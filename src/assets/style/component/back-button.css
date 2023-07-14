@@ -1,0 +1,33 @@
+.back-button {
+    display: flex;
+    height: 3em;
+    width: 100px;
+    align-items: center;
+    justify-content: center;
+    color: #063F30;
+    border-radius: 3px;
+    letter-spacing: 1px;
+    transition: all 0.2s linear;
+    cursor: pointer;
+    border: none;
+    background: #fff;
+    font-weight: 600;
+}
+   
+.back-button > svg {
+    margin-right: 5px;
+    margin-left: 5px;
+    transition: all 0.4s ease-in;
+}
+   
+.back-button:hover > svg {
+    transform: translateX(-10px);
+    fill: #fff;
+}
+   
+.back-button:hover {
+    box-shadow: 9px 9px 33px #d1d1d1, -9px -9px 33px #063F30;
+    transform: translateY(-2px);
+    color: #fff;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 60%, #BFE85F 120%);
+}

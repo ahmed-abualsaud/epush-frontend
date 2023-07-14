@@ -1,0 +1,11 @@
+.nav-items {
+    list-style: none;
+    display: block;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.nav-items a:hover {
+    background-color: #070020;
+}

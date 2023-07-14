@@ -1,0 +1,32 @@
+.nav-item {
+    display: flex;
+    align-items: center;
+    font-family: 'lexend';
+    border-bottom: 1px solid #fff;
+}
+
+.nav-item > a {
+    color: rgba(255, 255, 255, 0.9);
+    padding: 0.5em 0.5em;
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    text-decoration: none;
+    -webkit-transition: all 0.6s ease;
+    -moz-transition: all 0.6s ease;
+    -ms-transition: all 0.6s ease;
+    -o-transition: all 0.6s ease;
+    transition: all 0.6s ease;
+    font-size: larger;
+
+}
+
+.nav-icon {
+    margin-right: 0.5em;;
+}
+
+.nav-expand {
+    margin-left: auto;
+    font-size: 22px;
+}

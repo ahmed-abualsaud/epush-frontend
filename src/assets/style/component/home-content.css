@@ -1,0 +1,6 @@
+.home-content {
+    height: 90vh;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), url('../../image/epush_white.png');
+    background-size: cover;
+    background-position: center;
+}

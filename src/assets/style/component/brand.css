@@ -1,0 +1,9 @@
+.nav-brand {
+    margin-top: -12px;
+}
+
+.nav-brand > h1 {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 45px;
+}
