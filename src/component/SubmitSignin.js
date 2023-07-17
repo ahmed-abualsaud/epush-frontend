@@ -1,6 +1,6 @@
 import useAuthApi from "../api/useAuthApi"
 import Button from "../layout/Button"
-import { isNull } from "../utils/helper"
+import { isEmpty } from "../utils/helper"
 import { useNavigate } from "react-router-dom"
 
 const SubmitSignin = () => {
@@ -12,10 +12,11 @@ const SubmitSignin = () => {
   const submitSigninHandler = async () => {
     let data = await signin()
 
-    if (!isNull(data.roles) && data.roles.includes('super_admin')) {
+    if (!isEmpty(data) && data.roles.includes('super_admin')) {
       navigate("/dashboard/super-admin")
     }
-    if (!isNull(data.roles) && data.roles.includes('admin')) {
+
+    if (!isEmpty(data) && data.roles.includes('admin')) {
       navigate("/dashboard/admin")
     }
   }

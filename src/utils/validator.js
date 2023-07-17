@@ -1,4 +1,4 @@
-import { isNull, randomString, arrayMergeUnique, arrayIsEmpty } from "../utils/helper"
+import { isEmpty, randomString, arrayMergeUnique, arrayIsEmpty } from "../utils/helper"
 import { getElement, createElement, removeElement, fadeElementOut, getElementsWithAttribute } from "../utils/dom"
 
 function addErrorMessage(errorMessage, errorMessages) {
@@ -17,7 +17,7 @@ function validateElementValue(value, rules) {
         rule = rule.trim()
 
         if(rule === "required") {
-            if (isNull(value)) addErrorMessage("Please, submit required data", errorMessages) 
+            if (isEmpty(value)) addErrorMessage("Please, submit required data", errorMessages) 
         }
 
         if(rule === "number") {
@@ -50,11 +50,30 @@ function validatFormInputs(formID) {
     return errorMessages
 }
 
-function addToasts(toastContainerID, contents) {
+function addToasts(contents) {
 
     let toastID = null
     let toastElement = null
-    let toastContainer = getElement(toastContainerID)
+    let toastContainer = getElement("toast") ?? createElement('div', {
+
+        add: true,
+        attributes: [
+            {
+                name: "id",
+                value: "toast"
+            },
+            {
+                name: "class",
+                value: "position-absolute bottom-0 end-0"
+            },
+            {
+                name: "style",
+                value: {
+                    display: "block"
+                }
+            }
+        ]
+    })
 
     contents.forEach(content => {
 
@@ -64,8 +83,6 @@ function addToasts(toastContainerID, contents) {
         toastElement.setAttribute("id", toastID)
         toastElement.setAttribute("style", "border-bottom-left-radius:55px;border-top-left-radius:0;z-index:1000;background-image: url(\"https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg\"), linear-gradient(43deg, #070020 0%, #063F30 50%, #BFE85F 200%);")
         toastElement.setAttribute("class", "alert d-flex text-white justify-content-between")
-        toastContainer.style.display = "block"
-
         
         toastElement.appendChild(createElement("p", {
             text: content,
@@ -98,36 +115,20 @@ function addToasts(toastContainerID, contents) {
         }))
 
         toastContainer.appendChild(toastElement)
-
         fadeElementOut(toastElement)
     })
 }
 
-export function showValidationError(toastID, errorMessages) {
-
-    addToasts(toastID, errorMessages)
-}
-
 export function alertError(message) {
-    addToasts('toast', [message])
-}
-
-export function applyFormValidation(formID, toastID) {
-
-    let errorMessages = validatFormInputs(formID)
-    showValidationError(toastID, errorMessages)
-    if (arrayIsEmpty(errorMessages)) {
-        return true
-    }
-    return false
+    addToasts([message])
 }
 
 export function validate(formID) {
 
     let errorMessages = validatFormInputs(formID)
-    showValidationError('toast', errorMessages)
     if (arrayIsEmpty(errorMessages)) {
         return true
     }
+    addToasts(errorMessages)
     return false
 }

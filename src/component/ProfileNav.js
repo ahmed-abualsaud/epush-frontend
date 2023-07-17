@@ -1,9 +1,16 @@
-import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux'
 import '../assets/style/component/profile-nav.css'
+import useAuthApi from '../api/useAuthApi'
 
 const ProfileNav = () => {
 
     const user = useSelector((state) => state.auth.user)
+    const { signout } = useAuthApi()
+
+    const logout = async (e) => {
+        e.stopPropagation()
+        await signout()
+    }
 
     return (
         <div className="profile-nav">
@@ -14,10 +21,10 @@ const ProfileNav = () => {
             <div className="section-dropdown"> 
                 <a href="#">Profile <i className="uil uil-user-md"></i></a>
                 <a href="#">Settings <i className="uil uil-setting"></i></a>
-                <a href="#">Logout <i className="uil uil-sign-out-alt"></i></a>
+                <a href="#" onClick={ logout }>Logout <i className="uil uil-sign-out-alt"></i></a>
             </div>
         </div>
     )
   }
   
-  export default ProfileNav;
+  export default ProfileNav

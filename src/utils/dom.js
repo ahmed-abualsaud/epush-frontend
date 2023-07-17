@@ -1,26 +1,31 @@
-import { isNull } from "./helper"
+import { isEmpty } from "./helper"
 
 export function createElement(tagName, options = {}) {
 
     let element = document.createElement(tagName)
 
-    if (!isNull(options.attributes)) {
+    if (!isEmpty(options.attributes)) {
 
         options.attributes.forEach(attribute => {
             element.setAttribute(attribute.name, attribute.value)
         })
     }
 
-    if (!isNull(options.eventListeners)) {
+    if (!isEmpty(options.eventListeners)) {
 
         options.eventListeners.forEach(eventListener => {
             element.addEventListener(eventListener.name, eventListener.callback)
         })
     }
 
-    if (!isNull(options.text)) {
+    if (!isEmpty(options.text)) {
 
         element.appendChild(createText(options.text))
+    }
+
+    if (!isEmpty(options.add)) {
+
+        document.body.appendChild(element)
     }
 
     return element
@@ -39,7 +44,8 @@ export function createText(text) {
 export function removeElement(elementID) {
 
     let element = document.getElementById(elementID)
-    if (!isNull(element)) element.remove()
+
+    if (!isEmpty(element)) { element.remove() }
 }
 
 export function getElementsWithAttribute(elementID, attribute) {
@@ -63,10 +69,11 @@ export function getFormInputData(elementID) {
 export function fadeElementOut(element) {
 
     let oldClass = element.getAttribute("class")
-    let newClass = isNull(oldClass)? "fade-out" : `${oldClass} fade-out`
+    let newClass = isEmpty(oldClass)? "fade-out" : `${oldClass} fade-out`
 
     const interval1 = setInterval(() => {
         element.setAttribute("class", newClass)
+        //(new Audio("../assets/audio/beep-sound.mp3")).play()
         clearInterval(interval1)
     }, 2000)
 

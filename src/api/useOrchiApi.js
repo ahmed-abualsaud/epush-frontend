@@ -1,24 +1,18 @@
-import api from "./Api"
-import useAuthApi from "./useAuthApi"
-import { alertError } from "../utils/validator"
+import useAxiosApi from "./Api"
 
 const useOrchiApi = () => 
 {
 
-  const { getAuthenticatedUser } = useAuthApi()
+  const { api, handleErrorResponse } = useAxiosApi()
 
-  api.defaults.headers.common["Authorization"] = `Bearer ${getAuthenticatedUser().token}`
-  api.defaults.headers.post["Content-Type"] = "application/json"
 
   const listServices = async () => 
   {
     try {
-      return (await api.get("/orchi/service")).data.data
+      return (await api.get("/orchi/service"))?.data?.data
 
     } catch (error) {
-      if (error.response.status === 401) console.log('logout')
-      alertError(error.response.data.error)
-      return []
+      return handleErrorResponse(error)
     }
   }
 

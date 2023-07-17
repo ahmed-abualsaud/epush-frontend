@@ -1,6 +1,25 @@
-export function isNull(value) {
-
-    return value === undefined || value === null ||  value === ""
+export function isEmpty(value) {
+    if (
+        value === undefined ||
+        value === null ||
+        (typeof value === "string" && value.trim() === "") ||
+        (Array.isArray(value) && value.length === 0) ||
+        // (typeof value === "object" && Object.keys(value).length === 0) ||
+        value === false
+    ) {
+      return true;
+    }
+  
+    if (typeof value === "object") {
+      for (const key in value) {
+        if (!isEmpty(value[key])) {
+          return false;
+        }
+      }
+      return true;
+    }
+  
+    return false;
 }
 
 export function arrayContains(needles, haystack) {
@@ -37,3 +56,10 @@ export function arrayIsEmpty(array) {
 
     return false;
 }
+
+export function snakeToBeautifulCase(str) {
+    return str
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }

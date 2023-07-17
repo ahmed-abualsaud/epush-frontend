@@ -1,0 +1,84 @@
+.fl-table {
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: normal;
+    width: 100%;
+    background-color: white;
+}
+
+.fl-table td, .fl-table th {
+    text-align: center;
+    padding: 8px;
+}
+
+.fl-table td {
+    border-right: 1px solid #e7e6e6;
+    font-size: 12px;
+    word-wrap: break-word;
+    font-size: 16px;
+}
+
+.fl-table thead th {
+    color: #ffffff;
+    background: #063F30;
+    font-size: 20px;
+}
+
+
+.fl-table thead th:nth-child(odd) {
+    color: #ffffff;
+    background: #070020;
+}
+
+.fl-table tr:nth-child(even) {
+    background: #eee;
+}
+
+.fl-table tr:nth-child(even) td {
+    border-right: 1px solid #fff;
+}
+
+.fl-table .operation {
+    width: 10px;
+}
+
+.fl-table .operation:hover {
+    color: #BFE85F;
+    cursor: pointer;
+    background-color: #063F30;
+}
+
+.fl-table .page-head {
+    border: none;
+}
+
+.fl-table .last-row {
+    border-top: 1px solid #063F30;
+    padding: 0;
+    margin: 0;
+}
+
+.fl-table .pagination-row {
+    background-color: transparent!important;
+}
+
+.fl-table .page-navigator {
+    border: none;
+}
+
+.fl-table .per-page {
+    border: transparent;
+}
+
+.fl-table .page-input {
+    width: 0!important;
+    border: transparent;
+    color: #063F30;
+}
+
+.fl-table .pagination-info {
+    display: flex;
+    justify-content: space-evenly;
+    width: 60%;
+    margin: -10px auto 15px auto;
+}

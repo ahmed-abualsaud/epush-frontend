@@ -1,0 +1,52 @@
+.pagination-wrapper {
+    font-family: "lexend";
+    text-align: center;
+    height: inherit;
+    background-color: transparent;
+    margin-top: 10px;
+}
+  
+.pagination {
+    display: inline-block;
+    border-radius: 35px;
+    background-color: #eee;
+}
+
+.page-numbers {
+    text-decoration: none;
+    display: block;
+    padding: 0 25px;
+    float: left;
+    transition: 400ms ease;
+    color: #000;
+    font-size: 20px;
+    letter-spacing: 0.1em;
+    line-height: 70px;
+    border-top: 1px solid #063F30;
+    border-bottom: 1px solid #063F30;
+}
+.page-numbers:hover, .page-numbers.current {
+    background: radial-gradient(circle, rgba(6,63,48,1) 38%, rgba(7,0,32,1) 100%, rgba(7,0,32,1) 100%);
+    color: #fff;
+}
+
+.page-numbers.prev:hover, .page-numbers.next:hover {
+    background-color: transparent;
+    color: #BFE85F;
+}
+
+.page-numbers.first {
+    color: #fff;
+    background-image: linear-gradient(90deg, #070020 0%, #063F30 50%, #BFE85F 1000%);
+    border-radius: 40px 0 0 40px;
+}
+
+.page-numbers.last {
+    color: #fff;
+    background-image: linear-gradient(90deg, #BFE85F -1000%, #063F30 50%, #070020 150%);
+    border-radius: 0 40px 40px 0;
+}
+
+.page-numbers.first:hover, .page-numbers.last:hover {
+    color: #BFE85F;
+}

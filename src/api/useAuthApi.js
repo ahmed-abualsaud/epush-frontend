@@ -1,54 +1,83 @@
 import qs from "qs"
-import api from "./Api"
-import { isNull } from "../utils/helper"
-import { useSelector } from "react-redux"
+import useAxiosApi from "./Api"
 import { useDispatch } from "react-redux"
 import { getFormInputData } from '../utils/dom'
-import { alertError, validate } from "../utils/validator"
-import { authenticate } from "../container/redux/slice/authSlice"
+import { useNavigate } from "react-router-dom"
+import { validate } from "../utils/validator"
+import { signin as authSignin, signout as authSignout } from "../container/redux/slice/authSlice"
 
 const useAuthApi = () => 
 {
 
+    const { api, handleErrorResponse } = useAxiosApi()
     const dispatch = useDispatch()
-    let authUser = useSelector((state) => state.auth.user)
+    const navigate = useNavigate()
 
+ 
 
     const signin = async () =>
     {
         if (! validate("signin_form")) { return [] }
         try {
-            const user = (await api.post("/auth/signin", qs.stringify(getFormInputData("signin_form")))).data.data
+            const user = (await api.post("/auth/signin", getFormInputData("signin_form"))).data.data
             localStorage.setItem('user', JSON.stringify(user));
-            dispatch(authenticate(user))
+            dispatch(authSignin(user))
             return user
 
         } catch (error) {
-            alertError(error.response.data.error)
-            return []
+            return handleErrorResponse(error)
         }
     }
 
 
-    const getAuthenticatedUser = () => 
+    const signout = async () => 
     {
+        try {
+            await api.post("/auth/signout")
+            dispatch(authSignout())
+            localStorage.clear()
+            navigate("/signin")
+            window.location.reload()
 
-        if (! isNull(authUser)) { return authUser }
-
-        authUser = localStorage.getItem('user')
-
-        if (isNull(authUser)) {
-            alertError("Authentication credentials not found")
-            console.log("logout")
-            return null
+        } catch (error) {
+            return handleErrorResponse(error)
         }
-
-        dispatch(authenticate(JSON.parse(authUser)))
-        return authUser
     }
 
 
-    return { signin, getAuthenticatedUser }
+    const listUsers = async (perPage) =>
+    {
+        try {
+            return (await api.get("/auth/user?" + qs.stringify({take: perPage}))).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+
+    const listRoles = async (perPage) =>
+    {
+        try {
+            return (await api.get("/auth/role?" + qs.stringify({take: perPage}))).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+
+    const listPermissions = async (perPage) =>
+    {
+        try {
+            return (await api.get("/auth/permission?" + qs.stringify({take: perPage}))).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    return { signin, signout, listUsers, listRoles, listPermissions }
 }
 
 export default useAuthApi

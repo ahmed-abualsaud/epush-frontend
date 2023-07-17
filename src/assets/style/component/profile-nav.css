@@ -18,6 +18,7 @@
   opacity: 0;
   pointer-events: none;
 }
+
 .dropdown:checked + label,
 .dropdown:not(:checked) + label {
   position: relative;
@@ -61,20 +62,24 @@
   cursor: auto;
   pointer-events: none;
 }
+
 .dropdown:checked + label:before{
   pointer-events: auto;
 }
+
 .dropdown:not(:checked) + label .uil {
   font-size: 24px;
   margin-left: 10px;
   transition: transform 200ms linear;
 }
+
 .dropdown:checked + label .uil {
   transform: rotate(180deg);
   font-size: 24px;
   margin-left: 10px;
   transition: transform 200ms linear;
 }
+
 .section-dropdown {
   position: absolute;
   padding: 5px;
@@ -92,11 +97,13 @@
   transition: all 200ms linear;
   background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 80%, #BFE85F 200%);
 }
+
 .dropdown:checked ~ .section-dropdown{
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
 }
+
 .section-dropdown:before {
   position: absolute;
   top: -20px;
@@ -107,6 +114,7 @@
   display: block;
   z-index: 1;
 }
+
 .section-dropdown:after {
   position: absolute;
   top: -7px;
