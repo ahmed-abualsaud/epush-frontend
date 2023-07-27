@@ -7,7 +7,7 @@ const SubmitSignup = () => {
 
   const submitSignupHandler = () => {
   
-    navigate("/dashboard/super-admin")
+    // navigate("/super-admin")
   
   }
 

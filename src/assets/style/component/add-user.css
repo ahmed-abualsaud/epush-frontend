@@ -1,0 +1,91 @@
+
+.add-user-container {
+    margin: 1rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg");
+}
+
+.add-user-container .add-user-header {
+    display: flex;
+    align-items: center;
+    color: white;
+    height: 100px;
+    padding: 0 1.5rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 80%, #BFE85F 400%);
+}
+
+.input-icon {
+    position: absolute;
+    top: 0;
+    left: 18px;
+    height: 48px;
+    font-size: 24px;
+    line-height: 48px;
+    text-align: left;
+    color: #063F30;
+    -webkit-transition: all 200ms linear;
+    transition: all 200ms linear;
+}
+
+.user-image {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-image .avatar-hint {
+    color: #063F30;
+    font-size: 30px;
+    margin: 20px;
+}
+
+.user-image .image-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid #063F30;
+    margin: 2rem;
+}
+  
+.user-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+.user-image input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+  
+.user-image .image-wrapper i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: #063F30;
+    font-size: 50px;
+}
+  
+.user-image .image-wrapper:hover i {
+    display: block;
+    cursor: pointer;
+}
+  
+.user-image .image-wrapper:hover {
+    opacity: 0.8;
+}
+  
+.user-image .image-wrapper:hover img {
+    opacity: 0.5;
+}

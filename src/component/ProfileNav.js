@@ -14,9 +14,9 @@ const ProfileNav = () => {
 
     return (
         <div className="profile-nav">
-            <h5 className="d-inline-block m-3 text-white"><strong>{user?.user.username}</strong></h5>
-            <img src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp" className="rounded-circle" style={{width: "70px"}} alt="Avatar" />
-            <input className="dropdown" type="checkbox" id="dropdown" name="dropdown"/>
+            <h5 className="d-inline-block m-3 text-white"><strong>{user?.user?.full_name}</strong></h5>
+            <img src={user?.user?.avatar ?? "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg"} className="rounded-circle" style={{width: "70px", height: "70px"}} alt="Avatar" />
+            <input className="dropdown d-none" type="checkbox" id="dropdown" name="dropdown"/>
             <label className="for-dropdown" for="dropdown"><i className="uil uil-angle-double-down"></i></label>
             <div className="section-dropdown"> 
                 <a href="#">Profile <i className="uil uil-user-md"></i></a>

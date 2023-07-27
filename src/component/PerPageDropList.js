@@ -1,7 +1,7 @@
 import '../assets/style/component/per-page-drop-list.css'
 import { getElement } from '../utils/dom'
 
-const PerPageDropList = ({ entity, perPageHandler }) => {
+const PerPageDropList = ({ perPageHandler }) => {
 
   const handleOnMouseLeave = () => {
     getElement("dropdown-page").checked = false
@@ -18,10 +18,10 @@ const PerPageDropList = ({ entity, perPageHandler }) => {
                 </label>
 
                 <ul className="dropdown-page__items" onMouseLeave={ handleOnMouseLeave }>
-                    <li onClick={() => perPageHandler(10, entity)}>10</li>
-                    <li onClick={() => perPageHandler(25, entity)}>25</li>
-                    <li onClick={() => perPageHandler(50, entity)}>50</li>
-                    <li onClick={() => perPageHandler(100, entity)}>100</li>
+                    <li onClick={() => perPageHandler(10)}>10</li>
+                    <li onClick={() => perPageHandler(25)}>25</li>
+                    <li onClick={() => perPageHandler(50)}>50</li>
+                    <li onClick={() => perPageHandler(100)}>100</li>
                 </ul>
             </div>
 

@@ -80,3 +80,15 @@
     -o-transition: all 0.5s ease-in-out;
     transition: all 0.5s ease-in-out;
 }
+
+.nav-back-button {
+    position: absolute;
+    left: 65px;
+    bottom: 90px;
+    font-size: 20px;
+    padding: 10px 20px;
+}
+
+.nav-back-button i {
+    margin-right: 10px;
+}

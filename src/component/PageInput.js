@@ -1,11 +1,15 @@
 import '../assets/style/component/page-input.css'
 import { isEmpty } from "../utils/helper"
 
-const PageInput = ({ url, entity, setPageHandler }) => {
+const PageInput = ({ url, numberOfPages, setPageHandler }) => {
 
     const onKeyDownHandler = (e) => {
-        if (e.key === 'Enter' && ! isEmpty(e.currentTarget.value) && ! isNaN(e.currentTarget.value)) {
-            setPageHandler(url + "&page=" + e.currentTarget.value, entity)
+        if (e.key === 'Enter' && 
+            ! isEmpty(e.currentTarget.value) && 
+            ! isNaN(e.currentTarget.value) && 
+            parseInt(e.currentTarget.value) <= numberOfPages
+        ){
+            setPageHandler(url + "&page=" + e.currentTarget.value)
         }
     }
 

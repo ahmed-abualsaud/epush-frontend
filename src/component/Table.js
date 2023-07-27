@@ -1,13 +1,34 @@
 import '../assets/style/component/table.css'
+import ShowModal from './ShowModal'
+import DeleteModal from './DeleteModal'
 import { snakeToBeautifulCase } from '../utils/helper'
+import { render } from '../utils/dom'
+import EditUser from './EditUser'
+import AddUser from './AddUser'
+import EditRole from './EditRole'
+import EditPermission from './EditPermission'
+import AddRole from './AddRole'
+import { useState } from 'react'
 
-const excludedColumns = ["id", "first_name", "last_name", "full_name", "created_at", "updated_at", "email_verified_at"]
 
-const Table = ({ data, total, perPage, children }) => {
+const Table = ({ entity, data, total, perPage, children }) => {
+
+  const excludedColumns = ["id", "first_name", "last_name", "created_at", "updated_at", "deleted_at", "avatar", "email_verified_at"]
 
   const filteredColumns = Object.keys(data[0]).filter(
     (column) => !excludedColumns.includes(column)
   )
+
+  const [deletedRows, setDeletedRows] = useState([])
+
+  const addNewEntity = () => {
+    entity === "User" && render(<AddUser/>, "content");
+    entity === "Role" && render(<AddRole/>, "content");    
+  }
+
+  const deleteEntity = (entityID) => {
+    render(<DeleteModal entity={entity} entityID={entityID} deletedRows={deletedRows} setDeletedRows={setDeletedRows}/>, "modal-content")
+  }
 
   return (
     <div>
@@ -18,18 +39,46 @@ const Table = ({ data, total, perPage, children }) => {
             {filteredColumns.map((column) => (
               <th key={column}>{snakeToBeautifulCase(column)}</th>
             ))}
+            {entity !== "Permission" && 
+              <th style={{padding: "0"}} colSpan={3} key="add">
+                <a className="button add-button" onClick={() => addNewEntity()}><i className="uil uil-plus"></i>Add</a>
+              </th>
+            }
           </tr>
         </thead>
         <tbody>
           {data?.map((row, index) => (
-            <tr key={index}>
+            ! deletedRows.includes(row["id"]) &&
+            <tr id={entity + "-" + row["id"]} key={index}>
               <td key={ "#" + index + 1 }>{ index + 1 }</td>
               {filteredColumns.map((col) => (
-                <td key={ col + index + 1 }>{ row[col] }</td>
+                <td key={ col + index + 1 }>{ typeof row[col] === "boolean"? row[col] ? "Yes" : "No" : row[col] ?? "NULL"}</td>
               ))}
-              <td key="show" className="operation"><i className="uil uil-eye"></i></td>
-              <td key="show" className="operation"><i className="uil uil-edit-alt"></i></td>
-              <td key="edit" className="operation"><i className="uil uil-trash-alt"></i></td>
+              <td
+                style={{padding: "0"}}
+                onClick={() => render(<ShowModal entity={entity} data={row} columns={["id", ...filteredColumns]}/>, "modal-content")} 
+                key="show" 
+                className="operation"
+              >
+                <a className="modal-button" href="#popup"><i className="uil uil-eye"></i></a>
+              </td>
+
+              <td
+                style={{padding: "0"}}
+                key="edit" 
+                onClick={() => render(entity === "User"? <EditUser user={row}/> : entity === "Role"? <EditRole role={row}/> : <EditPermission permission={row}/>, "content")} 
+                className="operation">
+                <a className="modal-button"><i className="uil uil-edit-alt"></i></a>
+              </td>
+
+              <td 
+                style={{padding: "0"}} 
+                onClick={() => deleteEntity(row["id"])} 
+                key="delete" 
+                className="operation"
+              >
+                <a className="modal-button btn-del" href="#popup"><i className="uil uil-trash-alt"></i></a>
+              </td>
             </tr>
           ))}
           <tr>
@@ -47,7 +96,7 @@ const Table = ({ data, total, perPage, children }) => {
             </td>
           </tr>
           <tr className="pagination-row">
-            <td colSpan={filteredColumns.length + 2}>
+            <td colSpan={filteredColumns.length + 2} style={{border: "none"}}>
               <div className="pagination-info">
                 <div>total = {total}</div>
                 <div>rows per page = {perPage}</div>

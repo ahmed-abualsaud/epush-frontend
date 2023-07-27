@@ -1,4 +1,4 @@
-import '../assets/style/component/content.css'
+import '../assets/style/layout/content.css'
 
 const Content = ({ children }) => {
     return (

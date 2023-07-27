@@ -2,7 +2,7 @@ import { useState } from 'react'
 import '../assets/style/component/paginator.css'
 import { isEmpty } from '../utils/helper'
 
-const Paginator = ({ links, perPage, entity, getPageHandler }) => {
+const Paginator = ({ links, perPage, getPageHandler }) => {
 
     const [currentIndex, setCurrentIndex] = useState(1)
     const [minIndex, setMinIndex] = useState(1)
@@ -28,21 +28,21 @@ const Paginator = ({ links, perPage, entity, getPageHandler }) => {
         <div className="pagination-wrapper">
             <div className="pagination">
                 <a className="first page-numbers" onClick={() => {
-                    getPageHandler(links[1].url.split("?")[0] + "?page=1" + "&take=" + perPage, entity)
+                    getPageHandler(links[1].url.split("?")[0] + "?page=1" + "&take=" + perPage)
                     setCurrentIndexHandler(1)}
                 }>first</a>
                 {links?.map((link) => {
 
                     if (link.label.toLowerCase().includes("next") && ! isEmpty(link.url)) {
                         return (<a className="next page-numbers" onClick={() => {
-                            getPageHandler(link.url + "&take=" + perPage, entity)
+                            getPageHandler(link.url + "&take=" + perPage)
                             setCurrentIndexHandler(currentIndex + 1)}
                         }>next</a>)
                     }
 
                     if (link.label.toLowerCase().includes("prev")  && ! isEmpty(link.url)) {
                         return (<a className="prev page-numbers" onClick={() => {
-                            getPageHandler(link.url + "&take=" + perPage, entity)
+                            getPageHandler(link.url + "&take=" + perPage)
                             setCurrentIndexHandler(currentIndex - 1)}
                         }>prev</a>)
                     }
@@ -57,7 +57,7 @@ const Paginator = ({ links, perPage, entity, getPageHandler }) => {
 
                     if (link.active === false && parseInt(link.label) <= maxIndex && parseInt(link.label) >= minIndex) {
                         return (<a className="page-numbers" onClick={() => {
-                            getPageHandler(link.url + "&take=" + perPage, entity)
+                            getPageHandler(link.url + "&take=" + perPage)
                             setCurrentIndexHandler(parseInt(link.label))}
                         }>{link.label}</a>)
                     }
@@ -67,7 +67,7 @@ const Paginator = ({ links, perPage, entity, getPageHandler }) => {
                     }
                 })}
                 <a className="last page-numbers" onClick={() => {
-                    getPageHandler(links[1].url.split("?")[0] + "?page=" + (links.length-2) + "&take=" + perPage, entity)
+                    getPageHandler(links[1].url.split("?")[0] + "?page=" + (links.length-2) + "&take=" + perPage)
                     setCurrentIndexHandler(links.length-2)}
                 }>last</a>
             </div>

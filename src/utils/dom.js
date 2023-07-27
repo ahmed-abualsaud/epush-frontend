@@ -1,4 +1,11 @@
+import { createRoot } from 'react-dom/client'
 import { isEmpty } from "./helper"
+import ReactDOM from 'react-dom'
+
+import { BrowserRouter } from "react-router-dom"
+import store from "../container/redux/store"
+import { Provider } from "react-redux"
+import jsxToString from 'jsx-to-string'
 
 export function createElement(tagName, options = {}) {
 
@@ -18,9 +25,16 @@ export function createElement(tagName, options = {}) {
         })
     }
 
-    if (!isEmpty(options.text)) {
+    if (!isEmpty(options.children)) {
 
-        element.appendChild(createText(options.text))
+        if (typeof options.children === 'object') {
+            element.innerHTML = jsxToString(options.children, {
+                useFunctionCode: true
+            })
+        } 
+        if (typeof options.children === 'string') {
+            element.appendChild(createText(options.children))
+        }
     }
 
     if (!isEmpty(options.add)) {
@@ -29,6 +43,23 @@ export function createElement(tagName, options = {}) {
     }
 
     return element
+}
+
+export function updateElement(jsx, elementID) {
+    const elem = getElement(elementID)
+
+    if (Array.isArray(jsx)) {
+        elem.innerHTML = ""
+        jsx.forEach((element) => {
+            elem.innerHTML += jsxToString(element, {
+                useFunctionCode: true
+            })
+        })
+    } else {
+        elem.innerHTML = jsxToString(jsx, {
+            useFunctionCode: true
+        })
+    }
 }
 
 export function getElement(elementID) {
@@ -45,7 +76,7 @@ export function removeElement(elementID) {
 
     let element = document.getElementById(elementID)
 
-    if (!isEmpty(element)) { element.remove() }
+    if (! isEmpty(element)) { element.remove() }
 }
 
 export function getElementsWithAttribute(elementID, attribute) {
@@ -75,10 +106,18 @@ export function fadeElementOut(element) {
         element.setAttribute("class", newClass)
         //(new Audio("../assets/audio/beep-sound.mp3")).play()
         clearInterval(interval1)
-    }, 2000)
+    }, 3000)
 
     const interval2 = setInterval(() => {
         removeElement(element.getAttribute("id"))
         clearInterval(interval2)
-    }, 3000)
+    }, 4000)
+}
+
+export function render(component, containerID) {
+    createRoot(getElement(containerID)).render(<Provider store={store}><BrowserRouter> { component } </BrowserRouter> </Provider>)
+}
+
+export function hydrate(component, containerID) {
+    ReactDOM.hydrate(<Provider store={store}><BrowserRouter> { component } </BrowserRouter> </Provider>, getElement(containerID))
 }

@@ -1,0 +1,8 @@
+.assign-role-header {
+    display: flex;
+    align-items: center;
+    color: white;
+    height: 100px;
+    padding: 0 1.5rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 80%, #BFE85F 400%);
+}

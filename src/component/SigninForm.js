@@ -10,7 +10,7 @@ const SigninForm = ({ className }) => {
         <Form id ="signin_form" className={ className }>
             <h4 className="mb-4 pb-3 text-white form-title">Sign In</h4>
             <Input id="username" type="name" placeholder="Username" validrules="required">
-                <i className="input-icon uil uil-user"></i>
+                <i className="input-icon uil uil-user-check"></i>
             </Input>
 
             <Input id="password" type="password" placeholder="Password" validrules="required">

@@ -8,8 +8,16 @@ const SignupForm = ({ className }) => {
     <Form className={className}>
 
       <h4 className="mb-4 pb-3 text-white form-title">Sign Up</h4>
-      <Input id="username" type="text" placeholder="Username" validrules="required">
+      <Input className="w-49 d-inline-block me-1" id="first_name" type="text" placeholder="First Name" validrules="required">
         <i className="input-icon uil uil-user"></i>
+      </Input>
+
+      <Input className="w-49 d-inline-block ms-1" id="last_name" type="text" placeholder="Last Name" validrules="required">
+        <i className="input-icon uil uil-users-alt"></i>
+      </Input>
+
+      <Input id="username" type="text" placeholder="Username" validrules="required">
+        <i className="input-icon uil uil-user-md"></i>
       </Input>
 
       <Input id="email" type="email" placeholder="Email" validrules="required">
@@ -22,10 +30,6 @@ const SignupForm = ({ className }) => {
 
       <Input id="religion" type="text" placeholder="Religion" validrules="required">
         <i className="input-icon uil uil-flower"></i>
-      </Input>
-
-      <Input id="contact_name" type="text" placeholder="Contact Name" validrules="required">
-        <i className="input-icon uil uil-envelope-star"></i>
       </Input>
 
       <Input id="password" type="password" placeholder="Password" validrules="required|strong_password">

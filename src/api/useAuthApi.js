@@ -29,6 +29,20 @@ const useAuthApi = () =>
         }
     }
 
+    const addUser = async (user) =>
+    {
+        try {
+            return (await api.post("/auth/signup", user, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+            })).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
 
     const signout = async () => 
     {
@@ -38,6 +52,43 @@ const useAuthApi = () =>
             localStorage.clear()
             navigate("/signin")
             window.location.reload()
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+
+    const generatePassword = async (userID) =>
+    {
+        try {
+            return (await api.post("/auth/generate-password" , {user_id: userID})).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+
+    const updateUser = async (userID, data) =>
+    {
+        try {
+            data?.append("_method", "PUT")
+            return (await api.post("/auth/user/" + userID , data, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+            })).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const deleteUser = async (userID) =>
+    {
+        try {
+            return (await api.delete("/auth/user/" + userID)).data.data
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -67,6 +118,59 @@ const useAuthApi = () =>
     }
 
 
+    const addRole = async (data) =>
+    {
+        try {
+            return (await api.post("/auth/role", data)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+
+    const updateRole = async (roleID, data) =>
+    {
+        try {
+            return (await api.put("/auth/role/" + roleID, data)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const deleteRole = async (roleID) =>
+    {
+        try {
+            return (await api.delete("/auth/role/" + roleID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const assignRolePermissions = async (roleID, permissionsID) =>
+    {
+        try {
+            return (await api.post("/auth/role/" + roleID + "/permissions", { permissions_id: permissionsID })).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+
+    const unassignRolePermissions = async (roleID, permissionsID) =>
+    {
+        try {
+            return (await api.put("/auth/role/" + roleID + "/permissions", { permissions_id: permissionsID })).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+
     const listPermissions = async (perPage) =>
     {
         try {
@@ -77,7 +181,153 @@ const useAuthApi = () =>
         }
     }
 
-    return { signin, signout, listUsers, listRoles, listPermissions }
+
+    const updatePermission = async (permissionID, data) =>
+    {
+        try {
+            return (await api.put("/auth/permission/" + permissionID, data)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+
+    const deletePermission = async (permissionID) =>
+    {
+        try {
+            return (await api.delete("/auth/permission/" + permissionID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+
+    const getUserRoles = async (userID) =>
+    {
+        try {
+            return (await api.get("auth/user/" + userID + "/roles" )).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+
+    const getUserPermissions = async (userID) =>
+    {
+        try {
+            return (await api.get("auth/user/" + userID + "/permissions" )).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+
+    const getRolePermissions = async (roleID) =>
+    {
+        try {
+            return (await api.get("auth/role/" + roleID + "/permissions" )).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+
+    const assignUserRoles = async (userID, rolesID) =>
+    {
+        try {
+            return (await api.post("auth/user/" + userID + "/roles", {roles_id: rolesID} )).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+
+    const assignUserPermissions = async (userID, permissionsID) =>
+    {
+        try {
+            return (await api.post("auth/user/" + userID + "/permissions", {permissions_id: permissionsID} )).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+
+    const unassignUserRoles = async (userID, rolesID) =>
+    {
+        try {
+            return (await api.put("auth/user/" + userID + "/roles", {roles_id: rolesID} )).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+
+    const unassignUserPermissions = async (userID, permissionsID) =>
+    {
+        try {
+            return (await api.put("auth/user/" + userID + "/permissions", {permissions_id: permissionsID} )).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+
+    return { 
+        signin,
+
+        signout,
+
+        addUser,
+
+        addRole,
+
+        listUsers,
+
+        listRoles,
+
+        updateUser,
+
+        deleteUser,
+
+        updateRole,
+
+        deleteRole,
+
+        getUserRoles,
+
+        assignUserRoles,
+
+        listPermissions,
+
+        updatePermission,
+
+        deletePermission,
+
+        generatePassword,
+
+        unassignUserRoles,
+
+        getUserPermissions,
+
+        getRolePermissions,
+
+        assignUserPermissions,
+
+        assignRolePermissions,
+
+        unassignUserPermissions,
+
+        unassignRolePermissions
+    }
 }
 
 export default useAuthApi

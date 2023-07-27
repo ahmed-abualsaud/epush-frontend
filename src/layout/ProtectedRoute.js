@@ -1,6 +1,6 @@
 import { isEmpty } from '../utils/helper'
 import { useEffect, useRef } from 'react'
-import { alertError } from '../utils/validator'
+import { showAlert } from '../utils/validator'
 import { Outlet, useNavigate } from 'react-router-dom'
 import useAxiosApi from '../api/Api'
 
@@ -16,7 +16,7 @@ const ProtectedRoute = () => {
             localStorage.clear()
             navigate("/signin")
             window.location.reload()
-            alertError("Authenticated user not found")
+            showAlert("Authenticated user not found")
             
         }
     }

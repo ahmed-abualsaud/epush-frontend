@@ -1,25 +1,26 @@
 export function isEmpty(value) {
-    if (
-        value === undefined ||
-        value === null ||
-        (typeof value === "string" && value.trim() === "") ||
-        (Array.isArray(value) && value.length === 0) ||
-        // (typeof value === "object" && Object.keys(value).length === 0) ||
-        value === false
-    ) {
-      return true;
-    }
-  
-    if (typeof value === "object") {
-      for (const key in value) {
-        if (!isEmpty(value[key])) {
-          return false;
-        }
+
+  if (typeof value === "object") {
+    for (const key in value) {
+      if (! isEmpty(value[key])) {
+        return false;
       }
-      return true;
     }
-  
-    return false;
+    return true;
+  }
+
+  if (
+      value === undefined ||
+      value === null ||
+      (typeof value === "string" && value.trim() === "") ||
+      (Array.isArray(value) && value.length === 0) ||
+      // (typeof value === "object" && Object.keys(value).length === 0) ||
+      value === false
+  ) {
+    return true;
+  }
+
+  return false;
 }
 
 export function arrayContains(needles, haystack) {
@@ -62,4 +63,34 @@ export function snakeToBeautifulCase(str) {
       .split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
+}
+
+export function generatePassword(length = 8) {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-={}[]|;:"<>,.?/';
+    let password = '';
+    let hasUpperCase = false;
+    let hasDigit = false;
+    let hasSpecialChar = false;
+  
+    while (password.length < length) {
+      const randomIndex = Math.floor(Math.random() * chars.length);
+      password += chars[randomIndex];
+    }
+  
+    for (let i = 0; i < password.length; i++) {
+      const char = password[i];
+      if (char >= 'A' && char <= 'Z') {
+        hasUpperCase = true;
+      } else if (char >= '0' && char <= '9') {
+        hasDigit = true;
+      } else if (chars.includes(char)) {
+        hasSpecialChar = true;
+      }
+    }
+  
+    if (!hasUpperCase || !hasDigit || !hasSpecialChar) {
+      return generatePassword();
+    }
+  
+    return password;
   }

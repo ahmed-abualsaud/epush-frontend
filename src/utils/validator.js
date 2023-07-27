@@ -29,8 +29,12 @@ function validateElementValue(value, rules) {
             if (!inValues.includes(value)) addErrorMessage("Please, submit required data", errorMessages) 
         }
 
+        if(rule === "phone") {
+            if (! /^\d{10,16}$/.test(value)) addErrorMessage("Please, enter a valid phone number (between 10 and 16 digits)", errorMessages) 
+        }
+
         if(rule === "strong_password") {
-            if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+]).{8,}$/.test(value)) addErrorMessage("Please, choose a strong password", errorMessages) 
+            if (! /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+]).{8,}$/.test(value)) addErrorMessage("Please, enter a strong password", errorMessages) 
         }
     })
 
@@ -64,7 +68,7 @@ function addToasts(contents) {
             },
             {
                 name: "class",
-                value: "position-absolute bottom-0 end-0"
+                value: "position-fixed bottom-0 end-0"
             },
             {
                 name: "style",
@@ -81,11 +85,11 @@ function addToasts(contents) {
     
         toastElement = createElement("div")
         toastElement.setAttribute("id", toastID)
-        toastElement.setAttribute("style", "border-bottom-left-radius:55px;border-top-left-radius:0;z-index:1000;background-image: url(\"https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg\"), linear-gradient(43deg, #070020 0%, #063F30 50%, #BFE85F 200%);")
+        toastElement.setAttribute("style", "border-bottom-left-radius:55px;border-top-left-radius:0;z-index:1000000;background-image: url(\"https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg\"), linear-gradient(43deg, #070020 0%, #063F30 50%, #BFE85F 200%);")
         toastElement.setAttribute("class", "alert d-flex text-white justify-content-between")
         
         toastElement.appendChild(createElement("p", {
-            text: content,
+            children: content,
             attributes: [
                 {
                     name: "class",
@@ -119,7 +123,7 @@ function addToasts(contents) {
     })
 }
 
-export function alertError(message) {
+export function showAlert(message) {
     addToasts([message])
 }
 

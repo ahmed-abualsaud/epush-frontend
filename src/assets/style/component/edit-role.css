@@ -1,0 +1,47 @@
+.info-input {
+    padding: 0;
+    width: 400px;
+    height: 50px;
+}
+
+.info-input input {
+    margin: 5px 0;
+    padding: 2px 15px;
+    width: 98%;
+    height: inherit;
+    border-radius: 8px;
+    border: none;
+    font-size: 20px;
+    color: #063F30;
+    border: 1px dashed #063F30;
+    background-color: rgb(235, 235, 235);
+}
+
+.edit-role-container td {
+    font-size: 25px;
+}
+
+.update-role {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem;
+}
+
+.update-role button {
+    font-size: 30px;
+}
+
+.edit-role-container .edit-role-header {
+    display: flex;
+    align-items: center;
+    color: white;
+    height: 100px;
+    padding: 0 1.5rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 80%, #BFE85F 400%);
+}
+
+.edit-role-header button {
+    background-image: none;
+    background-color: #070020;
+}

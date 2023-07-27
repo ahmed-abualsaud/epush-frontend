@@ -3,7 +3,7 @@ import { Config } from '../config/Config'
 import { useDispatch, useSelector } from 'react-redux'
 import { isEmpty } from '../utils/helper'
 import { signin, signout } from "../container/redux/slice/authSlice"
-import { alertError } from "../utils/validator"
+import { showAlert } from "../utils/validator"
 import { useNavigate } from 'react-router-dom'
 
 const useAxiosApi = () => 
@@ -28,16 +28,18 @@ const useAxiosApi = () =>
     const handleErrorResponse = (error) => 
     {
         if (isEmpty(error.response)){
-            alertError("Backend Server is down")
+            showAlert("The Backend Server is Down")
+            return null
         } else if (error.response?.status === 401){
 
             dispatch(signout())
             localStorage.clear()
             navigate("/signin")
             window.location.reload()
-            alertError("Authenticated user not found")
+            showAlert("Authenticated user not found")
+            return null
         }
-        alertError(error.response?.data?.error)
+        showAlert(error.response?.data?.error)
         return null
     }
 

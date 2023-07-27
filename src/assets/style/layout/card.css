@@ -1,6 +1,6 @@
 .card-layout {
-    width: 250px;
-    height: 285px;
+    width: 550px;
+    height: 650px;
     background: #063F30;
     background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 -50%, #063F30 60%, #BFE85F 200%);
     box-shadow: 7px 7px 10px 4px rgba(0,0,0,0.75);
@@ -13,8 +13,15 @@
 }
 
 .card-imge {
-    height: 80px;
+    height: 130px;
     background-color: transparent;
+    display: flex;
+    align-items: center;
+}
+
+.card-title-id {
+    margin-left: -30px;
+    margin-top: 95px;
 }
 
 .card-imge .card-icon {
@@ -23,68 +30,72 @@
     align-items: center;
     background-color: #BFE85F;
     transform: translateX(10px) translateY(10px);
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
     border-radius: 10px;
-    font-size: 35px;
+    font-size: 85px;
 }
 
 .card-imge .card-title {
     background-color: #fff;
-    width: 100px;
-    height: 22px;
+    width: 250px;
+    height: 40px;
     border-width: 10px;
     border-radius: 5px;
     border-color: #070020;
     color: #070020;
-    font-size: 15px;
+    font-size: 25px;
     font-weight: bold;
     transform: translateX(70px) translateY(-35px);
-    padding-left: 5px;
+    padding-left: 20px;
 }
 
 .card-imge .card-unique-id {
     background-color: #fff;
-    width: 150px;
-    height: 22px;
+    width: 350px;
+    height: 40px;
     border-width: 10px;
     border-radius: 5px;
     border-color: #070020;
     color: #070020;
-    font-size: 15px;
+    font-size: 25px;
     font-weight: bold;
     transform: translateX(70px) translateY(-25px);
-    padding-left: 5px;
+    padding-left: 20px;
 }
   
 .description {
     border-color: #141414;
     background-color: #fff;
     transform: translate(5px, 6px);
-    width: 230px;
-    height: 130px;
+    width: 530px;
+    height: 360px;
     border-radius: 5px;
-    padding: 7px;
+    padding: 20px;
+    font-size: 35px;
+    margin: 8px 0;
 }
   
-.card-button:before {
+.card-footer:before {
     content: " ";
     display: block;
     width: 100%;
-    height: 2px;
+    height: 5px;
     transform: translatey(10px);
     background: #BFE85F;
 }
 
-.card-button a {
-    width: 100px;
-    margin-top: 20px;
-    margin-left:45px;
+.card-footer-inner {
     display: flex;
     align-items: center;
-    flex-direction: column;
+    justify-content: space-around;
     text-decoration: none;
-    color: inherit;
+    color: white;
+}
+
+.card-footer-inner a {
+    margin:auto;
+    margin-top: 40px;
 }
 
 .card-show i {
@@ -95,9 +106,10 @@
 
 .card-show {
     color: #fff;
-    width: 75px;
+    width: 120px;
     padding: 5px 0;
     display: inline-block;
+    font-size: 30px;
 }
 
 .card-show:hover {
