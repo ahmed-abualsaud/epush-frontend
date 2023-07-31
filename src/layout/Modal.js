@@ -1,15 +1,14 @@
 import '../assets/style/layout/modal.css'
-import { render } from '../utils/dom'
 const Modal = () => {
     
     return (
         <div>
-            <div class="popup" id="popup">
-                <div class="popup-inner">
-                    <div id="modal-content" class="popup__text">
+            <div className="popup" id="popup">
+                <div className="popup-inner">
+                    <div id="modal-content" className="popup-text">
 
                     </div>
-                    <a class="popup__close" href="#">X</a>
+                    <a className="popup-close" href="#">X</a>
                 </div>
             </div>
         </div>

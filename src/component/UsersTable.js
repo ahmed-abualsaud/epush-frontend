@@ -31,7 +31,7 @@ const UsersTable = () =>
         ! isEmpty(users) && 
         (<Table entity="User" data={users.data} total={users.total} perPage={users.per_page}>
             <PageInput url={users.links[1].url.split("?")[0] + "?take=" + users.per_page} numberOfPages={Math.ceil(parseFloat(users.total/users.per_page))} setPageHandler={handleGetPage} />
-            <Paginator links={users.links} perPage={users.per_page} getPageHandler={ handleGetPage }/>
+            <Paginator links={users.links} perPage={users.per_page} total={users.total} getPageHandler={ handleGetPage }/>
             <PerPageDropList perPageHandler={ setup }/>
         </Table>)
     )

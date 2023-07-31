@@ -32,7 +32,7 @@ const PermissionsTable = () =>
         ! isEmpty(permissions) && 
         (<Table entity="Permission" data={permissions.data} total={permissions.total} perPage={permissions.per_page}>
             <PageInput url={permissions.links[1].url.split("?")[0] + "?take=" + permissions.per_page} numberOfPages={Math.ceil(parseFloat(permissions.total/permissions.per_page))} setPageHandler={handleGetPage} />
-            <Paginator links={permissions.links} perPage={permissions.per_page} getPageHandler={ handleGetPage }/>
+            <Paginator links={permissions.links} perPage={permissions.per_page} total={permissions.total} getPageHandler={ handleGetPage }/>
             <PerPageDropList perPageHandler={ setup }/>
         </Table>)
     )

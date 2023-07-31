@@ -2,7 +2,7 @@ import { useState } from 'react'
 import '../assets/style/component/paginator.css'
 import { isEmpty } from '../utils/helper'
 
-const Paginator = ({ links, perPage, getPageHandler }) => {
+const Paginator = ({ links, perPage, total, getPageHandler }) => {
 
     const [currentIndex, setCurrentIndex] = useState(1)
     const [minIndex, setMinIndex] = useState(1)
@@ -67,8 +67,8 @@ const Paginator = ({ links, perPage, getPageHandler }) => {
                     }
                 })}
                 <a className="last page-numbers" onClick={() => {
-                    getPageHandler(links[1].url.split("?")[0] + "?page=" + (links.length-2) + "&take=" + perPage)
-                    setCurrentIndexHandler(links.length-2)}
+                    getPageHandler(links[1].url.split("?")[0] + "?page=" + (Math.ceil(parseFloat(total/perPage))) + "&take=" + perPage)
+                    setCurrentIndexHandler(Math.ceil(parseFloat(total/perPage)))}
                 }>last</a>
             </div>
         </div>

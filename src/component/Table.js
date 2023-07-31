@@ -4,25 +4,54 @@ import DeleteModal from './DeleteModal'
 import { snakeToBeautifulCase } from '../utils/helper'
 import { render } from '../utils/dom'
 import EditUser from './EditUser'
-import AddUser from './AddUser'
 import EditRole from './EditRole'
 import EditPermission from './EditPermission'
 import AddRole from './AddRole'
 import { useState } from 'react'
+import AddUserModal from './AddUserModal'
 
 
 const Table = ({ entity, data, total, perPage, children }) => {
 
-  const excludedColumns = ["id", "first_name", "last_name", "created_at", "updated_at", "deleted_at", "avatar", "email_verified_at"]
+  const excludedColumns = [
+    "clientId", 
+    "isNotify", 
+    "ip_required", 
+    "ip", 
+    "deleteDate", 
+    "updateDate", 
+    "saveDate", 
+    "reg_date", 
+    "areaId",
+    "agree", 
+    "active", 
+    "userId", 
+    "adminId", 
+    "business_field_id" , 
+    "sales_id", 
+    "show_msg_details", 
+    "birthDate", 
+    "FDelete", 
+    "access", 
+    "IsTestAccount", 
+    "governmentId", 
+    "first_name", 
+    "last_name", 
+    "created_at", 
+    "updated_at", 
+    "deleted_at", 
+    "avatar", 
+    "email_verified_at"
+  ]
 
-  const filteredColumns = Object.keys(data[0]).filter(
+  const filteredColumns = data[0] ? Object.keys(data[0]).filter(
     (column) => !excludedColumns.includes(column)
-  )
+  ) : []
 
   const [deletedRows, setDeletedRows] = useState([])
 
   const addNewEntity = () => {
-    entity === "User" && render(<AddUser/>, "content");
+    entity === "User" && render(<AddUserModal/>, "modal-content");
     entity === "Role" && render(<AddRole/>, "content");    
   }
 
@@ -41,7 +70,7 @@ const Table = ({ entity, data, total, perPage, children }) => {
             ))}
             {entity !== "Permission" && 
               <th style={{padding: "0"}} colSpan={3} key="add">
-                <a className="button add-button" onClick={() => addNewEntity()}><i className="uil uil-plus"></i>Add</a>
+                <a href={entity === "User"? "#popup" : "#"} className="button add-button" onClick={() => addNewEntity()}><i className="uil uil-plus"></i>Add</a>
               </th>
             }
           </tr>

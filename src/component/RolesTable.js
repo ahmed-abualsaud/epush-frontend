@@ -32,7 +32,7 @@ const RolesTable = () =>
         ! isEmpty(roles) && 
         (<Table entity="Role" data={roles.data} total={roles.total} perPage={roles.per_page}>
             <PageInput url={roles.links[1].url.split("?")[0] + "?take=" + roles.per_page} numberOfPages={Math.ceil(parseFloat(roles.total/roles.per_page))} setPageHandler={handleGetPage} />
-            <Paginator links={roles.links} perPage={roles.per_page} getPageHandler={ handleGetPage }/>
+            <Paginator links={roles.links} perPage={roles.per_page} total={roles.total} getPageHandler={ handleGetPage }/>
             <PerPageDropList perPageHandler={ setup }/>
         </Table>)
     )

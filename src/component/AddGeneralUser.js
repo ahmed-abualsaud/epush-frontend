@@ -10,7 +10,7 @@ import { showAlert, validate } from '../utils/validator'
 import { getElement, getFormInputData } from '../utils/dom'
 
 
-const AddUser = () => {
+const AddGeneralUser = () => {
 
     const { addUser } = useAuthApi()
     const [currentUser, setCurrentUser] = useState([])
@@ -25,17 +25,20 @@ const AddUser = () => {
     }, [])
 
     const addNewUser = async () => {
+
         if (validate("add-user-form")) {
             const newUser = getFormInputData("add-user-form")
             let user = new FormData();
             Object.keys(newUser).forEach(key => ! isEmpty(newUser[key]) && user.append(key.split("-")[2], newUser[key]))
+
             let avatar = getElement("add-avatar-input").files[0]
             if (! isEmpty(avatar)) { user.append("avatar", avatar) }
             user.append("enabled", getElement("add-user-enabled").checked)
+
             user = await addUser(user);
             if (! isEmpty(user)) {
-                showAlert("User Added Successfully please scroll to bottom!")
                 setCurrentUser(user)
+                showAlert("User Added Successfully please scroll to bottom!")
             } else {
                 showAlert("Valid User Information Required")
             }
@@ -82,16 +85,17 @@ const AddUser = () => {
                 <i className="input-icon uil uil-at"></i>
             </Input>
 
-            <Input id="add-user-phone" type="tel" placeholder="Phone Number" validrules="required|phone">
+            <Input id="add-user-phone" type="tel" placeholder="Phone" validrules="required|phone">
                 <i className="input-icon uil uil-phone"></i>
             </Input>
 
-            <Input id="add-user-religion" type="text" placeholder="Religion" validrules="required">
-                <i className="input-icon uil uil-flower"></i>
+
+            <Input id="add-user-password" type="password" placeholder="Password" validrules="required|strong_password">
+                <i className="input-icon uil uil-lock-alt"></i>
             </Input>
 
-            <Input id="add-user-notes" type="text" placeholder="Notes" validrules="">
-                <i className="input-icon uil uil-notes"></i>
+            <Input id="add-user-password_confirmation" type="password" placeholder="Password Confirmation" validrules="required">
+                <i className="input-icon uil uil-lock"></i>
             </Input>
 
             <div className="d-flex flex-column align-items-center pt-5">
@@ -109,4 +113,4 @@ const AddUser = () => {
     )
 }
 
-export default AddUser
+export default AddGeneralUser

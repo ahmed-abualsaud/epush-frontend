@@ -20,6 +20,7 @@
 }
 
 .show-modal-info-wrapper {
+    overflow:auto;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -33,6 +34,7 @@
     color: #fff;
     margin: 1rem 0;
     font-size: 1.5rem;
+    word-break: break-all;
 }
 
 .show-modal-info-column {
@@ -48,4 +50,18 @@
 
 .w-50 {
     width: 50%;
+}
+
+.websites-container {
+    width: 100%;
+}
+
+.websites-container span {
+    font-size: 30px;
+}
+
+.websites-container hr {
+    width: 100%;
+    border-width: 3px;
+    color: #BFE85F;
 }

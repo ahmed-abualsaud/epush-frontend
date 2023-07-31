@@ -62,6 +62,22 @@ export function updateElement(jsx, elementID) {
     }
 }
 
+export function appendChildsToElement(jsx, elementID) {
+    const elem = getElement(elementID)
+
+    if (Array.isArray(jsx)) {
+        jsx.forEach((element) => {
+            elem.innerHTML += jsxToString(element, {
+                useFunctionCode: true
+            })
+        })
+    } else {
+        elem.innerHTML += jsxToString(jsx, {
+            useFunctionCode: true
+        })
+    }
+}
+
 export function getElement(elementID) {
 
     return document.getElementById(elementID)

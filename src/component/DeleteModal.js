@@ -1,7 +1,6 @@
-import useAuthApi from '../api/useAuthApi'
 import '../assets/style/component/delete-modal.css'
-import { removeElement } from '../utils/dom'
 import { showAlert } from '../utils/validator'
+import useAuthApi from '../api/useAuthApi'
 
 const DeleteModal = ({ entity, entityID, deletedRows, setDeletedRows }) => {
 
@@ -33,7 +32,7 @@ const DeleteModal = ({ entity, entityID, deletedRows, setDeletedRows }) => {
             <h1 className="delete-header">Delete {entity}</h1>
             <p className="delete-content">Do you want to delete this {entity.toLowerCase()}?</p>
             <div className="delete-button-wrapper">
-                <button className="button delete-botton" onClick={() => deleteEntity()}>Delete</button>
+                <a href="#"><button className="button delete-botton" onClick={() => deleteEntity()}>Delete</button></a>
             </div>
         </div>
     )
