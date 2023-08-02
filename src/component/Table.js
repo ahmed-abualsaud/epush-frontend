@@ -1,14 +1,7 @@
-import '../assets/style/component/table.css'
-import ShowModal from './ShowModal'
-import DeleteModal from './DeleteModal'
-import { snakeToBeautifulCase } from '../utils/helper'
-import { render } from '../utils/dom'
-import EditUser from './EditUser'
-import EditRole from './EditRole'
-import EditPermission from './EditPermission'
-import AddRole from './AddRole'
 import { useState } from 'react'
-import AddUserModal from './AddUserModal'
+import { navigate } from "../setup/navigator"
+import '../assets/style/component/table.css'
+import { snakeToBeautifulCase } from '../utils/helper'
 
 
 const Table = ({ entity, data, total, perPage, children }) => {
@@ -41,7 +34,14 @@ const Table = ({ entity, data, total, perPage, children }) => {
     "updated_at", 
     "deleted_at", 
     "avatar", 
-    "email_verified_at"
+    "email_verified_at",
+    "fullName",
+    "mobile",
+    "use_api",
+    "api_token",
+    "pricelistId",
+    "id",
+    "religion"
   ]
 
   const filteredColumns = data[0] ? Object.keys(data[0]).filter(
@@ -51,12 +51,12 @@ const Table = ({ entity, data, total, perPage, children }) => {
   const [deletedRows, setDeletedRows] = useState([])
 
   const addNewEntity = () => {
-    entity === "User" && render(<AddUserModal/>, "modal-content");
-    entity === "Role" && render(<AddRole/>, "content");    
+    entity === "User" && navigate("modal-content", "add-user-modal");
+    entity === "Role" && navigate("content", "add-role");    
   }
 
   const deleteEntity = (entityID) => {
-    render(<DeleteModal entity={entity} entityID={entityID} deletedRows={deletedRows} setDeletedRows={setDeletedRows}/>, "modal-content")
+    navigate("modal-content", "delete-modal", entity, entityID, deletedRows, setDeletedRows)
   }
 
   return (
@@ -66,7 +66,7 @@ const Table = ({ entity, data, total, perPage, children }) => {
           <tr>
             <th key="#">#</th>
             {filteredColumns.map((column) => (
-              <th key={column}>{snakeToBeautifulCase(column)}</th>
+              <th className="th-nowrap" key={column}>{snakeToBeautifulCase(column)}</th>
             ))}
             {entity !== "Permission" && 
               <th style={{padding: "0"}} colSpan={3} key="add">
@@ -81,21 +81,21 @@ const Table = ({ entity, data, total, perPage, children }) => {
             <tr id={entity + "-" + row["id"]} key={index}>
               <td key={ "#" + index + 1 }>{ index + 1 }</td>
               {filteredColumns.map((col) => (
-                <td key={ col + index + 1 }>{ typeof row[col] === "boolean"? row[col] ? "Yes" : "No" : row[col] ?? "NULL"}</td>
+                <td className="td-break" key={ col + index + 1 }>{ typeof row[col] === "boolean"? row[col] ? "Yes" : "No" : row[col] ?? "NULL"}</td>
               ))}
               <td
                 style={{padding: "0"}}
-                onClick={() => render(<ShowModal entity={entity} data={row} columns={["id", ...filteredColumns]}/>, "modal-content")} 
+                onClick={() => entity === "User" ? navigate("content", "show-user-info", row) : navigate("modal-content", "show-modal", entity, row, ["id", ...filteredColumns])}
                 key="show" 
                 className="operation"
               >
-                <a className="modal-button" href="#popup"><i className="uil uil-eye"></i></a>
+                <a className="modal-button" href={entity === "User"? "#" : "#popup"}><i className="uil uil-eye"></i></a>
               </td>
 
               <td
                 style={{padding: "0"}}
                 key="edit" 
-                onClick={() => render(entity === "User"? <EditUser user={row}/> : entity === "Role"? <EditRole role={row}/> : <EditPermission permission={row}/>, "content")} 
+                onClick={() => navigate("content", entity === "User"? "edit-user" : entity === "Role"? "edit-role" : "edit-permission", row)} 
                 className="operation">
                 <a className="modal-button"><i className="uil uil-edit-alt"></i></a>
               </td>

@@ -1,10 +1,4 @@
-import { createRoot } from 'react-dom/client'
 import { isEmpty } from "./helper"
-import ReactDOM from 'react-dom'
-
-import { BrowserRouter } from "react-router-dom"
-import store from "../container/redux/store"
-import { Provider } from "react-redux"
 import jsxToString from 'jsx-to-string'
 
 export function createElement(tagName, options = {}) {
@@ -128,12 +122,4 @@ export function fadeElementOut(element) {
         removeElement(element.getAttribute("id"))
         clearInterval(interval2)
     }, 4000)
-}
-
-export function render(component, containerID) {
-    createRoot(getElement(containerID)).render(<Provider store={store}><BrowserRouter> { component } </BrowserRouter> </Provider>)
-}
-
-export function hydrate(component, containerID) {
-    ReactDOM.hydrate(<Provider store={store}><BrowserRouter> { component } </BrowserRouter> </Provider>, getElement(containerID))
 }

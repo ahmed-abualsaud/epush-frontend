@@ -1,10 +1,10 @@
-import useOrchiApi from '../api/useOrchiApi'
-import '../assets/style/layout/card.css'
-import ServiceContexts from '../component/ServiceContexts'
-import { getElement, render } from '../utils/dom'
-import { isEmpty } from '../utils/helper'
-import { showAlert } from '../utils/validator'
 import Switch from './Switch'
+import '../assets/style/layout/card.css'
+import { isEmpty } from '../utils/helper'
+import useOrchiApi from '../api/useOrchiApi'
+import { showAlert } from '../utils/validator'
+import { getElement } from '../utils/dom'
+import { navigate } from '../setup/navigator'
 
 const Card = ({ service, title, identifier, description, icon }) => {
 
@@ -32,7 +32,7 @@ const Card = ({ service, title, identifier, description, icon }) => {
 
             <div className="card-footer">
                 <div className="card-footer-inner">
-                    <a href="#" onClick={() => render(<ServiceContexts service={service}/>, "content")}>
+                    <a href="#" onClick={() => navigate("content", "service-contexts", service)}>
                         <span className="card-show"><i className="uil uil-eye"></i>Show</span>
                     </a>
                     <div className="d-inline-block">

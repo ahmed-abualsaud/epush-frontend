@@ -1,0 +1,18 @@
+.scroll-button-container {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+}
+  
+.scroll-button-container button {
+    padding: 6px;
+    border-radius: 5px;
+    background-color: #063F30;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+  
+.scroll-button-container button:hover {
+    background-color: #070020;
+}

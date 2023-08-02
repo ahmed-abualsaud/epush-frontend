@@ -1,9 +1,10 @@
-import React from 'react'
 import '../assets/style/layout/sidebar.css'
-import Logo from '../component/Logo'
-import NavItems from './NavItems'
-import NavToggler from '../component/NavToggler'
+import React from 'react'
 import Button from './Button'
+import NavItems from './NavItems'
+import Logo from '../component/Logo'
+import NavToggler from '../component/NavToggler'
+import { nextRoute, previousRoute } from '../setup/navigator'
 
 const Sidebar = ({ children }) => {
 
@@ -20,7 +21,11 @@ const Sidebar = ({ children }) => {
                     { children }
 
                 </NavItems>
-                <Button className="button nav-back-button"><i className="uil uil-arrow-left"></i>Back</Button>
+                <div className="page-nav">
+                    <Button className="nav-back-button" onClick={previousRoute}><i className="uil uil-arrow-left"></i></Button>
+                    <div className="elipsis">.....</div>
+                    <Button className="nav-front-button" onClick={nextRoute}><i className="uil uil-arrow-right"></i></Button>
+                </div>
             </nav>
         </aside>
     )

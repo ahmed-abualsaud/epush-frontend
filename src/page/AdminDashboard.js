@@ -1,14 +1,11 @@
+import { navigate } from "../setup/navigator"
 import Header from "../layout/Header"
 import Sidebar from "../layout/Sidebar"
 import Content from "../layout/Content"
 import NavItem from "../layout/NavItem"
 import NavItems from "../layout/NavItems"
 import Dashboard from "../layout/Dashboard"
-import { render } from "../utils/dom"
 import ProfileNav from "../component/ProfileNav"
-import UsersTable from "../component/UsersTable"
-import RolesTable from "../component/RolesTable"
-import PermissionsTable from "../component/PermissionsTable"
 
 const AdminDashboard = () => {
 
@@ -42,9 +39,9 @@ const AdminDashboard = () => {
                     onMouseLeave={handleLeave}
                 >
                     <NavItems className="nav-flyout">
-                        <NavItem text="Users" icon="uil uil-users-alt" onClick={ () => render(<UsersTable/>, "content") }/>
-                        <NavItem text="Roles" icon="yil uil-user-check" onClick={ () => render(<RolesTable/>, "content") }/>
-                        <NavItem text="Permissions" icon="uil uil-shield-check" onClick={ () => render(<PermissionsTable/>, "content") }/>
+                        <NavItem text="Users" icon="uil uil-users-alt" onClick={ () => navigate("content", "users-table") }/>
+                        <NavItem text="Roles" icon="yil uil-user-check" onClick={ () => navigate("content", "roles-table") }/>
+                        <NavItem text="Permissions" icon="uil uil-shield-check" onClick={ () => navigate("content", "permissions-table") }/>
                     </NavItems>
                 </NavItem>
             </Sidebar>

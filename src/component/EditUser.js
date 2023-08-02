@@ -1,14 +1,12 @@
 import '../assets/style/component/edit-user.css'
 import useAuthApi from '../api/useAuthApi'
-import { getElement, render, updateElement } from '../utils/dom'
+import { getElement, updateElement } from '../utils/dom'
 import { useEffect, useRef, useState } from 'react'
 import { isEmpty, snakeToBeautifulCase } from '../utils/helper'
-import GeneratePasswordModal from './GeneratePasswordModal'
 import { showAlert } from '../utils/validator'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateAuthUser } from '../container/redux/slice/authSlice'
-import RoleList from './RoleList'
-import PermissionList from './PermissionList'
+import { navigate } from '../setup/navigator'
 
 const EditUser = ({ user }) => {
 
@@ -257,7 +255,7 @@ const EditUser = ({ user }) => {
                         <div className="password-hint">Click the button to create a new password for this user and update their old password with the new one.</div>
                         <a href="#popup">
                             <button 
-                                onClick={() => render(<GeneratePasswordModal userID={user["id"]}/>, "modal-content")} 
+                                onClick={() => navigate("modal-content", "generate-password-modal", user["id"])} 
                                 className="button password-button"
                             >
                                 Generate New Password
@@ -315,7 +313,7 @@ const EditUser = ({ user }) => {
             <div className="user-roles">
                 <div className="edit-user-header d-flex justify-content-between">
                     <h1>User Roles</h1>
-                    <button className="button" onClick={() => render(<RoleList userID={user["id"]}/>, "content")}>Assign New Role</button>
+                    <button className="button" onClick={() => navigate("content", "role-list", user["id"])}>Assign New Role</button>
                 </div>
                 {isEmpty(userRoles)? <div className="user-no-perm"> User has no roles! </div> :
                     <div className="roles-list">
@@ -361,7 +359,7 @@ const EditUser = ({ user }) => {
             <div className="user-permissons">
                 <div className="edit-user-header d-flex justify-content-between">
                     <h1>User Permissions</h1>
-                    <button className="button" onClick={() => render(<PermissionList entity="User" entityID={user["id"]}/>, "content")}>Assign New Permission</button>
+                    <button className="button" onClick={() => navigate("content", "permission-list", "User", user["id"])}>Assign New Permission</button>
                 </div>
                 {isEmpty(userPermissions)? <div className="user-no-perm"> User has no permissions! </div> :
                     <div className="roles-list">

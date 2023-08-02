@@ -1,18 +1,19 @@
 import '../assets/style/component/service-contexts.css'
 
+import Switch from '../layout/Switch'
 import { isEmpty } from "../utils/helper"
 import useOrchiApi from "../api/useOrchiApi"
-import { useEffect, useRef, useState } from "react"
-import { getElement, render, updateElement } from "../utils/dom"
-import Handler from './Handler';
-import Switch from '../layout/Switch'
+import { render } from '../setup/navigator'
 import { showAlert } from '../utils/validator'
+import { useEffect, useRef, useState } from "react"
+import { getElement, updateElement } from "../utils/dom"
+
 
 const ServiceContexts = ({ service }) => {
 
     const [ contexts, setContexts ] = useState([])
     const [ contextsHandleGroups, setContextsHandleGroups ] = useState([])
-    const { getServiceContexts, getContextHandleGroups, updateContext, updateHandleGroup } = useOrchiApi()
+    const { getServiceContexts, getContextHandleGroups, updateContext } = useOrchiApi()
 
     const setupLock = useRef(true)
     const setup = async () => {
@@ -28,14 +29,6 @@ const ServiceContexts = ({ service }) => {
             showAlert(enabled ? "Context Enabled Successfully" : "Context Disabled Successfully")
         } else {
             getElement(contextID + "-context-switch").checked = false
-        }
-    }
-
-    const enableDisableHandleGroup = async (handleGroupID, enabled) => {
-        if (! isEmpty(await updateHandleGroup(handleGroupID, { enabled: enabled }))) {
-            showAlert(enabled ? "Handle Group Enabled Successfully" : "Handle Group Disabled Successfully")
-        } else {
-            getElement(handleGroupID + "-handle-group-switch").checked = false
         }
     }
 
@@ -73,39 +66,8 @@ const ServiceContexts = ({ service }) => {
         }
 
         const ctxHdlGrpList = ctxHdlGrpsIsEmpty ? hdlgrp : ctxHdlGrps.handleGroups
+        isEmpty(ctxHdlGrpList)? render(contextListID, "no-contexts") : render(contextListID, "handle-group", ctxHdlGrpList)
 
-        render(
-            isEmpty(ctxHdlGrpList)? <div class="user-no-perm" style="margin-top: 0;"> Context has no handle groups! </div> :
-            <table class="fl-table">
-                <thead>
-                    <tr>
-                        <th>Handle Group ID</th>
-                        <th>Handle Group Name</th>
-                        <th>Handle Group Description</th>
-                        <th>Enabled</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {Object.values(ctxHdlGrpList).map((handleGroup) => (
-                        <tr>
-                            <td className="clickable-row" onClick={() => render(<Handler handleGroup={handleGroup}/>, "content")}>{handleGroup.id}</td>
-                            <td className="clickable-row" onClick={() => render(<Handler handleGroup={handleGroup}/>, "content")}>{handleGroup.name}</td>
-                            <td className="clickable-row" onClick={() => render(<Handler handleGroup={handleGroup}/>, "content")}>{handleGroup.description}</td>
-                            <td>
-                                <Switch 
-                                    id={handleGroup.id + "-handle-group-switch"} 
-                                    labelLeft="Disabled"
-                                    labelRight="Enabled" 
-                                    defaultChecked={handleGroup.enabled}
-                                    onLeft={() => enableDisableHandleGroup(handleGroup.id, false)}
-                                    onRight={() => enableDisableHandleGroup(handleGroup.id, true)}
-                                />
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        , contextListID)
     }
 
 

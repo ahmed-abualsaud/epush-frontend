@@ -81,14 +81,57 @@
     transition: all 0.5s ease-in-out;
 }
 
+.nav-front-button {
+    display: flex;
+    color: #fff;
+    transition: all 0.2s linear;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    font-size: 40px;
+    padding: 0;
+    margin: 0;
+}
+
 .nav-back-button {
-    position: absolute;
-    left: 65px;
-    bottom: 90px;
-    font-size: 20px;
-    padding: 10px 20px;
+    display: flex;
+    color: #fff;
+    transition: all 0.2s linear;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    font-size: 40px;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-front-button i {
+    transition: all 0.4s ease-in;
 }
 
 .nav-back-button i {
-    margin-right: 10px;
+    transition: all 0.4s ease-in;
+}
+
+.nav-front-button:hover i {
+    transform: translateX(10px);
+}
+
+.nav-back-button:hover i {
+    transform: translateX(-10px);
+}
+
+.page-nav {
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 10px;
+    width: 150px;
+    margin-left: 22%;
+    padding: 0;
+}
+
+.elipsis {
+    color: #fff;
+    font-size: 30px;
 }

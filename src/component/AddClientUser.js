@@ -3,11 +3,10 @@ import '../assets/style/component/add-user.css'
 import Input from '../layout/Input'
 import { isEmpty } from '../utils/helper'
 import useCoreApi from '../api/useCoreApi'
-import PermissionList from './PermissionList'
 import { useEffect, useRef, useState } from 'react'
 import { showAlert, validate } from '../utils/validator'
-import { appendChildsToElement, getElement, getFormInputData, render } from '../utils/dom'
-import UsersTable from './UsersTable'
+import { getElement, getFormInputData } from '../utils/dom'
+import { navigate } from '../setup/navigator'
 
 
 const AddClientUser = () => {
@@ -69,7 +68,7 @@ const AddClientUser = () => {
             client = await addClient(client);
             if (! isEmpty(client)) {
                 setCurrentClient(client)
-                render(<UsersTable/>, "content")
+                navigate("content", "users-table")
                 showAlert("Client Added Successfully!")
             } else {
                 showAlert("Valid Client Information Required")

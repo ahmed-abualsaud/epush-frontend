@@ -13,13 +13,16 @@
 
 .fl-table td {
     border-right: 1px solid #e7e6e6;
-    font-size: 12px;
     word-wrap: break-word;
     font-size: 16px;
 }
 
 .fl-table .td-break {
     word-break: break-all;
+}
+
+.fl-table .th-nowrap {
+    white-space: nowrap;
 }
 
 .fl-table thead th {

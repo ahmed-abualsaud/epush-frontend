@@ -4,8 +4,8 @@ import useAuthApi from '../api/useAuthApi'
 import { showAlert } from '../utils/validator'
 import { useEffect, useRef, useState } from 'react'
 import { isEmpty, snakeToBeautifulCase } from "../utils/helper"
-import { getElement, render } from '../utils/dom'
-import PermissionList from './PermissionList'
+import { getElement } from '../utils/dom'
+import { navigate } from '../setup/navigator'
 
 const EditRole = ({ role }) => {
 
@@ -132,7 +132,7 @@ const EditRole = ({ role }) => {
             <div className="role-permissons">
                 <div className="edit-role-header d-flex justify-content-between">
                     <h1>Role Permissions</h1>
-                    <button className="button" onClick={() => render(<PermissionList entity="Role" entityID={role["id"]}/>, "content")}>Assign New Permission</button>
+                    <button className="button" onClick={() => navigate("content", "permission-list", "Role", role["id"])}>Assign New Permission</button>
                 </div>
                 {isEmpty(rolePermissions)? <div className="user-no-perm"> Role has no permissions! </div> :
                     <div className="roles-list">

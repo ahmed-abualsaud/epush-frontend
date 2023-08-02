@@ -7,12 +7,8 @@ import NavItems from "../layout/NavItems"
 import Dashboard from "../layout/Dashboard"
 import useOrchiApi from "../api/useOrchiApi"
 import ProfileNav from "../component/ProfileNav"
-import UsersTable from "../component/UsersTable"
-import RolesTable from "../component/RolesTable"
-import ServiceContexts from "../component/ServiceContexts"
-import PermissionsTable from "../component/PermissionsTable"
 
-import { render } from "../utils/dom"
+import { navigate } from "../setup/navigator"
 import React, { useEffect, useRef, useState } from "react"
 
 const SuperAdminDashboard = () => {
@@ -65,7 +61,7 @@ const SuperAdminDashboard = () => {
                                 key={service.id} 
                                 text={service.name.charAt(0).toUpperCase() + service.name.slice(1)} 
                                 icon={ service.name === "auth" ? "uil uil-lock-alt" : service.name === "file" ? "uil uil-file-alt" : "uil uil-atom"} 
-                                onClick={() => render(<ServiceContexts service={service}/>, "content")}
+                                onClick={() => navigate("content", "service-contexts", service)}
                             />
                         ))}
                     </NavItems>
@@ -78,9 +74,9 @@ const SuperAdminDashboard = () => {
                     onMouseLeave={handleLeave}
                 >
                     <NavItems className="nav-flyout">
-                        <NavItem text="Users" icon="uil uil-users-alt" onClick={ () => render(<UsersTable/>, "content") }/>
-                        <NavItem text="Roles" icon="yil uil-user-check" onClick={ () => render(<RolesTable/>, "content") }/>
-                        <NavItem text="Permissions" icon="uil uil-shield-check" onClick={ () => render(<PermissionsTable/>, "content") }/>
+                        <NavItem text="Users" icon="uil uil-users-alt" onClick={ () => navigate("content", "users-table") }/>
+                        <NavItem text="Roles" icon="yil uil-user-check" onClick={ () => navigate("content", "roles-table") }/>
+                        <NavItem text="Permissions" icon="uil uil-shield-check" onClick={ () => navigate("content", "permissions-table") }/>
                     </NavItems>
                 </NavItem>
             </Sidebar>
