@@ -4,14 +4,14 @@ import Button from './Button'
 import NavItems from './NavItems'
 import Logo from '../component/Logo'
 import NavToggler from '../component/NavToggler'
-import { nextRoute, previousRoute } from '../setup/navigator'
+import { navigate, nextRoute, previousRoute } from '../setup/navigator'
 
 const Sidebar = ({ children }) => {
 
     return (
         <aside id="sidebar" className="sidebar">
             <NavToggler />
-            <header>
+            <header onClick={() => navigate("root", "home")}>
                 <Logo /> 
                 e-push
             </header>

@@ -1,10 +1,12 @@
 import { useSelector } from 'react-redux'
 import '../assets/style/component/profile-nav.css'
 import useAuthApi from '../api/useAuthApi'
+import { navigate } from '../setup/navigator'
 
 const ProfileNav = () => {
 
     const user = useSelector((state) => state.auth.user)
+    
     const { signout } = useAuthApi()
 
     const logout = async (e) => {
@@ -19,7 +21,7 @@ const ProfileNav = () => {
             <input className="dropdown d-none" type="checkbox" id="dropdown" name="dropdown"/>
             <label className="for-dropdown" for="dropdown"><i className="uil uil-angle-double-down"></i></label>
             <div className="section-dropdown"> 
-                <a href="#">Profile <i className="uil uil-user-md"></i></a>
+                <a href="#" onClick={() => navigate("content", "profile", user?.user)}>Profile <i className="uil uil-user-md"></i></a>
                 <a href="#">Settings <i className="uil uil-setting"></i></a>
                 <a href="#" onClick={ logout }>Logout <i className="uil uil-sign-out-alt"></i></a>
             </div>

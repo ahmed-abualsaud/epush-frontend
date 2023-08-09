@@ -1,4 +1,3 @@
-import Card from "../layout/Card"
 import Header from "../layout/Header"
 import Sidebar from "../layout/Sidebar"
 import Content from "../layout/Content"
@@ -9,6 +8,7 @@ import useOrchiApi from "../api/useOrchiApi"
 import ProfileNav from "../component/ProfileNav"
 
 import { navigate } from "../setup/navigator"
+import TableContent from "../layout/TableContent"
 import React, { useEffect, useRef, useState } from "react"
 
 const SuperAdminDashboard = () => {
@@ -56,6 +56,12 @@ const SuperAdminDashboard = () => {
                     onMouseLeave={handleLeave}
                 >
                     <NavItems className="nav-flyout">
+                        <NavItem 
+                            key="all" 
+                            text="All"
+                            icon="uil uil-align-alt" 
+                            onClick={() => navigate("content", "all-services", services)}
+                        />
                         {services.map((service) => (
                             <NavItem 
                                 key={service.id} 
@@ -74,26 +80,30 @@ const SuperAdminDashboard = () => {
                     onMouseLeave={handleLeave}
                 >
                     <NavItems className="nav-flyout">
-                        <NavItem text="Users" icon="uil uil-users-alt" onClick={ () => navigate("content", "users-table") }/>
+                        <NavItem text="Users" icon="uil uil-users-alt" onClick={ () => navigate("content", "table-content") }/>
                         <NavItem text="Roles" icon="yil uil-user-check" onClick={ () => navigate("content", "roles-table") }/>
                         <NavItem text="Permissions" icon="uil uil-shield-check" onClick={ () => navigate("content", "permissions-table") }/>
+                    </NavItems>
+                </NavItem>
+
+                <NavItem text="Sales" icon="uil uil-money-withdraw" onClick={ () => navigate("content", "sales-table") }/>
+                <NavItem text="Price List" icon="uil uil-receipt-alt" onClick={ () => navigate("content", "pricelist-table") }/>
+                <NavItem text="Business Fields" icon="uil uil-analytics" onClick={ () => navigate("content", "business-field-table") }/>
+
+                <NavItem
+                    text="Expense"
+                    icon="uil uil-dollar-alt"
+                    onClick={handleClick}
+                    onMouseLeave={handleLeave}
+                >
+                    <NavItems className="nav-flyout">
+                        <NavItem text="Payment Methods" icon="uil uil-credit-card" onClick={ () => navigate("content", "payment-method-table") }/>
                     </NavItems>
                 </NavItem>
             </Sidebar>
 
             <Content>
-                <div>
-                    {services.map((service) => (
-                        <Card 
-                            key={ service.id } 
-                            service={ service }
-                            title={ service.name.charAt(0).toUpperCase() + service.name.slice(1) }
-                            icon={ service.name === "auth" ? "uil uil-lock-alt" : service.name === "file" ? "uil uil-file-alt" : "uil uil-atom"} 
-                            description={ service.description }
-                            identifier={ service.domain }
-                        />
-                    ))}
-                </div>
+                <TableContent/>
             </Content>
         </Dashboard>
     )

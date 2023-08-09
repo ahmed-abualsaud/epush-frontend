@@ -7,13 +7,17 @@ import { useEffect, useRef, useState } from 'react'
 import { showAlert, validate } from '../utils/validator'
 import { getElement, getFormInputData } from '../utils/dom'
 import { navigate } from '../setup/navigator'
+import DropList from '../layout/DropList'
 
 
 const AddClientUser = () => {
 
-    const { addClient } = useCoreApi()
-    const [currentClient, setCurrentClient] = useState([])
+    const { addClient, listSales, listBusinessFields } = useCoreApi()
 
+    const [sales, setSales] = useState([])
+    const [businessField, setBusinessField] = useState([])
+    const [selectedSalesID, setSelectedSalesID] = useState([])
+    const [selectedBusinessFieldID, setSelectedBusinessFieldID] = useState([])
     const [websiteInputs, setWebsiteInputs] = useState([
         { id: 0, value: '' }
     ]);
@@ -22,6 +26,12 @@ const AddClientUser = () => {
 
     const setupLock = useRef(true)
     const setup = async () => {
+        const prclst = await listSales()
+        if (prclst) setSales(prclst)
+
+        const bsnfld = await listBusinessFields()
+        if (bsnfld) setBusinessField(bsnfld)
+
         document.querySelector('.uil-camera-plus').addEventListener("click", () => getElement("add-client-avatar-input").click())
     }
     useEffect(() => {
@@ -64,11 +74,12 @@ const AddClientUser = () => {
             })
 
             client.append("websites", JSON.stringify(websites))
+            client.append("sales_id",  selectedSalesID)
+            client.append("business_field_id",  selectedBusinessFieldID)
 
             client = await addClient(client);
             if (! isEmpty(client)) {
-                setCurrentClient(client)
-                navigate("content", "users-table")
+                navigate("content", "table-content")
                 showAlert("Client Added Successfully!")
             } else {
                 showAlert("Valid Client Information Required")
@@ -83,6 +94,14 @@ const AddClientUser = () => {
             setImagePreview(e.target.result);
         };
         reader.readAsDataURL(file);
+    }
+
+    const onSelectSales = (option) => {
+        setSelectedSalesID(sales.filter(p => p.name === option)[0].id)
+    }
+
+    const onSelectBusinessField = (option) => {
+        setSelectedBusinessFieldID(businessField.filter(bf => bf.name === option)[0].id)
     }
 
 
@@ -160,11 +179,17 @@ const AddClientUser = () => {
                 <input id="add-client-enabled" className="checkbox d-none" type="checkbox" defaultChecked={true}/>
                 <label for="add-client-enabled"></label>
             </div>
+            <div className="d-flex justify-content-center mt-5">
+                <DropList selectName="Select Sales" options={sales.map(item => item.name)} onSelect={onSelectSales}/>
+            </div>
+            <div className="d-flex justify-content-center mt-5">
+                <DropList selectName="Select Business Field" options={businessField.map(item => item.name)} onSelect={onSelectBusinessField}/>
+            </div>
 
             <div className="update-user">
                 <button className="button" onClick={() => addNewClient()}>Add New Client</button>
             </div>
-            {/* <PermissionList entity="User" entityID={currentClient["id"]}/> */}
+
         </div>
     )
 }

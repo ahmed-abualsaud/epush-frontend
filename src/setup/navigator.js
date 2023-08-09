@@ -5,6 +5,8 @@ import store from "../container/redux/store"
 import { Provider } from "react-redux"
 import getComponent from '../setup/component-map'
 import { getElement } from '../utils/dom'
+import { isEmpty } from '../utils/helper'
+import ErrorBoundary from './ErrorBoundary'
 
 let currentRoute = -1
 
@@ -41,15 +43,45 @@ export function previousRoute()
 
 export function render(containerID, componentKey, ...params) 
 {
-    createRoot(getElement(containerID)).render(<Provider store={store}><BrowserRouter> { getComponent(componentKey, ...params) } </BrowserRouter> </Provider>)
+    const container = getElement(containerID)
+    ! isEmpty(container) && createRoot(container).render(
+
+        <ErrorBoundary fallback={<p>Something went wrong</p>}>
+            <Provider store={store}>
+                <BrowserRouter> 
+                    { getComponent(componentKey, ...params) } 
+                </BrowserRouter> 
+            </Provider>
+        </ErrorBoundary>
+    )
 }
 
 export function navigate(containerID, componentKey, ...params) 
 {
     addRoute(containerID, componentKey, params)
-    createRoot(getElement(containerID)).render(<Provider store={store}><BrowserRouter> { getComponent(componentKey, ...params) } </BrowserRouter> </Provider>)
+    const container = getElement(containerID)
+    ! isEmpty(container) && createRoot(container).render(
+
+        <ErrorBoundary fallback={<p>Something went wrong</p>}>
+            <Provider store={store}>
+                <BrowserRouter> 
+                    { getComponent(componentKey, ...params) }
+                </BrowserRouter>
+            </Provider>
+        </ErrorBoundary>
+    )
 }
 
 export function hydrate(component, containerID) {
-    ReactDOM.hydrate(<Provider store={store}><BrowserRouter> { component } </BrowserRouter> </Provider>, getElement(containerID))
+    ReactDOM.hydrate(
+
+        <ErrorBoundary fallback={<p>Something went wrong</p>}>
+            <Provider store={store}>
+                <BrowserRouter> 
+                    { component } 
+                </BrowserRouter> 
+            </Provider>
+        </ErrorBoundary>
+
+    , getElement(containerID))
 }

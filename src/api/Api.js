@@ -52,11 +52,30 @@ const useAxiosApi = () =>
         }
     }
 
+    const sendPostRequest = async (url, data) => {
+        try {
+            return (await api.post(url, data)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
     const api = axios.create({ baseURL: Config.get("REACT_APP_SERVER_URL")})
     api.defaults.headers.common["Authorization"] = `Bearer ${getAuthenticatedUser()?.token}`
     api.defaults.headers.post["Content-Type"] = "application/json"
 
-    return { api, sendGetRequest, getAuthenticatedUser, handleErrorResponse }
+    return { 
+        api, 
+
+        sendGetRequest, 
+        
+        sendPostRequest, 
+        
+        getAuthenticatedUser, 
+        
+        handleErrorResponse 
+    }
 }
 
 export default useAxiosApi

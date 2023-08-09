@@ -11,30 +11,36 @@ import ProtectedRoute from './layout/ProtectedRoute'
 import SuperAdminDashboard from './page/SuperAdminDashboard'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import AdminDashboard from './page/AdminDashboard'
+import HomeContent from './component/HomeContent'
+import ErrorBoundary from './setup/ErrorBoundary'
 
 function App() {
   return (
     <>
-      <Provider store={store}>
-        <BrowserRouter>
-        <Modal/>
-        <Routes>
+      <ErrorBoundary fallback={<p>Something went wrong</p>}>
+        <Provider store={store}>
+          <BrowserRouter>
+          <Modal/>
+          <HomeContent />
 
-            {/* Public Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/signin" element={<Signin />} />
-            <Route path="/signup" element={<Signup />} />
+          <Routes>
+
+              {/* Public Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/signin" element={<Signin />} />
+              <Route path="/signup" element={<Signup />} />
 
 
-            {/* Protected Routes */}
-            <Route path="/" element={<ProtectedRoute />}>
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/super-admin" element={<SuperAdminDashboard />} />
-            </Route>
+              {/* Protected Routes */}
+              <Route path="/" element={<ProtectedRoute />}>
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/super-admin" element={<SuperAdminDashboard />} />
+              </Route>
 
-          </Routes>
-        </BrowserRouter>
-      </Provider> 
+            </Routes>
+          </BrowserRouter>
+        </Provider> 
+      </ErrorBoundary>
     </>   
   )
 }

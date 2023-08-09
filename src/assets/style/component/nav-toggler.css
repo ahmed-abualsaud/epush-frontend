@@ -50,10 +50,10 @@
 }
 
 .content-collapse {
-    width: 83vw;
-    -webkit-transform: translateX(15.8vw);
-    -moz-transform: translateX(15.8vw);
-    -ms-transform: translateX(15.8vw);
-    -o-transform: translateX(15.8vw);
-    transform: translateX(15.8vw);
+    width: 82vw;
+    -webkit-transform: translateX(17vw);
+    -moz-transform: translateX(17vw);
+    -ms-transform: translateX(17vw);
+    -o-transform: translateX(17vw);
+    transform: translateX(17vw);
 }

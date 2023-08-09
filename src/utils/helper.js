@@ -65,6 +65,10 @@ export function snakeToBeautifulCase(str) {
       .join(' ');
 }
 
+export function beautifulToKebabCase(str) {
+  return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+}
+
 export function generatePassword(length = 8) {
     const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-={}[]|;:"<>,.?/';
     let password = '';
@@ -94,3 +98,12 @@ export function generatePassword(length = 8) {
   
     return password;
   }
+
+  export const getFileNameFromResponseHeaders = (headers) => {
+    const disposition = headers['content-disposition'];
+    const match = disposition.match(/filename="(.+)"/i);
+    if (match && match[1]) {
+      return match[1];
+    }
+    return 'export.pdf'; // Default filename if unable to extract from headers
+  };

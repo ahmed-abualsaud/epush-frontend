@@ -1,0 +1,32 @@
+.add-website-modal-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.add-website-modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 60%;
+    width: 100%;
+}
+
+.add-website-input {
+    color: #063F30;
+    font-size: 20px;
+    margin: 3rem 1rem;
+    padding: 1rem;
+    height: 80px;
+    width: 80%;
+    border-radius: 30px;
+    background-color: rgb(224, 224, 224);
+    text-align: center;
+}
+
+.add-website-button {
+    font-size: 35px;
+    height: 80px;
+}

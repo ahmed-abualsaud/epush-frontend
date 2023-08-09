@@ -1,6 +1,15 @@
 .home-content {
-    height: 90vh;
-    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), url('../../image/epush_white.png');
-    background-size: cover;
-    background-position: center;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg");
+    z-index: -10!important;
 }
+
+.home-content video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1000;
+}
+  

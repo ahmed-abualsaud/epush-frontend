@@ -280,6 +280,16 @@ const useAuthApi = () =>
         }
     }
 
+    const searchUser = async (take, column, value) =>
+    {
+        try {
+            return (await api.post("/auth/user/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
 
     return { 
         signin,
@@ -297,6 +307,8 @@ const useAuthApi = () =>
         updateUser,
 
         deleteUser,
+
+        searchUser,
 
         updateRole,
 

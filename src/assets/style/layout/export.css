@@ -1,0 +1,49 @@
+.export-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 25%;
+    border-radius: 30px;
+    background-image: var(--background-image);
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+.export-header {
+    width: 30%;
+    height: 77px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid #fff;
+}
+
+.export-buttons {
+    width: 75%;
+    display: flex;
+    justify-content: end;
+    padding: 15px;
+}
+
+.export-button {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 1px solid #fff;
+    background-color: var(--select-theme-hover);
+    margin-left: 15px;
+    transition: all 0.3s ease-in-out;
+}
+
+.export-button:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+.export-button:active {
+    cursor: grab;
+    transform: scale(0.95);
+}
+
+.export-button i {
+    margin-left: 5px;
+}

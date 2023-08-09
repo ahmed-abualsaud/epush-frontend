@@ -1,0 +1,110 @@
+
+.droplist-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 50%;
+    margin-bottom: 1rem;
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    background-image: var(--background-image);
+}
+
+.selectbox {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-width: 100%;
+}
+
+.option-container {
+    background-color: var(--select-theme);
+    color: var(--option-color);
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.4s ease;
+    border-radius: 8px;
+    overflow: hidden;
+}
+  
+.selectbox--active .option-container {
+    max-height: 192px;
+    opacity: 1;
+    overflow-y: auto;
+}
+  
+.selectbox__displayWord,
+.option-container__option {
+    padding: 12px 24px;
+    cursor: pointer;
+    text-align: center;
+}
+  
+.selectbox__displayWord {
+    position: relative;
+    background-color: var(--select-theme);
+    color: var(--option-color)!important;
+    border-radius: 8px;
+    height: 40px;
+    display: flex;
+    margin-right: 1rem;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #fff;
+}
+
+.selectbox__displayWord i {
+    transition: all 0.4s linear;
+}
+
+.selectbox__displayWord::after {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    content: "";
+    background: url("https://image.flaticon.com/icons/svg/271/271210.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+  
+    height: 16px;
+    width: 16px;
+    color: #f5f6fa;
+    transform: translateY(-50%);
+}
+.selectbox--active .selectbox__displayWord::after {
+    transform: translateY(-50%) rotateZ(180deg);
+}
+
+.selectbox--unselect .selectbox__displayWord {
+    color: gray;
+}
+
+.option-container {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.option-container__option:hover {
+    background-color: var(--select-theme-hover);
+}
+
+.option__radio {
+    display: none;
+}
+
+.option__label {
+    cursor: pointer;
+}
+
+.search-columns i {
+    color: var(--select-theme);
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+}

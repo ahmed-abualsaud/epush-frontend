@@ -89,6 +89,9 @@ const AddGeneralUser = () => {
                 <i className="input-icon uil uil-phone"></i>
             </Input>
 
+            <Input id="add-client-address" type="text" placeholder="Address" validrules="required">
+                <i className="input-icon uil uil-map-marker"></i>
+            </Input>
 
             <Input id="add-user-password" type="password" placeholder="Password" validrules="required|strong_password">
                 <i className="input-icon uil uil-lock-alt"></i>

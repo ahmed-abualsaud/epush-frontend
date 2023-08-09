@@ -1,12 +1,13 @@
-import '../assets/style/component/edit-user.css'
 import useAuthApi from '../api/useAuthApi'
-import { getElement, updateElement } from '../utils/dom'
-import { useEffect, useRef, useState } from 'react'
-import { isEmpty, snakeToBeautifulCase } from '../utils/helper'
 import { showAlert } from '../utils/validator'
+import '../assets/style/component/edit-user.css'
+import { useEffect, useRef, useState } from 'react'
+import { navigate, render } from '../setup/navigator'
 import { useDispatch, useSelector } from 'react-redux'
+import { getElement, updateElement } from '../utils/dom'
+import { isEmpty, snakeToBeautifulCase } from '../utils/helper'
 import { updateAuthUser } from '../container/redux/slice/authSlice'
-import { navigate } from '../setup/navigator'
+
 
 const EditUser = ({ user }) => {
 
@@ -255,7 +256,7 @@ const EditUser = ({ user }) => {
                         <div className="password-hint">Click the button to create a new password for this user and update their old password with the new one.</div>
                         <a href="#popup">
                             <button 
-                                onClick={() => navigate("modal-content", "generate-password-modal", user["id"])} 
+                                onClick={() => render("modal-content", "generate-password-modal", user["id"])} 
                                 className="button password-button"
                             >
                                 Generate New Password

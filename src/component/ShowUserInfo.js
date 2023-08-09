@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import useCoreApi from "../api/useCoreApi";
 
-const ShowUserInfo = ({ user }) => {
+const ShowUserInfo = ({ user, isUser }) => {
 
     const excludedColumns = [
         // "clientId", 
@@ -37,13 +37,13 @@ const ShowUserInfo = ({ user }) => {
     const [client, setClient] = useState([])
     const { getClient } = useCoreApi()
 
-    const filteredColumns = client ? Object.keys(client).filter(
+    const filteredColumns = user ? Object.keys(user).filter(
         (column) => !excludedColumns.includes(column)
     ) : []
 
     const setupLock = useRef(true)
     const setup = async () => {
-        const clt = await getClient(user.id)
+        const clt = await getClient(isUser? user.id : user.user_id)
         if (clt) setClient(clt)
     }
     useEffect(() => {
@@ -57,8 +57,6 @@ const ShowUserInfo = ({ user }) => {
             <div className="user-image">
                 <div className="image-wrapper">
                     <img src={client.avatar ?? "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg"} alt="Avatar" />
-                    <input id="add-client-avatar-input" type="file" accept="image/*"/>
-                    <i className="uil uil-camera-plus"></i>
                 </div>
             </div>
             <table className="fl-table">
@@ -77,6 +75,16 @@ const ShowUserInfo = ({ user }) => {
                                 <td style={{fontSize: "22px"}}>{ website.url }</td>
                             </tr>
                         )) :
+                        col === "sales" ?
+                        <tr>
+                            <td style={{fontSize: "22px"}}>Sales name</td>
+                            <td style={{fontSize: "22px"}}>{ client.sales?.name ?? "NULL" }</td>
+                        </tr>:
+                        col === "business_field" ?
+                        <tr>
+                            <td style={{fontSize: "22px"}}>Business Field</td>
+                            <td style={{fontSize: "22px"}}>{ client.businessfield?.name ?? "NULL" }</td>
+                        </tr>:
                         <tr>
                             <td style={{fontSize: "22px"}}>{col}</td>
                             <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof client[col] === "boolean"? client[col] ? "Yes" : "No" : client[col] ?? "NULL"}</td>
