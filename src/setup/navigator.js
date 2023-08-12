@@ -59,6 +59,7 @@ export function render(containerID, componentKey, ...params)
 export function navigate(containerID, componentKey, ...params) 
 {
     addRoute(containerID, componentKey, params)
+    
     const container = getElement(containerID)
     ! isEmpty(container) && createRoot(container).render(
 

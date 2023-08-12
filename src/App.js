@@ -4,14 +4,14 @@ import "@fontsource/lexend"
 import Home from './page/Home'
 import Signin from './page/Signin'
 import Signup from './page/Signup'
-import Modal from './layout/Modal'
+import Modal from './layout/Shared/Modal'
 import { Provider } from 'react-redux'
 import store from './container/redux/store'
-import ProtectedRoute from './layout/ProtectedRoute'
+import ProtectedRoute from './layout/Shared/ProtectedRoute'
 import SuperAdminDashboard from './page/SuperAdminDashboard'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import AdminDashboard from './page/AdminDashboard'
-import HomeContent from './component/HomeContent'
+import HomeContent from './component/Shared/HomeContent'
 import ErrorBoundary from './setup/ErrorBoundary'
 
 function App() {

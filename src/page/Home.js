@@ -1,10 +1,10 @@
 import '../assets/style/page/home.css'
-import Header from '../layout/Header'
-import Footer from '../layout/Footer'
-import HomeContent from '../component/HomeContent'
-import SigninButton from '../component/SigninButton'
-import SignupButton from '../component/SignupButton'
-import Brand from '../component/Brand'
+import Header from '../layout/Shared/Header'
+import Footer from '../layout/Shared/Footer'
+import HomeContent from '../component/Shared/HomeContent'
+import SigninButton from '../component/Auth/SigninButton'
+import SignupButton from '../component/Auth/SignupButton'
+import Brand from '../component/Header/Brand'
 
 const Home = () => {  
     return (

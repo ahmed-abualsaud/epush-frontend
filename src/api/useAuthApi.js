@@ -19,7 +19,7 @@ const useAuthApi = () =>
     {
         if (! validate("signin_form")) { return [] }
         try {
-            const user = (await api.post("/auth/signin", getFormInputData("signin_form"))).data.data
+            const user = (await api.post("/auth/user/signin", getFormInputData("signin_form"))).data.data
             localStorage.setItem('user', JSON.stringify(user));
             dispatch(authSignin(user))
             return user
@@ -29,10 +29,20 @@ const useAuthApi = () =>
         }
     }
 
+    const getUser = async (userID) =>
+    {
+        try {
+            return (await api.get("/auth/user/" + userID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
     const addUser = async (user) =>
     {
         try {
-            return (await api.post("/auth/signup", user, {
+            return (await api.post("/auth/user/signup", user, {
                 headers: {
                   'Content-Type': 'multipart/form-data',
                 },
@@ -47,7 +57,7 @@ const useAuthApi = () =>
     const signout = async () => 
     {
         try {
-            await api.post("/auth/signout")
+            await api.post("/auth/user/signout")
             dispatch(authSignout())
             localStorage.clear()
             navigate("/signin")
@@ -62,7 +72,7 @@ const useAuthApi = () =>
     const generatePassword = async (userID) =>
     {
         try {
-            return (await api.post("/auth/generate-password" , {user_id: userID})).data.data
+            return (await api.post("/auth/user/generate-password" , {user_id: userID})).data.data
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -295,6 +305,8 @@ const useAuthApi = () =>
         signin,
 
         signout,
+
+        getUser,
 
         addUser,
 

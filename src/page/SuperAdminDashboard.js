@@ -1,14 +1,14 @@
-import Header from "../layout/Header"
-import Sidebar from "../layout/Sidebar"
-import Content from "../layout/Content"
-import NavItem from "../layout/NavItem"
-import NavItems from "../layout/NavItems"
-import Dashboard from "../layout/Dashboard"
+import Header from "../layout/Shared/Header"
+import Sidebar from "../layout/Navigation/Sidebar"
+import Content from "../layout/Shared/Content"
+import NavItem from "../layout/Navigation/NavItem"
+import NavItems from "../layout/Navigation/NavItems"
+import Dashboard from "../layout/Shared/Dashboard"
 import useOrchiApi from "../api/useOrchiApi"
-import ProfileNav from "../component/ProfileNav"
+import ProfileNav from "../component/Header/ProfileNav"
 
 import { navigate } from "../setup/navigator"
-import TableContent from "../layout/TableContent"
+import TableContent from "../layout/Shared/TableContent"
 import React, { useEffect, useRef, useState } from "react"
 
 const SuperAdminDashboard = () => {
@@ -81,8 +81,8 @@ const SuperAdminDashboard = () => {
                 >
                     <NavItems className="nav-flyout">
                         <NavItem text="Users" icon="uil uil-users-alt" onClick={ () => navigate("content", "table-content") }/>
-                        <NavItem text="Roles" icon="yil uil-user-check" onClick={ () => navigate("content", "roles-table") }/>
-                        <NavItem text="Permissions" icon="uil uil-shield-check" onClick={ () => navigate("content", "permissions-table") }/>
+                        <NavItem text="Roles" icon="yil uil-user-check" onClick={ () => navigate("content", "list-roles") }/>
+                        <NavItem text="Permissions" icon="uil uil-shield-check" onClick={ () => navigate("content", "list-permissions") }/>
                     </NavItems>
                 </NavItem>
 
