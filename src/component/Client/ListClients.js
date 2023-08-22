@@ -158,7 +158,11 @@ const ListClients = () =>
                     </HeadRow>
                 </TableHead>
                 <TableBody>
-                    <DataRows columns={columns} rows={clients.data.map(client => {client.sales = client.sales?.name ?? "NULL"; client.business_field = client.business_field?.name ?? "NULL"; return client})}>
+                    <DataRows columns={columns} rows={clients.data.map(client => {
+                        client.sales = client.sales?.name ?? "NULL"
+                        client.business_field = client.business_field?.name ?? "NULL"
+                        return client
+                    })}>
                         {withOperationCellParameters(ShowRowCell, "showFunction", showClientHandler)}
                         {withOperationCellParameters(UpdateRowCell, "updateFunction", updateClientHandler)}
                         {withOperationCellParameters(DeleteRowCell, "deleteFunction", deleteClientHandler)}

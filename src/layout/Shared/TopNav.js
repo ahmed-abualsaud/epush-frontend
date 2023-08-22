@@ -2,7 +2,7 @@ import { useState } from 'react'
 import '../../assets/style/layout/top-nav.css'
 import { navigate } from '../../setup/navigator'
 
-const TopNav = () => {
+const TopNav = ({ tab }) => {
 
     const [previous, setPrevious] = useState(-1)
 
@@ -27,12 +27,12 @@ const TopNav = () => {
             navtab.classList.remove('hidemiddle')
         }, 750)
 
-        navigate("table-content", table === "all" ? "list-users": table === "clients" ? "list-clients" : "list-admins")
+        navigate("content", table === "all" ? "list-users": table === "clients" ? "list-clients" : "list-admins")
     }
 
     return (
         <div className="topnav-container">
-            <nav class="tab" data-selected="2">
+            <nav class="tab" data-selected={tab === "admins" ? "1" : tab === "all" ? "2" : "3"}>
                 <div class="icons">
                     <div data-index="1" class="icon" onClick={(e) => tabOnClickHandler(e, "admins")}>Admins</div>
                     <div data-index="2" class="icon" onClick={(e) => tabOnClickHandler(e, "all")}>All</div>

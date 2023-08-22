@@ -1,4 +1,4 @@
-export function isEmpty(value) {
+export function isEmpty(value, falseTolarent = true) {
 
   if (typeof value === "object") {
     for (const key in value) {
@@ -15,7 +15,7 @@ export function isEmpty(value) {
       (typeof value === "string" && value.trim() === "") ||
       (Array.isArray(value) && value.length === 0) ||
       // (typeof value === "object" && Object.keys(value).length === 0) ||
-      value === false
+      (value === false && ! falseTolarent)
   ) {
     return true;
   }
@@ -59,14 +59,15 @@ export function arrayIsEmpty(array) {
 }
 
 export function snakeToBeautifulCase(str) {
-    return str
+    
+    return str ? str
       .split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+      .join(' '): "NULL";
 }
 
 export function beautifulToKebabCase(str) {
-  return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+  return str ? str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() : "NULL";
 }
 
 export function generatePassword(length = 8) {

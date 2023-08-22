@@ -24,7 +24,7 @@ const AddSales = () => {
 
             const result = await addSales(priclist);
             if (! isEmpty(result)) {
-                navigate("content", "sales-table")
+                navigate("content", "list-sales")
                 showAlert("Sales Added Successfully!")
             } else {
                 showAlert("Valid Sales Information Required")
@@ -37,7 +37,7 @@ const AddSales = () => {
             <h1 className="add-user-header mb-5">Add New Sales</h1>
 
             <Input id="add-sales-name" type="text" placeholder="Name" validrules="required">
-                <i className="input-icon uil uil-pen"></i>
+                <i className="input-icon fas fa-pen"></i>
             </Input>
 
             <div className="update-user">

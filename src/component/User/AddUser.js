@@ -8,6 +8,7 @@ import PermissionList from '../Permission/PermissionList'
 import { useEffect, useRef, useState } from 'react'
 import { showAlert, validate } from '../../utils/validator'
 import { getElement, getFormInputData } from '../../utils/dom'
+import { navigate } from '../../setup/navigator'
 
 
 const AddUser = () => {
@@ -38,6 +39,7 @@ const AddUser = () => {
             user = await addUser(user);
             if (! isEmpty(user)) {
                 setCurrentUser(user)
+                navigate("content", "list-users")
                 showAlert("User Added Successfully please scroll to bottom!")
             } else {
                 showAlert("Valid User Information Required")

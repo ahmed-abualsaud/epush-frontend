@@ -3,16 +3,38 @@
     bottom: 10px;
     right: 10px;
 }
-  
+
 .scroll-button-container button {
-    padding: 6px;
     border-radius: 5px;
     background-color: #063F30;
     color: white;
     font-size: 16px;
     cursor: pointer;
+    width: 35px;
+    height: 35px;
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
 }
-  
+
 .scroll-button-container button:hover {
+    width: 100px;
     background-color: #070020;
+}
+
+.scroll-button-container button:hover .button-text {
+    margin-left: 3px;
+    display: inline-block!important;
+    animation: delay-animation 1s ease-in-out;
+    animation-delay: 1s;
+}
+
+@keyframes delay-animation {
+    0% {
+        margin-left: 0;
+        opacity: 0;
+    }
+    100% {
+        margin-left: 3px;
+        opacity: 1;
+    }
 }

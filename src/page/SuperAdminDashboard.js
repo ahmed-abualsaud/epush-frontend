@@ -1,15 +1,16 @@
 import Header from "../layout/Shared/Header"
-import Sidebar from "../layout/Navigation/Sidebar"
-import Content from "../layout/Shared/Content"
-import NavItem from "../layout/Navigation/NavItem"
-import NavItems from "../layout/Navigation/NavItems"
-import Dashboard from "../layout/Shared/Dashboard"
 import useOrchiApi from "../api/useOrchiApi"
+import Content from "../layout/Shared/Content"
+import Sidebar from "../layout/Navigation/Sidebar"
+import NavItem from "../layout/Navigation/NavItem"
+import Dashboard from "../layout/Shared/Dashboard"
+import NavItems from "../layout/Navigation/NavItems"
 import ProfileNav from "../component/Header/ProfileNav"
 
-import { navigate } from "../setup/navigator"
+import { addRoute, navigate } from "../setup/navigator"
 import TableContent from "../layout/Shared/TableContent"
 import React, { useEffect, useRef, useState } from "react"
+import ListUsers from "../component/User/ListUsers"
 
 const SuperAdminDashboard = () => {
 
@@ -21,6 +22,7 @@ const SuperAdminDashboard = () => {
     const setup = async () => {
         const srv = await listServices()
         if (srv) setServices(srv)
+        addRoute("content", "list-users", [])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup() }
@@ -51,22 +53,27 @@ const SuperAdminDashboard = () => {
             <Sidebar>
                 <NavItem
                     text="Services"
-                    icon="uil uil-dropbox"
+                    icon="fas fa-box-open"
                     onClick={handleClick}
                     onMouseLeave={handleLeave}
                 >
                     <NavItems className="nav-flyout">
                         <NavItem 
-                            key="all" 
+                            key="all"
                             text="All"
-                            icon="uil uil-align-alt" 
+                            icon="uil uil-align-alt"
                             onClick={() => navigate("content", "all-services", services)}
                         />
                         {services.map((service) => (
                             <NavItem 
                                 key={service.id} 
                                 text={service.name.charAt(0).toUpperCase() + service.name.slice(1)} 
-                                icon={ service.name === "auth" ? "uil uil-lock-alt" : service.name === "file" ? "uil uil-file-alt" : "uil uil-atom"} 
+                                icon={ 
+                                    service.name === "auth" ? "fas fa-lock" : 
+                                    service.name === "file" ? "fas fa-file-alt" : 
+                                    service.name === "core" ? "fas fa-atom" : 
+                                    "fas fa-sack-dollar"
+                                }
                                 onClick={() => navigate("content", "service-contexts", service)}
                             />
                         ))}
@@ -74,36 +81,67 @@ const SuperAdminDashboard = () => {
                 </NavItem>
 
                 <NavItem
-                    text="Authorities"
-                    icon="uil uil-shield-question"
+                    text="Authorization"
+                    icon="fas fa-user-shield"
                     onClick={handleClick}
                     onMouseLeave={handleLeave}
                 >
                     <NavItems className="nav-flyout">
-                        <NavItem text="Users" icon="uil uil-users-alt" onClick={ () => navigate("content", "table-content") }/>
-                        <NavItem text="Roles" icon="yil uil-user-check" onClick={ () => navigate("content", "list-roles") }/>
-                        <NavItem text="Permissions" icon="uil uil-shield-check" onClick={ () => navigate("content", "list-permissions") }/>
+                        <NavItem text="Users" icon="fas fa-users" onClick={ () => navigate("content", "list-users") }/>
+                        <NavItem text="Roles" icon="fas fa-person-circle-check" onClick={ () => navigate("content", "list-roles") }/>
+                        <NavItem text="Permissions" icon="fas uil-shield-check" onClick={ () => navigate("content", "list-permissions") }/>
                     </NavItems>
                 </NavItem>
 
-                <NavItem text="Sales" icon="uil uil-money-withdraw" onClick={ () => navigate("content", "sales-table") }/>
-                <NavItem text="Price List" icon="uil uil-receipt-alt" onClick={ () => navigate("content", "pricelist-table") }/>
-                <NavItem text="Business Fields" icon="uil uil-analytics" onClick={ () => navigate("content", "business-field-table") }/>
+                <NavItem text="Sales" icon="fas fa-hand-holding-dollar" onClick={ () => navigate("content", "list-sales") }/>
+                <NavItem text="Price List" icon="fas fa-receipt" onClick={ () => navigate("content", "list-pricelist") }/>
+                <NavItem text="Business Fields" icon="fas fa-industry" onClick={ () => navigate("content", "list-business-fields") }/>
 
                 <NavItem
                     text="Expense"
-                    icon="uil uil-dollar-alt"
+                    icon="fas fa-sack-dollar"
                     onClick={handleClick}
                     onMouseLeave={handleLeave}
                 >
                     <NavItems className="nav-flyout">
-                        <NavItem text="Payment Methods" icon="uil uil-credit-card" onClick={ () => navigate("content", "payment-method-table") }/>
+                        <NavItem text="Payment Methods" icon="fas fa-credit-card" onClick={ () => navigate("content", "list-payment-methods") }/>
+                        <NavItem text="Orders" icon="fas fa-money-bill-transfer" onClick={ () => navigate("content", "list-orders") }/>
                     </NavItems>
                 </NavItem>
+
+                <NavItem text="Countries" icon="fas fa-earth-americas" onClick={ () => navigate("content", "list-countries") }/>
+                <NavItem text="Operators" icon="fas fa-tower-cell" onClick={ () => navigate("content", "list-operators") }/>
+
+                <NavItem
+                    text="SMSCs Management"
+                    icon="fas fa-circle-nodes"
+                    onClick={handleClick}
+                    onMouseLeave={handleLeave}
+                >
+                    <NavItems className="nav-flyout">
+                        <NavItem text="SMS Connections" icon="fas fa-plug" onClick={ () => navigate("content", "list-smscs") }/>
+                        <NavItem text="Connections Bindings" icon="fas fa-circle-nodes" onClick={ () => navigate("content", "list-smsc-bindings") }/>
+                    </NavItems>
+                </NavItem>
+
+                <NavItem
+                    text="Senders Management"
+                    icon="fas fa-share-from-square"
+                    onClick={handleClick}
+                    onMouseLeave={handleLeave}
+                >
+                    <NavItems className="nav-flyout">
+                        <NavItem text="Senders" icon="fas fa-share-from-square" onClick={ () => navigate("content", "list-senders") }/>
+                        <NavItem text="Senders Connections" icon="fas fa-tower-broadcast" onClick={ () => navigate("content", "list-senders-connections") }/>
+                    </NavItems>
+                </NavItem>
+
             </Sidebar>
 
             <Content>
-                <TableContent/>
+                <TableContent tab="all">
+                    <ListUsers/>
+                </TableContent>
             </Content>
         </Dashboard>
     )

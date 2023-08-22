@@ -79,7 +79,7 @@ const AddClient = () => {
 
             client = await addClient(client);
             if (! isEmpty(client)) {
-                navigate("content", "table-content")
+                navigate("content", "list-clients")
                 showAlert("Client Added Successfully!")
             } else {
                 showAlert("Valid Client Information Required")

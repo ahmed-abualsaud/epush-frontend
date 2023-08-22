@@ -1,3 +1,4 @@
+import qs from "qs"
 import useAxiosApi from "./Api"
 
 const useExpenseApi = () => 
@@ -45,8 +46,56 @@ const useExpenseApi = () =>
         }
     }
 
+    const getOrder = async (orderID) =>
+    {
+        try {
+            return (await api.get("/expense/order/" + orderID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const listOrders = async (perPage) =>
+    {
+        try {
+            return (await api.get("/expense/order?" + qs.stringify({take: perPage}))).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const addOrder = async (order) =>
+    {
+        try {
+            return (await api.post("/expense/order", order)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const searchOrder = async (take, column, value) =>
+    {
+        try {
+            return (await api.post("/expense/order/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
 
     return {
+
+        getOrder,
+
+        addOrder,
+
+        listOrders,
+
+        searchOrder,
 
         addPaymentMethod,
 

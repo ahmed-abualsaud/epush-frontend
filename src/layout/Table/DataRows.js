@@ -6,6 +6,8 @@ const DataRows = ({ columns, rows, children }) => {
 
     const [deletedRows, setDeletedRows] = useState([])
 
+    children = children ? children.length === 1 ? [children] : children : []
+
     return (
         <>
             {rows.map((row, index) => (

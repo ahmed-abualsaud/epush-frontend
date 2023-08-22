@@ -35,12 +35,18 @@ function ScrollButton() {
 
   return (
     <div className="scroll-button-container">
-      {showScrollButton ? (
-        <button onClick={scrollToTop}><i className="uil uil-top-arrow-to-top"></i></button>
-      ) : (
-        <button onClick={scrollToBottom}><i className="uil uil-arrow-to-bottom"></i></button>
-      )}
-    </div>
+    {showScrollButton ? (
+        <button onClick={scrollToTop}>
+          <i className="uil uil-top-arrow-to-top"></i>
+          <span className="button-text">go up</span>
+        </button>
+    ) : (
+        <button onClick={scrollToBottom}>
+          <i className="uil uil-arrow-to-bottom"></i>
+          <span className="button-text">go down</span>
+        </button>
+    )}
+</div>
   );
 }
 

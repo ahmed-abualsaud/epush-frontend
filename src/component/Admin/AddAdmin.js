@@ -35,7 +35,7 @@ const AddAdmin = () => {
 
             user = await addAdmin(user);
             if (! isEmpty(user)) {
-                navigate("content", "table-content")
+                navigate("content", "list-admins")
                 showAlert("Admin Added Successfully")
             } else {
                 showAlert("Valid Admin Information Required")

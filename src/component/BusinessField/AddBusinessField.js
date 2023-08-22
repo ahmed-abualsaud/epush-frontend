@@ -24,7 +24,7 @@ const AddBusinessField = () => {
 
             const result = await addBusinessField(priclist);
             if (! isEmpty(result)) {
-                navigate("content", "business-field-table")
+                navigate("content", "list-business-fields")
                 showAlert("Business Field Added Successfully!")
             } else {
                 showAlert("Valid Business Field Information Required")
@@ -37,7 +37,7 @@ const AddBusinessField = () => {
             <h1 className="add-user-header mb-5">Add New Business Field</h1>
 
             <Input id="add-business-field-name" type="text" placeholder="Name" validrules="required">
-                <i className="input-icon uil uil-pen"></i>
+                <i className="input-icon fas fa-pen"></i>
             </Input>
 
             <div className="update-user">

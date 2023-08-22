@@ -24,7 +24,7 @@ const AddPricelist = () => {
 
             const result = await addPricelist(priclist);
             if (! isEmpty(result)) {
-                navigate("content", "pricelist-table")
+                navigate("content", "list-pricelist")
                 showAlert("Pricelist Added Successfully!")
             } else {
                 showAlert("Valid Pricelist Information Required")
@@ -37,7 +37,7 @@ const AddPricelist = () => {
             <h1 className="add-user-header mb-5">Add New Price</h1>
 
             <Input id="add-pricelist-name" type="text" placeholder="Name" validrules="required">
-                <i className="input-icon uil uil-pen"></i>
+                <i className="input-icon fas fa-pen"></i>
             </Input>
 
             <Input id="add-pricelist-price" type="text" placeholder="Price" validrules="required">

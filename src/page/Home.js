@@ -16,6 +16,7 @@ const Home = () => {
                     {/* <SignupButton /> */}
                 </div>
             </Header>
+            <HomeContent />
             <Footer />
         </div>
     )

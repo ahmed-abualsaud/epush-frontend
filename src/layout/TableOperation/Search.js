@@ -1,23 +1,14 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import '../../assets/style/layout/search.css'
 import { getElement } from '../../utils/dom'
 import { snakeToBeautifulCase } from '../../utils/helper'
 
 const Search = ({ columns, searchColumn }) => {
-  const setupLock = useRef(true)
-
-  const setup = async () => {
-    window.addEventListener('click', () => {
-      getElement('select-column')?.classList.remove('selectbox--active')
-    })
-  }
+  const [currentColumns, setCurrentColumns] = useState([])
 
   useEffect(() => {
-    if (setupLock.current) {
-      setupLock.current = false
-      setup()
-    }
-  }, [])
+      setCurrentColumns(columns)
+  }, [columns])
 
   const displayColumnsOnClickHandler = (e) => {
     e.stopPropagation()
@@ -34,6 +25,7 @@ const Search = ({ columns, searchColumn }) => {
     selectbox.setAttribute('data-option', column)
     selectbox.classList.remove('selectbox--active', 'selectbox--unselect')
     let searchInput = getElement("search-input-id")
+
     if (column === "phone") {
         searchInput.type = "number"
     }
@@ -58,6 +50,11 @@ const Search = ({ columns, searchColumn }) => {
     }
   }
 
+  const searchDroplistColumns = (e) => {
+    setCurrentColumns(columns.filter(column => column?.toLowerCase().includes(e.currentTarget.value)))
+  }
+
+
   return (
     <div className="search-container">
       <div id="select-column" className="selectbox selectbox--unselect" data-option="">
@@ -65,7 +62,10 @@ const Search = ({ columns, searchColumn }) => {
           Select Column <i className="ms-1 uil uil-angle-double-down"></i>
         </div>
         <div className="option-container">
-          {columns.map((column, index) => (
+          <div className={"form-group m-1"}>
+              <input style={{padding: "10px"}} className="form-style" onInput={searchDroplistColumns} type="text" placeholder="Type Column Name"/>
+          </div>
+          {currentColumns.map((column, index) => (
             <div className="option-container__option" onClick={selectColumnOnClickHandler} key={index}>
               <input type="radio" className="option__radio" name="category" />
               <label className="option__label" data-value={column}>

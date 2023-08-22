@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import "@fontsource/lexend"
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import Home from './page/Home'
 import Signin from './page/Signin'
@@ -11,7 +12,6 @@ import ProtectedRoute from './layout/Shared/ProtectedRoute'
 import SuperAdminDashboard from './page/SuperAdminDashboard'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import AdminDashboard from './page/AdminDashboard'
-import HomeContent from './component/Shared/HomeContent'
 import ErrorBoundary from './setup/ErrorBoundary'
 
 function App() {
@@ -21,7 +21,6 @@ function App() {
         <Provider store={store}>
           <BrowserRouter>
           <Modal/>
-          <HomeContent />
 
           <Routes>
 

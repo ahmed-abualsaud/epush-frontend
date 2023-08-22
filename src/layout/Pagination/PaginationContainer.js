@@ -1,5 +1,7 @@
 const PaginationContainer = ({ children }) => {
 
+    children = children.length === 1 ? [children] : children
+
     return (
         <>
             <div className="d-flex align-items-center justify-content-between mx-1">

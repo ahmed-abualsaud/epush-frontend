@@ -24,7 +24,7 @@ const AddPaymentMethod = () => {
 
             const result = await addPaymentMethod(paymentMethod);
             if (! isEmpty(result)) {
-                navigate("content", "payment-method-table")
+                navigate("content", "list-payment-methods")
                 showAlert("Payment Method Added Successfully!")
             } else {
                 showAlert("Valid Payment Method Information Required")
@@ -37,7 +37,7 @@ const AddPaymentMethod = () => {
             <h1 className="add-user-header mb-5">Add New Payment Method</h1>
 
             <Input id="add-payment-method-name" type="text" placeholder="Name" validrules="required">
-                <i className="input-icon uil uil-pen"></i>
+                <i className="input-icon fas fa-pen"></i>
             </Input>
 
             <div className="update-user">
