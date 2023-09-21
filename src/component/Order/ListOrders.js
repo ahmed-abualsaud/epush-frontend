@@ -21,15 +21,19 @@ import PaginationInfo from "../../layout/Pagination/PaginationInfo"
 import ShowRowCell from "../../layout/TableOperation/ShowRowCell"
 import OperationContainer from "../../layout/TableOperation/OperationContainer"
 import useExpenseApi from "../../api/useExpenseApi"
-
+import UpdateRowCell from "../../layout/TableOperation/UpdateRowCell"
+import '../../assets/style/layout/general.css'
+import OperationRowCell from "../../layout/TableOperation/OperationRowCell"
+import { showAlert } from "../../utils/validator"
 
 const ListOrders = () =>
 {
     const [orders, setOrders] = useState([])
     const [columns, setColumns] = useState([])
+    const [currentOrder, setCurrentOrder] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
-    const { listOrders, searchOrder } = useExpenseApi()
+    const { listOrders, updateOrder, searchOrder } = useExpenseApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
     const setupLock = useRef(true)
@@ -41,7 +45,7 @@ const ListOrders = () =>
             ord = await searchOrder(perPage, searchParams.column, searchParams.value)
         }
         setOrders(ord)
-        setColumns(["credit", "company_name", "sales_name", "pricelist", "payment_method", "created_at"])
+        setColumns(["credit", "company_name", "sales_name", "pricelist", "payment_method", "collection_date", "created_at"])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup(10) }
@@ -82,8 +86,40 @@ const ListOrders = () =>
         navigate("content", "add-order")
     }
 
+    const updateOrderHandler = (order) => {
+        navigate("content", "edit-order", order)
+    }
+
     const showOrderHandler = (order) => {
         navigate("content", "show-order", order)
+    }
+
+    const setChosenOrder = (order) => {
+        setCurrentOrder(order)
+    }
+
+    const collectOrderHandler = async (e) => {
+        const userDate = new Date(e.currentTarget.value)
+        const timezoneOffset = userDate.getTimezoneOffset() * 60000
+        const localDate = new Date(userDate.getTime() - timezoneOffset)
+        const selectedDateTime = localDate.toISOString().replace("T", " ").slice(0, 19)
+
+        let newOrder = await updateOrder(currentOrder.id, {
+            collection_date: selectedDateTime
+        })
+        if (! isEmpty(newOrder)) {
+            showAlert("Order Collected Successfully!")
+        } else {
+            showAlert("Failed To Collect The Order")
+        }
+
+        let ord = []
+        if (isEmpty(searchParams)) {
+            ord = await listOrders(orders.per_page)
+        } else {
+            ord = await searchOrder(orders.per_page, searchParams.column, searchParams.value)
+        }
+        setOrders(ord)
     }
 
     return (
@@ -101,7 +137,7 @@ const ListOrders = () =>
                 <TableHead>
                     <HeadRow>
                         <HeadCells columns={columns}/>
-                        <div style={{width: "110px"}}><AddRowCell addingFunction={addOrderHandler}/></div>
+                        <AddRowCell className="w-110px" addingFunction={addOrderHandler}/>
                     </HeadRow>
                 </TableHead>
                 <TableBody>
@@ -113,6 +149,18 @@ const ListOrders = () =>
                         return order
                     })}>
                         {withOperationCellParameters(ShowRowCell, "showFunction", showOrderHandler)}
+                        {withOperationCellParameters(UpdateRowCell, "updateFunction", updateOrderHandler)}
+                        {withOperationCellParameters(OperationRowCell, "operationFunction", setChosenOrder, {
+                            children: <div style={{color: "#FFBB00"}} className="date-button-icon">
+                                        <i className="fas fa-coins"></i>
+                                        <input
+                                            id="date-time-input"
+                                            type="datetime-local"
+                                            className="date-button-input"
+                                            onInput={collectOrderHandler}
+                                        />
+                                    </div>
+                        })}
                     </DataRows>
                 </TableBody>
             </Table>

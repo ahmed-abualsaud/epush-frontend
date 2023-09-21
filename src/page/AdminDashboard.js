@@ -97,6 +97,20 @@ const AdminDashboard = () => {
                     </NavItems>
                 </NavItem>
 
+                <NavItem 
+                    text="SMS Management" 
+                    icon="fas fa-comment-sms" 
+                    onClick={handleClick}
+                    onMouseLeave={handleLeave}
+                >
+                    <NavItems className="nav-flyout">
+                        <NavItem text="Messages" icon="fas fa-envelope-open-text" onClick={ () => navigate("content", "list-messages") }/>
+                        <NavItem text="Message Languages" icon="fas fa-language" onClick={ () => navigate("content", "list-message-languages") }/>
+                        <NavItem text="Message Segments" icon="fas fa-comments" onClick={ () => navigate("content", "list-message-segments") }/>
+                        <NavItem text="Message Recipients" icon="fas fa-mobile-retro" onClick={ () => navigate("content", "list-message-recipients") }/>
+                    </NavItems>
+                </NavItem>
+
             </Sidebar>
 
             <Content>

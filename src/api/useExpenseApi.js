@@ -76,6 +76,16 @@ const useExpenseApi = () =>
         }
     }
 
+    const updateOrder = async (orderID, data) =>
+    {
+        try {
+            return (await api.put("/expense/order/" + orderID, data)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
     const searchOrder = async (take, column, value) =>
     {
         try {
@@ -92,6 +102,8 @@ const useExpenseApi = () =>
         getOrder,
 
         addOrder,
+
+        updateOrder,
 
         listOrders,
 

@@ -60,7 +60,7 @@ const EditOperator = ({ operator }) => {
                     {filteredColumns?.map((column) => (
                         <tr>
                             <td>{ column }</td>
-                            <td>{ typeof currentOperator[column] === "boolean"? currentOperator[column] ? "Yes" : "No" : currentOperator[column] ?? "NULL"}</td>
+                            <td>{ typeof currentOperator[column] === "boolean"? currentOperator[column] ? <i class="fa-solid fa-check"></i> : <i class="fa-solid fa-xmark"></i> : currentOperator[column] ?? "NULL"}</td>
                             <td className="info-input"> {
                                 <input id={column + "-operator-input"} placeholder={ "Type the new " + snakeToBeautifulCase(column) + " here"} type="text"/>
                             }</td>

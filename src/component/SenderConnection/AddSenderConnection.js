@@ -1,10 +1,14 @@
-import { isEmpty } from "../../utils/helper"
+import { beautifulToKebabCase, isEmpty } from "../../utils/helper"
 import { getElement } from "../../utils/dom"
 import useCoreApi from "../../api/useCoreApi"
 import { navigate } from "../../setup/navigator"
 import { showAlert } from "../../utils/validator"
 import { useEffect, useRef, useState } from "react"
 import DropList from "../../layout/Shared/DropList"
+import List from "../../layout/List/List"
+import MasterListItem from "../../layout/List/MasterListItem"
+import SlavesList from "../../layout/List/SlavesList"
+import SlaveListItem from "../../layout/List/SlaveListItem"
 
 const AddSenderConnection = () => {
 
@@ -12,14 +16,11 @@ const AddSenderConnection = () => {
 
     const [client, setClient] = useState([])
     const [smscBindings, setSMSCBindings] = useState([])
-    const [operatorSMSC, setOperatorSMSC] = useState([])
     const [clientSenders, setClientSenders] = useState([])
     const [selectedSenderID, setSelectedSenderID] = useState(0)
     const [countryOperators, setCountryOperators] = useState([])
-    const [selectedConnection, setSelectedConnection] = useState({})
-    const [selectedSMSCVAlue, setSelectedSMSCVAlue] = useState("Not Selected")
+    const [selectedConnections, setSelectedConnections] = useState([])
     const [selectedCountryCode, setSelectedCountryCode] = useState("Not Selected")
-    const [selectedOperatorCode, setSelectedOperatorCode] = useState("Not Selected")
 
     const setupLock = useRef(true)
     const setup = async () => {
@@ -33,23 +34,33 @@ const AddSenderConnection = () => {
         if (setupLock.current) { setupLock.current = false; setup() }
     }, [])
 
-    const addNewSenderConnection = async () => {
-        const senderconnection = {
-            sender_id: selectedSenderID + "",
-            smsc_id: selectedConnection.id + "",
-            approved: getElement("add-sender-connection-approved")?.checked
-        }
+    const addNewSenderConnection = () => {
 
-        if (isEmpty(senderconnection)) {
+        if (isEmpty(selectedConnections)) {
             showAlert("Valid Sender Connection Information Required")
             return
         }
 
-        const result = await addSenderConnection(senderconnection);
-        if (! isEmpty(result)) {
-            navigate("content", "list-senders-connections")
-            showAlert("Sender Connection Added Successfully!")
-        }
+        let senderconnection = {}
+        selectedConnections.forEach(async (connection) => {
+            senderconnection = {
+                sender_id: selectedSenderID + "",
+                smsc_id: connection.id + "",
+                approved: connection.approved
+            }
+
+            if (isEmpty(senderconnection)) {
+                showAlert("Valid Sender Connection Information Required")
+                return
+            }
+
+            const result = await addSenderConnection(senderconnection);
+            if (! isEmpty(result)) {
+                showAlert("Sender Connection Added Successfully!")
+            }
+        })
+
+        navigate("content", "list-senders-connections")
     }
 
     const onSelectClient = async (option) => {
@@ -65,20 +76,24 @@ const AddSenderConnection = () => {
         const selectedCountry = smscBindings.filter(o => o.country.name === option)
         setCountryOperators(selectedCountry)
         setSelectedCountryCode(selectedCountry[0].country.code)
-        getElement("country-operators-droplist").classList.remove("d-none")
+        setSelectedConnections([])
     }
 
-    const onSelectOperator = async (option) => {
-        const selectedOperator = countryOperators.filter(o => o.operator.name === option)
-        setOperatorSMSC(selectedOperator)
-        setSelectedOperatorCode(selectedOperator[0].operator.code)
-        getElement("operator-smsc-droplist").classList.remove("d-none")
+    const onSelectConnection = async (selected, item) => {
+        const connectionID = item.querySelector(".connection-id").innerText
+        const selectedConnection = countryOperators.find(countryOperator => countryOperator.id === parseInt(connectionID))
+
+        selected?
+        setSelectedConnections([...selectedConnections, {
+            id: selectedConnection.id, 
+            approved: getElement("connection-approved-" + beautifulToKebabCase(selectedConnection.operator.name) + "-" + beautifulToKebabCase(selectedConnection.country.name)).checked
+        }]) :
+        setSelectedConnections(selectedConnections.filter(sc => sc.id !== selectedConnection.id))
     }
 
-    const onSelectSMSC = (option) => {
-        const selectedSMSC = operatorSMSC.find(o => o.smsc.name === option)
-        setSelectedConnection(selectedSMSC)
-        setSelectedSMSCVAlue(selectedSMSC.smsc.value)
+    const operatorApprovementChanged = (checked, operatorName) => {
+        const connectionsID = countryOperators.filter(countryOperator => countryOperator.operator.name === operatorName).map(countryOperator => countryOperator.id)
+        setSelectedConnections(selectedConnections.map(sc => {sc.approved = connectionsID.includes(sc.id) ? checked : sc.approved; return sc}))
     }
 
 
@@ -112,27 +127,35 @@ const AddSenderConnection = () => {
                 <div className="d-inline-flex align-items-center justify-content-center" style={{width: "20%", fontSize: "22px"}}>Country Code = {selectedCountryCode}</div>
             </div>
 
-            <div id="country-operators-droplist" className="d-none">
-                <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>Operator</div>
-                <div className="d-inline-flex justify-content-center mt-5" style={{width: "60%"}}>
-                    <DropList selectName="Select Operator" options={[...new Set(countryOperators.map(item => item.operator.name))]} onSelect={onSelectOperator}/>
-                </div>
-                <div className="d-inline-flex align-items-center justify-content-center" style={{width: "20%", fontSize: "22px"}}>Operator Code = {selectedOperatorCode}</div>
-            </div>
+            {[...new Set(countryOperators.map(item => item.operator.name))].map(countryOperator => (
+                <List>
+                    <MasterListItem>
+                        <div className="d-flex align-items-center justify-content-between">
+                            {countryOperator}
+                            <div className="d-flex flex-column align-items-center pt-2">
+                                <h6><span>Not Approved</span><span>Is Approved</span></h6>
+                                <input 
+                                    className="smsc-approved checkbox d-none"
+                                    id={"connection-approved-" + beautifulToKebabCase(countryOperator) + "-" + beautifulToKebabCase(countryOperators[0].country.name)}
+                                    type="checkbox"
+                                    defaultChecked={true}
+                                    onChange={(e) => operatorApprovementChanged(e.currentTarget.checked, countryOperator)}
+                                />
 
-            <div id="operator-smsc-droplist" className="d-none">
-                <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>SMS Connection</div>
-                <div className="d-inline-flex justify-content-center mt-5" style={{width: "60%"}}>
-                    <DropList selectName="Select SMS Connection" options={[...new Set(operatorSMSC.map(item => item.smsc.name))]} onSelect={onSelectSMSC}/>
-                </div>
-                <div className="d-inline-flex align-items-center justify-content-center" style={{width: "20%", fontSize: "22px"}}>SMSC Value = {selectedSMSCVAlue}</div>
-            </div>
-
-            <div className="d-flex flex-column align-items-center pt-5">
-                <h6><span>Not Approved</span><span>Is Approved</span></h6>
-                <input id="add-sender-connection-approved" className="checkbox d-none" type="checkbox" defaultChecked={true}/>
-                <label for="add-sender-connection-approved"></label>
-            </div>
+                                <label for={"connection-approved-" + beautifulToKebabCase(countryOperator) + "-" + beautifulToKebabCase(countryOperators[0].country.name)}></label>
+                            </div>
+                        </div>
+                    </MasterListItem>
+                    <SlavesList>
+                        {countryOperators.filter(item => item.operator.name === countryOperator).map(connection => (
+                            <SlaveListItem onSelectItem={onSelectConnection}>
+                                <div className="connection-id d-none">{connection.id}</div>
+                                <div>{connection.smsc.name}</div>
+                            </SlaveListItem>
+                        ))}
+                    </SlavesList>
+                </List>
+            ))}
 
             <div className="update-user">
                 <button className="button" onClick={() => addNewSenderConnection()}>Add New Sender Connection</button>

@@ -13,16 +13,16 @@ const AddOperator = () => {
 
         if (validate("add-operator-form")) {
 
-            const priclist = {};
+            const operator = {};
             const input = getFormInputData("add-operator-form")
             for (const key in input) {
                 if (input.hasOwnProperty(key)) {
                     const newKey = key.replace("add-operator-", "");
-                    priclist[newKey] = input[key];
+                    operator[newKey] = input[key];
                 }
             }
 
-            const result = await addOperator(priclist);
+            const result = await addOperator(operator);
             if (! isEmpty(result)) {
                 navigate("content", "list-operators")
                 showAlert("Operator Added Successfully!")

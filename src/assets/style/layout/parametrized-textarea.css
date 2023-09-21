@@ -1,0 +1,105 @@
+.parametrized-textarea-container {
+    margin: 20px 10px;
+    border: 2px solid #063F30!important;
+    border-radius: 12px;
+    box-shadow: 10px 14px 18px 4px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 10px 14px 18px 4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 14px 18px 4px rgba(0,0,0,0.75);    border: none;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 80%, #BFE85F 200%);
+    overflow: hidden;
+}
+
+.textarea-toolbox {
+    display: flex;
+    position: relative;
+    justify-content: end;
+    padding: 20px;
+    border-bottom: none;
+}
+
+.textarea-toolbox-item-container {
+    padding: 0;
+    margin-right: 10px;
+    position: relative;
+}
+
+.textarea-toolbox-item {
+    display: inline-block;
+    font-size: 20px;
+    border: 1px solid #063F30;
+    background-color: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    max-width: 100%;
+}
+
+.textarea-toolbox-item span {
+    display: inline-block;
+    padding: 10px;
+}
+
+.textarea-toolbox-item i {
+    padding-right: 10px;
+}
+
+.textarea-toolbox-item-droplist-container {
+    background-color: #fff;
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.4s ease;
+    border-radius: 8px;
+    overflow: hidden;
+    position: absolute;
+    z-index: 100;
+    border: 1px solid #063F30;
+    width: 100%;
+}
+
+.selectbox--active .textarea-toolbox-item-droplist-container {
+    max-height: 210px;
+    opacity: 1;
+    overflow-y: auto;
+}
+
+.textarea-toolbox-item-droplist-option {
+    text-align: center;
+    width: 100%;
+    z-index: 100;
+    padding: 10px;
+    border-bottom: 1px solid #063F30;
+}
+
+.textarea-toolbox-item-droplist-option:hover {
+    background-color: var(--select-theme-hover);
+    color: #fff;
+}
+
+.textarea-toolbox-item-droplist-radio {
+    display: none;
+}
+
+.textarea-toolbox-item-droplist-label {
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+.textarea-toolbox-item-droplist-label i {
+    margin-left: 10px;
+}
+
+.parametrized-textarea-selected-parameters-file {
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 10px;
+    top: 0;
+    height: 100%;
+}
+
+.parametrized-textarea-note {
+    color: red;
+    padding: 5px 10px;
+}

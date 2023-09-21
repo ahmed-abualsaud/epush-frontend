@@ -123,3 +123,14 @@ export function fadeElementOut(element) {
         clearInterval(interval2)
     }, 4000)
 }
+
+export function getFirstElementParent(tagName, element) {
+    var parent = element.parentNode
+    while (parent) {
+      if (parent.tagName === tagName.toUpperCase()) {
+        return parent
+      }
+      parent = parent.parentNode
+    }
+    return null
+}

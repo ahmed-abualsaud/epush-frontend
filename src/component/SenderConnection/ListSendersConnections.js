@@ -61,6 +61,7 @@ const ListSendersConnections = () =>
         filteredColumns.push(...(sndcon?.data[0] ? Object.keys(sndcon?.data[0]).filter(
             (column) => !excludedColumns.includes(column)
         ) : []))
+
         setColumns(filteredColumns)
     }
     useEffect(() => {

@@ -13,14 +13,14 @@ const DropList = ({ selectName, options, onSelect }) => {
     const displayOptionsOnClickHandler = (e) => {
         e.stopPropagation()
         e.currentTarget.querySelector('i')?.classList.toggle('rotate-180')
-        getElement('select-column-' + beautifulToKebabCase(selectName)).classList.toggle('selectbox--active')
+        getElement('select-option-' + beautifulToKebabCase(selectName)).classList.toggle('selectbox--active')
     }
 
     const selectOptionOnClickHandler = (e) => {
         e.stopPropagation()
         let label = e.currentTarget.querySelector('.option__label')
-        let selectbox = getElement('select-column-' + beautifulToKebabCase(selectName))
-        getElement('display-columns-' + beautifulToKebabCase(selectName)).innerHTML = label.innerHTML
+        let selectbox = getElement('select-option-' + beautifulToKebabCase(selectName))
+        getElement('display-options-' + beautifulToKebabCase(selectName)).innerHTML = label.innerHTML
         let option = label.getAttribute('data-value')
         selectbox.setAttribute('data-option', option)
         selectbox.classList.remove('selectbox--active', 'selectbox--unselect')
@@ -33,9 +33,9 @@ const DropList = ({ selectName, options, onSelect }) => {
 
     return (
         <div className="droplist-container">
-            <div id={"select-column-" + beautifulToKebabCase(selectName)} className="selectbox selectbox--unselect" data-option="">
-                <div id={"display-columns-" + beautifulToKebabCase(selectName)} className="selectbox__displayWord" onClick={displayOptionsOnClickHandler}>
-                {selectName} <i className="ms-1 uil uil-angle-double-down"></i>
+            <div id={"select-option-" + beautifulToKebabCase(selectName)} className="selectbox selectbox--unselect" data-option="">
+                <div id={"display-options-" + beautifulToKebabCase(selectName)} className="selectbox__displayWord" onClick={displayOptionsOnClickHandler}>
+                    {selectName} <i className="ms-1 uil uil-angle-double-down"></i>
                 </div>
                 <div className="option-container">
                     <div className="form-group droplist-search-options">

@@ -1,0 +1,26 @@
+.file-input-container {
+    max-width: 100%;
+}
+
+.file-input {
+    display: none;
+}
+
+.file-input-label {
+  background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #BFE85F -200%, #063F30 20%, #070020 200%);
+  color: #fff;
+  font-weight: bold;
+  padding: 20px 70px;
+  border-radius: 5px;
+  cursor: pointer;
+  max-width: 100%;
+  overflow: auto;
+}
+  
+  .file-input-label:hover {
+    background: #070020;
+  }
+  
+  .file-input-label:active {
+    background: #063F30;
+  }

@@ -1,0 +1,41 @@
+.messages-list {
+    border: 2px solid #063F30;
+    margin: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.messages-list-item {
+    position: relative;
+    margin: 30px 0 10px 0;
+}
+
+.messages-list-title {
+    position: absolute;
+    text-align: center;
+    left: 5%;
+    top: -15px;
+    padding: 8px;
+    width: 25%;
+    color: #fff;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 80%, #BFE85F 200%);
+}
+
+.messages-list-content {
+    padding: 35px 10px 10px 10px;
+    font-size: 20px;
+    margin: 5px;
+    border: 2px solid #063F30;
+    border-radius: 10px;
+    background-color: rgb(240, 238, 238);
+}
+
+.messages-list-total {
+    position: relative;
+    float: right;
+    margin-top: -64px;
+    padding: 20px;
+    border-top-left-radius: 1000px;
+    background-color: #063F30;
+    color: #fff;
+}

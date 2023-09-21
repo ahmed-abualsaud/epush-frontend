@@ -1,0 +1,93 @@
+/* Hide the default checkbox */
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  .checkbox-container {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    font-size: 22px;
+    user-select: none;
+    border-radius: 50%;
+    border: 2px solid #063F30;
+    height: 1.3em;
+    width: 1.3em;
+    z-index: 1000;
+    margin-right: 10px;
+
+  }
+  
+  /* Create a custom checkbox */
+  .checkmark {
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    transition: .3s;
+    transform: scale(0);
+    border-radius: 50%;
+  }
+  
+  /* When the checkbox is checked, add a blue background */
+  .checkbox-container input:checked ~ .checkmark {
+    background-color: #fff;
+    transform: scale(1);
+  }
+  
+  /* Create the checkmark/indicator (hidden when not checked) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the checkmark when checked */
+  .checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  .checkbox-container input:checked ~ .celebrate {
+    display: block;
+  }
+  
+  /* Style the checkmark/indicator */
+  .checkbox-container .checkmark:after {
+    left: 0.40em;
+    top: 0.20em;
+    width: 0.35em;
+    height: 0.55em;
+    border: solid #063F30;
+    border-width: 0 0.15em 0.15em 0;
+    transform: rotate(45deg);
+  }
+  
+  .checkbox-container .celebrate {
+    position: absolute;
+    transform-origin: center;
+    animation: kfr-celebrate .4s;
+    animation-fill-mode: forwards;
+    display: none;
+    stroke: #fff;
+  }
+  
+  @keyframes kfr-celebrate {
+    0% {
+      transform: scale(0);
+    }
+  
+    50% {
+      opacity: 1;
+    }
+  
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+      display: none;
+    }
+  }

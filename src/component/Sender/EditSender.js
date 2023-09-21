@@ -1,17 +1,18 @@
 import useCoreApi from "../../api/useCoreApi"
 import { useEffect, useRef, useState } from "react"
-import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
+import { beautifulToKebabCase, isEmpty, snakeToBeautifulCase } from "../../utils/helper"
 import { showAlert } from "../../utils/validator"
 import { getElement } from "../../utils/dom"
 import DropList from "../../layout/Shared/DropList"
 
 const EditSender = ({ sender }) => {
 
-    const { updateSender, listClients } = useCoreApi()
+    const { updateSender, getSenderConnections, updateSenderConnection, listClients } = useCoreApi()
 
     const [client, setClient] = useState([])
     const [currentSender, setCurrentSender] = useState([])
     const [selectedUserID, setSelectedUserID] = useState(sender.user_id)
+    const [currentSenderConnections, setCurrentSenderConnections] = useState([])
     const [selectedCompany, setSelectedCompany] = useState(sender.client.company_name);
 
     const setupLock = useRef(true)
@@ -19,6 +20,9 @@ const EditSender = ({ sender }) => {
         const clt = await listClients(1000000000000)
         if (clt?.data) setClient(clt.data)
         setCurrentSender(sender)
+
+        const sndcon = await getSenderConnections(sender.id)
+        if (sndcon) setCurrentSenderConnections(sndcon)
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup() }
@@ -52,6 +56,16 @@ const EditSender = ({ sender }) => {
         }
     }
 
+    const operatorApprovementChanged = (checked, operatorName) => {
+        const conn = currentSenderConnections.filter(conn => conn.smsc.operator.name === operatorName)
+        conn.forEach( async conn => {
+            let newConn = await updateSenderConnection(conn.id, { approved: checked })
+            if (! isEmpty(newConn)) {
+                showAlert("Sender operator approvement updated successfully");
+            }
+        })
+    }
+
 
     return (
         <div className="add-user-container">
@@ -67,7 +81,7 @@ const EditSender = ({ sender }) => {
                 <tbody>
                     <tr>
                         <td>name</td>
-                        <td>{ typeof currentSender["name"] === "boolean"? currentSender["name"] ? "Yes" : "No" : currentSender["name"] ?? "NULL"}</td>
+                        <td>{ typeof currentSender["name"] === "boolean"? currentSender["name"] ? <i class="fa-solid fa-check"></i> : <i class="fa-solid fa-xmark"></i> : currentSender["name"] ?? "NULL"}</td>
                         <td className="info-input"> {
                             <input id={"sender-name-input"} placeholder={ "Type the new " + snakeToBeautifulCase("name") + " here"} type="text"/>
                         }</td>
@@ -94,6 +108,30 @@ const EditSender = ({ sender }) => {
             <div className="update-role">
                 <button className="button" onClick={() => updateSpecificSender()}>Update Sender</button>
             </div>
+
+            <h1 className="add-user-header mb-5 mt-5">Sender Operators</h1>
+            {[...new Set(currentSenderConnections.map(conn => conn.smsc.operator.name))].map(currentSenderOperator => (
+                <div className="list-container">
+                    <div className="master-list-item-container">
+                        <div className="master-list-item">
+                            <div className="d-flex align-items-center justify-content-between">
+                                { currentSenderOperator }
+                                <div className="d-flex flex-column align-items-center pt-2">
+                                    <h6><span>Not Approved</span><span>Is Approved</span></h6>
+                                    <input 
+                                        className="smsc-approved checkbox d-none" 
+                                        id={"connection-approved-" + beautifulToKebabCase(currentSenderOperator)} 
+                                        type="checkbox" 
+                                        defaultChecked={currentSenderConnections.find(conn => conn.smsc.operator.name === currentSenderOperator).approved}
+                                        onChange={(e) => operatorApprovementChanged(e.currentTarget.checked, currentSenderOperator)}
+                                    />
+                                    <label for={"connection-approved-" + beautifulToKebabCase(currentSenderOperator)}></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ))}
         </div>
     )
 }

@@ -119,6 +119,16 @@ const useCoreApi = () =>
         }
     }
 
+    const getClientLatestOrder = async (userID) =>
+    {
+        try {
+            return (await api.get("/client/" + userID + "/latest-order")).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
     const updateClient = async (userID, data) =>
     {
         try {
@@ -654,6 +664,176 @@ const useCoreApi = () =>
         }
     }
 
+    const getMessage = async (messageID) =>
+    {
+        try {
+            return (await api.get("/message/" + messageID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const addMessage = async (message) =>
+    {
+        try {
+            return (await api.post("/message", message)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const bulkAddMessages = async (messages) =>
+    {
+        try {
+            return (await api.post("/message/bulk-add", messages)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const listMessages = async (perPage) =>
+    {
+        try {
+            return (await api.get("/message?" + qs.stringify({take: perPage}))).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const updateMessage = async (messageID, data) =>
+    {
+        try {
+            return (await api.put("/message/" + messageID , data)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const deleteMessage = async (messageID) =>
+    {
+        try {
+            return (await api.delete("/message/" + messageID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+    
+    const searchMessage = async (take, column, value) =>
+    {
+        try {
+            return (await api.post("/message/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const getMessageLanguage = async (messageLanguageID) =>
+    {
+        try {
+            return (await api.get("/message-language/" + messageLanguageID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const addMessageLanguage = async (messageLanguage) =>
+    {
+        try {
+            return (await api.post("/message-language", messageLanguage)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const listMessageLanguages = async (perPage) =>
+    {
+        try {
+            return (await api.get("/message-language?" + qs.stringify({take: perPage}))).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const updateMessageLanguage = async (messageLanguageID, data) =>
+    {
+        try {
+            return (await api.put("/message-language/" + messageLanguageID , data)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const deleteMessageLanguage = async (messageLanguageID) =>
+    {
+        try {
+            return (await api.delete("/message-language/" + messageLanguageID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+    
+    const searchMessageLanguage = async (take, column, value) =>
+    {
+        try {
+            return (await api.post("/message-language/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const listMessageSegments = async (perPage) =>
+    {
+        try {
+            return (await api.get("/message-segment?" + qs.stringify({take: perPage}))).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const searchMessageSegment = async (take, column, value) =>
+    {
+        try {
+            return (await api.post("/message-segment/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const listMessageRecipients = async (perPage) =>
+    {
+        try {
+            return (await api.get("/message-recipient?" + qs.stringify({take: perPage}))).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const searchMessageRecipient = async (take, column, value) =>
+    {
+        try {
+            return (await api.post("/message-recipient/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
 
 
 
@@ -692,6 +872,8 @@ const useCoreApi = () =>
         searchClient,
 
         getClientOrders,
+
+        getClientLatestOrder,
 
         addPricelist,
 
@@ -783,7 +965,41 @@ const useCoreApi = () =>
 
         deleteSenderConnection,
 
-        searchSenderConnection
+        searchSenderConnection,
+
+        getMessage,
+
+        addMessage,
+
+        bulkAddMessages,
+
+        listMessages,
+
+        updateMessage,
+
+        deleteMessage,
+
+        searchMessage,
+
+        getMessageLanguage,
+
+        addMessageLanguage,
+
+        listMessageLanguages,
+
+        updateMessageLanguage,
+
+        deleteMessageLanguage,
+
+        searchMessageLanguage,
+
+        listMessageSegments,
+
+        searchMessageSegment,
+
+        listMessageRecipients,
+
+        searchMessageRecipient
 
     }
 }

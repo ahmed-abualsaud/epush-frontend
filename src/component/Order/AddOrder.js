@@ -64,11 +64,11 @@ const AddOrder = () => {
     }
 
     const onSelectClient = async (option) => {
-        const selected_user_id = client.filter(c => c.company_name === option)[0].user_id
+        const selected_user_id = client.find(c => c.company_name === option).user_id
         setSelectedUserID(selected_user_id)
         const clientOrders = await getClientOrders(selected_user_id)
         const lastOrder = clientOrders[clientOrders.length - 1]
-        lastOrder ? setLastPricelists(pricelist.filter(pl => pl.id === lastOrder?.pricelist_id)[0]?.price) : setLastPricelists("Not Found")
+        lastOrder ? setLastPricelists(pricelist.find(pl => pl.id === lastOrder?.pricelist_id)?.price) : setLastPricelists("Not Found")
     }
 
     const onSelectAction = (option) => {
@@ -76,11 +76,11 @@ const AddOrder = () => {
     }
 
     const onSelectPricelist = (option) => {
-        setSelectedPricelistID(pricelist.filter(bf => bf.name === option)[0].id)
+        setSelectedPricelistID(pricelist.find(bf => bf.name === option).id)
     }
 
     const onSelectPaymentMethod = (option) => {
-        setSelectedPaymentMethodID(paymentMethod.filter(pm => pm.name === option)[0].id)
+        setSelectedPaymentMethodID(paymentMethod.find(pm => pm.name === option).id)
     }
 
 
@@ -92,7 +92,7 @@ const AddOrder = () => {
             <div style={{fontSize: "30px"}} className="d-flex justify-content-around m-5">
                 <div>
                     <i className="uil uil-dollar-alt"></i>
-                    <span>Balance = {client.filter(c => c.user_id === selectedUserID)[0]?.balance ?? 0.00}</span>
+                    <span>Balance = {client.find(c => c.user_id === selectedUserID)?.balance ?? 0.00}</span>
                 </div>
                 <div>
                     <i className="uil uil-dollar-alt"></i>

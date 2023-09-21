@@ -96,7 +96,7 @@ const ListSenders = () =>
     }
 
     const addSenderHandler = () => {
-        navigate("content", "add-sender")
+        navigate("content", "add-sender-and-sender-connection")
     }
 
     const showSenderHandler = (sender) => {

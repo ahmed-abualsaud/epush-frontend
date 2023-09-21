@@ -1,5 +1,4 @@
 import { isEmpty } from "../../utils/helper"
-import { getElement } from "../../utils/dom"
 import useCoreApi from "../../api/useCoreApi"
 import { showAlert } from "../../utils/validator"
 import { useEffect, useRef, useState } from "react"
@@ -42,7 +41,7 @@ const EditSenderConnection = ({ senderConnection }) => {
         const senderconnection = {
             sender_id: selectedSenderID + "",
             smsc_id: selectedConnection.id + "",
-            approved: getElement("edit-sender-connection-approved")?.checked
+            approved: senderConnection.approved
         }
 
         if (isEmpty(senderconnection)) {
@@ -126,12 +125,6 @@ const EditSenderConnection = ({ senderConnection }) => {
                     <DropList selectName={senderConnection.smsc.smsc.name} options={[...new Set(operatorSMSC.map(item => item.smsc.name))]} onSelect={onSelectSMSC}/>
                 </div>
                 <div className="d-inline-flex align-items-center justify-content-center" style={{width: "20%", fontSize: "22px"}}>SMSC Value = {selectedSMSCVAlue}</div>
-            </div>
-
-            <div className="d-flex flex-column align-items-center pt-5">
-                <h6><span>Not Approved</span><span>Is Approved</span></h6>
-                <input id="edit-sender-connection-approved" className="checkbox d-none" type="checkbox" defaultChecked={true}/>
-                <label for="edit-sender-connection-approved"></label>
             </div>
 
             <div className="update-user">

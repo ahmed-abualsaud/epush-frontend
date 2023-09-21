@@ -43,11 +43,11 @@ const AddSender = () => {
     }
 
     const onSelectClient = async (option) => {
-        setSelectedUserID(client.filter(c => c.company_name === option)[0].user_id)
+        setSelectedUserID(client.find(c => c.company_name === option).user_id)
     }
 
     const senderNameOnInputHandler = (e) => {
-        const englishRegex = /^[A-Za-z0-9\s]*$/;
+        const englishRegex = /^[A-Za-z0-9\s!@#$%^&*()-_=+[\]{};:'"<>/?.,|`~]*$/;
         if (!englishRegex.test(e.currentTarget.value)) {
             e.currentTarget.value = e.currentTarget.value.substring(0, e.currentTarget.value.length - 1);
         }

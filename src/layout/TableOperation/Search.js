@@ -29,7 +29,7 @@ const Search = ({ columns, searchColumn }) => {
     if (column === "phone") {
         searchInput.type = "number"
     }
-    else if (column.includes("_at")) {
+    else if (column.includes("_at") || column.includes("date")) {
         searchInput.type = "date"
     } 
     else {

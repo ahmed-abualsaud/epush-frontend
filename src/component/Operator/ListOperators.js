@@ -29,16 +29,16 @@ const ListOperators = () =>
 {
     const excludedColumns = [
 
+        "id",
         "updated_at", 
         "deleted_at", 
         "avatar", 
         "email_verified_at",
-        "id",
         "user_id"
     ]
 
-    const [operators, setOperators] = useState([])
     const [columns, setColumns] = useState([])
+    const [operators, setOperators] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
     const { listOperators, searchOperator } = useCoreApi()

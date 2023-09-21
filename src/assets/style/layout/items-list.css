@@ -1,0 +1,24 @@
+.items-list {
+    border: 2px solid #063F30;
+    margin: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.items-list-item {
+    padding: 10px;
+    font-size: 20px;
+    margin: 5px;
+    border: 2px solid #063F30;
+    border-radius: 10px;
+    background-color: rgb(240, 238, 238);
+}
+
+.items-list-total {
+    float: right;
+    margin-top: -64px;
+    padding: 20px;
+    border-top-left-radius: 1000px;
+    background-color: #063F30;
+    color: #fff;
+}

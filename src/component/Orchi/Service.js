@@ -13,6 +13,7 @@ const Service = ({ services }) => {
                         service.name === "auth" ? "fas fa-lock" : 
                         service.name === "file" ? "fas fa-file-alt" : 
                         service.name === "core" ? "fas fa-atom" : 
+                        service.name === "mail" ? "fas fa-envelope" : 
                         "fas fa-sack-dollar"
                     }
                     description={ service.description }

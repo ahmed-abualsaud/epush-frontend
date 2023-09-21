@@ -75,8 +75,8 @@ const ServiceContexts = ({ service }) => {
 
 
     return (
-        <div className="edit-role-container">
-            <div className="edit-role-header">
+        <div className="add-user-container">
+            <div className="add-user-header">
                 <h1>{service.name.charAt(0).toUpperCase() + service.name.slice(1)} Contexts</h1>
             </div>
             { ! isEmpty(contexts) &&
