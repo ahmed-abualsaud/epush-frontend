@@ -27,6 +27,8 @@ const ListMessageSegments = () =>
         "updated_at", 
         "deleted_at", 
         "avatar", 
+        "message",
+        "message_id",
         "email_verified_at",
         "user_id"
     ]
@@ -48,9 +50,9 @@ const ListMessageSegments = () =>
         }
          
         setMessageSegments(clt)
-        setColumns(clt?.data[0] ? Object.keys(clt?.data[0]).filter(
+        setColumns(clt?.data[0] ? ["message", ...Object.keys(clt?.data[0]).filter(
             (column) => !excludedColumns.includes(column)
-        ) : [])
+        )] : [])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup(10) }
@@ -104,7 +106,10 @@ const ListMessageSegments = () =>
                     </HeadRow>
                 </TableHead>
                 <TableBody>
-                    <DataRows columns={columns} rows={messageSegments.data}/>
+                    <DataRows columns={columns} rows={messageSegments.data.map(messageSegment => {
+                        messageSegment.message = messageSegment.message?.content ?? "NULL"
+                        return messageSegment
+                    })}/>
                 </TableBody>
             </Table>
 

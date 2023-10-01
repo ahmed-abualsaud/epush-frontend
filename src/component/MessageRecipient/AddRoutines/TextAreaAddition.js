@@ -1,15 +1,18 @@
 import { useState } from "react"
 import TextArea from "../../../layout/Shared/TextArea"
 import ItemsList from "../../../layout/List/ItemsList"
+import { randomString } from "../../../utils/helper"
 
-const TextAreaAddition = ({ setRecipients }) => {
+const TextAreaAddition = ({ setGroupRecipients }) => {
 
     const [numbers, setNumbers] = useState([])
+    const [messageGroupName, setMessageGroupName] = useState("group-" + randomString(8))
+
 
     const onTextAreaContentChange = (content) => {
         let nums = [...new Set(content.split("\n").filter(n => n && n))].filter(Number)
         setNumbers(nums)
-        setRecipients(nums)
+        setGroupRecipients([{name: messageGroupName, recipients: nums.map(num => {return {number: num}})}])
     }
 
     const textInputFilter = (e) => {
@@ -33,16 +36,14 @@ const TextAreaAddition = ({ setRecipients }) => {
     }
 
     return (
-        <div style={{marginTop: "120px"}}>
-            <div className="d-flex">
-                <div style={{width: "60%", marginTop: "10px"}}>
-                    <TextArea placeholder={"Enter Recipient Numbers."} onContentChange={onTextAreaContentChange} textInputFilterFunction={textInputFilter}/>
-                </div>
-                <div style={{width: "40%"}}>
-                    <ItemsList items={numbers}/>
-                </div>
+        <div className="d-flex align-items-center">
+            <div style={{width: "60%", marginTop: "10px"}}>
+                <TextArea placeholder={"Enter Recipient Numbers."} onContentChange={onTextAreaContentChange} textInputFilterFunction={textInputFilter}/>
             </div>
-       </div>
+            <div style={{width: "40%"}}>
+                <ItemsList items={numbers}/>
+            </div>
+        </div>
     )
 }
 

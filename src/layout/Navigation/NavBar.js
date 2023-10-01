@@ -1,26 +1,28 @@
 import { useEffect, useRef } from "react"
 import "../../assets/style/layout/navbar.css"
 import { getFirstElementParent } from "../../utils/dom"
+import { randomString } from "../../utils/helper"
 
 const NavBar = ({ children }) => {
 
-    children = children ? children.length === 1 ? [children] : children : []
+    const navbarKey = randomString(8)
+    children = children ? (children.length === undefined ? [children] : children) : []
 
     const setupLock = useRef(true)
     const setup = async () => {
-        let tabsNewAnim = document.querySelector("#navbar-animmenu")
+        let tabsNewAnim = document.querySelector("#navbar-animmenu-" + navbarKey)
         let activeItemNewAnim = tabsNewAnim.querySelector(".active")
         let activeWidthNewAnimWidth = activeItemNewAnim.offsetWidth
         let itemPosNewAnimLeft = activeItemNewAnim.offsetLeft
-        document.querySelector(".hori-selector").style.left = itemPosNewAnimLeft + "px"
-        document.querySelector(".hori-selector").style.width = activeWidthNewAnimWidth + "px"
+        tabsNewAnim.querySelector(".hori-selector").style.left = itemPosNewAnimLeft + "px"
+        tabsNewAnim.querySelector(".hori-selector").style.width = activeWidthNewAnimWidth + "px"
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup() }
     }, [])
 
     const onClickHandler = (e) => {
-        let navItems = document.querySelectorAll("#navbar-animmenu ul li")
+        let navItems = document.querySelectorAll("#navbar-animmenu-" + navbarKey + " ul li")
         navItems.forEach(function(item) {
             item.classList.remove("active")
         })
@@ -30,12 +32,13 @@ const NavBar = ({ children }) => {
 
         let activeWidthNewAnimWidth = parent?.offsetWidth
         let itemPosNewAnimLeft = parent?.offsetLeft
-        document.querySelector(".hori-selector").style.left = itemPosNewAnimLeft + "px"
-        document.querySelector(".hori-selector").style.width = activeWidthNewAnimWidth + "px"
+        let tabsNewAnim = document.querySelector("#navbar-animmenu-" + navbarKey)
+        tabsNewAnim.querySelector(".hori-selector").style.left = itemPosNewAnimLeft + "px"
+        tabsNewAnim.querySelector(".hori-selector").style.width = activeWidthNewAnimWidth + "px"
     }
 
     return (
-        <div id="navbar-animmenu">
+        <div id={"navbar-animmenu-" + navbarKey} className="navbar-animmenu">
             <ul>
                 <div className="hori-selector">
                     <div className="left"></div>

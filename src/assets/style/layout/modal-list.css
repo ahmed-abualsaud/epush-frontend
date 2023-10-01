@@ -1,0 +1,71 @@
+.modal-list-container {
+    width: calc(100% - margin);
+    margin: 20px;
+}
+
+.modal-list-item-container {
+    position: relative;
+}
+
+.modal-list-item {
+    position: relative;
+    font-size: 25px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #063F30;
+    margin: 10px;
+    border-radius: 50px;
+    text-align: center;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 80%, #BFE85F 200%);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.75s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.modal-list-item-modal {
+    min-height: 0;
+    opacity: 0;
+    padding: 20px;
+    width: 80%;
+    border: 2px solid #063F30;
+    position: absolute;
+    background-color: #fff;
+    transform: translate(80%, -100px);
+    transition: all 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: -10000;
+    border-radius: 20px;
+    font-size: 20px;
+}
+
+.modal-list-item-arrow {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    transform: rotate(45deg);
+    top: 15px;
+    right: 93.5%;
+    background-color: #063F30;
+    border-radius: 0;
+    border: 1px solid #fff;
+}
+
+.modal-list-item-active .modal-list-item {
+    width: 30%;
+}
+
+.modal-list-item-active .modal-list-item-modal {
+    min-height: 400px;
+    max-height: 1000px;
+    opacity: 1;
+    z-index: 10000;
+    transform: translate(38%, -120px);
+    overflow-y: auto;
+}
+
+.modal-list-item-active .modal-list-item-arrow {
+    z-index: 1000001;
+    right: -18px;
+    transform: (225deg);
+    border: none;
+    pointer-events: none;
+}

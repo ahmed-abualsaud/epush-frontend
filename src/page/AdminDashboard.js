@@ -105,6 +105,8 @@ const AdminDashboard = () => {
                 >
                     <NavItems className="nav-flyout">
                         <NavItem text="Messages" icon="fas fa-envelope-open-text" onClick={ () => navigate("content", "list-messages") }/>
+                        <NavItem text="Message Groups" icon="fas fa-users-rectangle" onClick={ () => navigate("content", "list-message-groups") }/>
+                        <NavItem text="Group Recipients" icon="fas fa-arrows-down-to-people" onClick={ () => navigate("content", "list-message-group-recipients") }/>
                         <NavItem text="Message Languages" icon="fas fa-language" onClick={ () => navigate("content", "list-message-languages") }/>
                         <NavItem text="Message Segments" icon="fas fa-comments" onClick={ () => navigate("content", "list-message-segments") }/>
                         <NavItem text="Message Recipients" icon="fas fa-mobile-retro" onClick={ () => navigate("content", "list-message-recipients") }/>

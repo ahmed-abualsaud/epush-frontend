@@ -45,7 +45,7 @@ const DropList = ({ selectName, options, onSelect }) => {
                         <div className="option-container__option" onClick={selectOptionOnClickHandler} key={index}>
                             <input type="radio" className="option__radio" name="category" />
                             <label className="option__label" data-value={option}>
-                                {snakeToBeautifulCase(option)}
+                                {option}
                             </label>
                         </div>
                     ))}

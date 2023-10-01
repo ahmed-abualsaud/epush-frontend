@@ -1,0 +1,26 @@
+.w-110px {
+    width: 110px;
+}
+
+.delete-attribute-button {
+    color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0px 0px 14px -4px rgba(0,0,0,0.55);
+    -webkit-box-shadow: 0px 0px 14px -4px rgba(0,0,0,0.55);
+    -moz-box-shadow: 0px 0px 14px -4px rgba(0,0,0,0.55);
+}
+
+.delete-attribute-button:hover {
+    background-color: red;
+    color: #fff;
+}
+
+.opacity-0 {
+    opacity: 0;
+}

@@ -22,7 +22,6 @@ import ShowRowCell from "../../layout/TableOperation/ShowRowCell"
 import OperationContainer from "../../layout/TableOperation/OperationContainer"
 import useExpenseApi from "../../api/useExpenseApi"
 import UpdateRowCell from "../../layout/TableOperation/UpdateRowCell"
-import '../../assets/style/layout/general.css'
 import OperationRowCell from "../../layout/TableOperation/OperationRowCell"
 import { showAlert } from "../../utils/validator"
 

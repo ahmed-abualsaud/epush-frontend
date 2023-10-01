@@ -112,6 +112,17 @@ import MessagesList from '../layout/List/MessagesList'
 import WordFileExample from '../component/MessageSegment/ImportParametersFileExamples/WordFileExample'
 import ExcelFileExample from '../component/MessageSegment/ImportParametersFileExamples/ExcelFileExample'
 import TextFileExample from '../component/MessageSegment/ImportParametersFileExamples/TextFileExample'
+import RecipientsGroupAddition from '../component/MessageRecipient/AddRoutines/RecipientsGroupAddition'
+import ListMessageGroups from '../component/MessageGroup/ListMessageGroups'
+import AddMessageGroup from '../component/MessageGroup/AddMessageGroup'
+import ShowMessageGroup from '../component/MessageGroup/ShowMessageGroup'
+import EditMessageGroup from '../component/MessageGroup/EditMessageGroup'
+import DeleteMessageGroup from '../component/MessageGroup/DeleteMessageGroup'
+import ListMessageGroupRecipients from '../component/MessageGroupRecipient/ListMessageGroupRecipients'
+import AddMessageGroupRecipient from '../component/MessageGroupRecipient/AddMessageGroupRecipient'
+import EditMessageGroupRecipient from '../component/MessageGroupRecipient/EditMessageGroupRecipient'
+import DeleteMessageGroupRecipient from '../component/MessageGroupRecipient/DeleteMessageGroupRecipient'
+import ImportRecipientsData from '../component/MessageGroup/ImportRecipientsData'
 
 
 
@@ -144,14 +155,16 @@ const componentMap = {
     "list-countries":                   () => <ListCountries/>,
     "list-pricelist":                   () => <ListPricelist/>,
     "add-smsc-binding":                 () => <AddSMSCBinding/>,
+    "add-message-group":                () => <AddMessageGroup/>,
     "text-file-example":                () => <TextFileExample/>,
     "word-file-example":                () => <WordFileExample/>,
-    "excel-file-example":                () => <ExcelFileExample/>,
     "list-permissions":                 () => <ListPermissions/>,
     "add-business-field":               () => <AddBusinessField/>,
     "add-payment-method":               () => <AddPaymentMethod/>,
     "list-smsc-bindings":               () => <ListSMSCBindings/>,
+    "excel-file-example":                () => <ExcelFileExample/>,
     "list-mail-templates":              () => <ListMailTemplates/>,
+    "list-message-groups":              () => <ListMessageGroups/>,
     "list-business-fields":             () => <ListBusinessFields/>,
     "list-payment-methods":             () => <ListPaymentMethods/>,
     "add-message-language":             () => <AddMessageLanguage/>,
@@ -160,6 +173,9 @@ const componentMap = {
     "list-message-languages":           () => <ListMessageLanguages/>,
     "list-message-recipients":          () => <ListMessageRecipients/>,
     "list-senders-connections":         () => <ListSendersConnections/>,
+    "add-message-group-recipient":      () => <AddMessageGroupRecipient/>,
+    "list-message-group-recipients":    () => <ListMessageGroupRecipients/>,
+
     "profile":                          (user) => <Profile user={user}/>,
     "edit-smsc":                        (smsc) => <EditSMSC smsc={smsc}/>,
     "show-smsc":                        (smsc) => <ShowSMSC smsc={smsc}/>,
@@ -200,13 +216,12 @@ const componentMap = {
     "list-users":                       () => <TableContent tab="all"><ListUsers/></TableContent>,
     "list-admins":                      () => <TableContent tab="admins"><ListAdmins/></TableContent>,
     "list-clients":                     () => <TableContent tab="clients"><ListClients/></TableContent>,
-    "from-file-addition":               (setRecipients) => <FromFileAddition setRecipients={setRecipients}/>,
-    "text-area-addition":               (setRecipients) => <TextAreaAddition setRecipients={setRecipients}/>,
+    "show-message-group":               (messageGroup) => <ShowMessageGroup messageGroup={messageGroup}/>,
+    "edit-message-group":               (messageGroup) => <EditMessageGroup messageGroup={messageGroup}/>,
     "show-business-field":              (businessField) => <ShowBusinessField businessField={businessField}/>,
     "edit-business-field":              (businessField) => <EditBusinessField businessField={businessField}/>,
     "show-payment-method":              (paymentMethod) => <ShowPaymentMethod paymentMethod={paymentMethod}/>,
     "edit-payment-method":              (paymentMethod) => <EditPaymentMethod paymentMethod={paymentMethod}/>,
-    "extendable-form-addition":         (setRecipients) => <ExtendableFormAddition setRecipients={setRecipients}/>,
     "permission-list":                  (entity, entityID) => <PermissionList entity={entity} entityID={entityID}/>,
     "add-website-modal":                (addClientWebsite) => <AddWebsiteModal addClientWebsite={addClientWebsite}/>,
     "show-message-language":            (messageLanguage) => <ShowMessageLanguage messageLanguage={messageLanguage}/>,
@@ -214,7 +229,8 @@ const componentMap = {
     "edit-sender-connection":           (senderConnection) => <EditSenderConnection senderConnection={senderConnection}/>,
     "show-sender-connection":           (senderconnection) => <ShowSenderConnection senderconnection={senderconnection}/>,
     "edit-mail-template":               (template, templates) => <EditMailTemplate template={template} templates={templates}/>,
-    "add-message-segments":             (sender, order, language, recipients) => <AddMessageSegments sender={sender} order={order} language={language} recipients={recipients}/>,
+    "import-recipients-data":           (setGroupRecipients) => <ImportRecipientsData setGroupRecipients={setGroupRecipients}/>,
+    "edit-message-group-recipient":     (messageGroupRecipient) => <EditMessageGroupRecipient messageGroupRecipient={messageGroupRecipient}/>,
     "delete-role":                      (role, deletedRows, setDeletedRows) => <DeleteRole role={role} deletedRows={deletedRows} setDeletedRows={setDeletedRows}/>,
     "delete-smsc":                      (smsc, deletedRows, setDeletedRows) => <DeleteSMSC smsc={smsc} deletedRows={deletedRows} setDeletedRows={setDeletedRows}/>,
     "delete-user":                      (user, deletedRows, setDeletedRows) => <DeleteUser user={user} deletedRows={deletedRows} setDeletedRows={setDeletedRows}/>,
@@ -229,10 +245,17 @@ const componentMap = {
     "delete-mail-template":             (template, deletedRows, setDeletedRows) => <DeleteMailTemplate template={template} deletedRows={deletedRows} setDeletedRows={setDeletedRows}/>,
     "delete-permission":                (permission, deletedRows, setDeletedRows) => <DeletePermission permission={permission} deletedRows={deletedRows} setDeletedRows={setDeletedRows}/>,
     "delete-smsc-binding":              (smscBinding, deletedRows, setDeletedRows) => <DeleteSMSCBinding smscBinding={smscBinding} deletedRows={deletedRows} setDeletedRows={setDeletedRows}/>,
+    "delete-message-group":             (messageGroup, deletedRows, setDeletedRows) => <DeleteMessageGroup messageGroup={messageGroup} deletedRows={deletedRows} setDeletedRows={setDeletedRows}/>,
     "delete-business-field":            (businessField, deletedRows, setDeletedRows) => <DeleteBusinessField businessField={businessField} deletedRows={deletedRows} setDeletedRows={setDeletedRows}/>,
     "delete-payment-method":            (paymentMethod, deletedRows, setDeletedRows) => <DeletePaymentMethod paymentMethod={paymentMethod} deletedRows={deletedRows} setDeletedRows={setDeletedRows}/>,
     "delete-message-language":          (messageLanguage, deletedRows, setDeletedRows) => <DeleteMessageLanguage messageLanguage={messageLanguage} deletedRows={deletedRows} setDeletedRows={setDeletedRows}/>,
     "delete-sender-connection":         (senderConnection, deletedRows, setDeletedRows) => <DeleteSenderConnection senderConnection={senderConnection} deletedRows={deletedRows} setDeletedRows={setDeletedRows}/>,
+    "delete-message-group-recipient":   (messageGroupRecipient, deletedRows, setDeletedRows) => <DeleteMessageGroupRecipient messageGroupRecipient={messageGroupRecipient} deletedRows={deletedRows} setDeletedRows={setDeletedRows}/>,
+    "from-file-addition":               (setGroupRecipients) => <FromFileAddition setGroupRecipients={setGroupRecipients}/>,
+    "text-area-addition":               (setGroupRecipients) => <TextAreaAddition setGroupRecipients={setGroupRecipients}/>,
+    "extendable-form-addition":         (setGroupRecipients) => <ExtendableFormAddition setGroupRecipients={setGroupRecipients}/>,
+    "recipients-group-addition":        (setGroupRecipients) => <RecipientsGroupAddition setGroupRecipients={setGroupRecipients}/>,
+    "add-message-segments":             (sender, order, language, groupRecipients) => <AddMessageSegments sender={sender} order={order} language={language} groupRecipients={groupRecipients}/>,
     "no-contexts":                      () => <div className="user-no-perm" style={{marginTop: "0"}}> Context has no handle groups! </div>,
     "default":                          (componentKey) => <NotFound route={componentKey}/>,
 }

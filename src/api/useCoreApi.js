@@ -834,6 +834,126 @@ const useCoreApi = () =>
         }
     }
 
+    const getMessageGroup = async (messageGroupID) =>
+    {
+        try {
+            return (await api.get("/message-group/" + messageGroupID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const addMessageGroup = async (messageGroup) =>
+    {
+        try {
+            return (await api.post("/message-group", messageGroup)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const listMessageGroups = async (perPage) =>
+    {
+        try {
+            return (await api.get("/message-group?" + qs.stringify({take: perPage}))).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const updateMessageGroup = async (messageGroupID, data) =>
+    {
+        try {
+            return (await api.put("/message-group/" + messageGroupID , data)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const deleteMessageGroup = async (messageGroupID) =>
+    {
+        try {
+            return (await api.delete("/message-group/" + messageGroupID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+    
+    const searchMessageGroup = async (take, column, value) =>
+    {
+        try {
+            return (await api.post("/message-group/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const getMessageGroupRecipient = async (messageGroupRecipientID) =>
+    {
+        try {
+            return (await api.get("/message-group-recipient/" + messageGroupRecipientID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const addMessageGroupRecipient = async (messageGroupRecipient) =>
+    {
+        try {
+            return (await api.post("/message-group-recipient", messageGroupRecipient)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const listMessageGroupRecipients = async (perPage) =>
+    {
+        try {
+            return (await api.get("/message-group-recipient?" + qs.stringify({take: perPage}))).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const updateMessageGroupRecipient = async (messageGroupRecipientID, data) =>
+    {
+        try {
+            return (await api.put("/message-group-recipient/" + messageGroupRecipientID , data)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const deleteMessageGroupRecipient = async (messageGroupRecipientID) =>
+    {
+        try {
+            return (await api.delete("/message-group-recipient/" + messageGroupRecipientID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+    
+    const searchMessageGroupRecipient = async (take, column, value) =>
+    {
+        try {
+            return (await api.post("/message-group-recipient/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
 
 
 
@@ -999,7 +1119,31 @@ const useCoreApi = () =>
 
         listMessageRecipients,
 
-        searchMessageRecipient
+        searchMessageRecipient,
+
+        getMessageGroup,
+
+        addMessageGroup,
+
+        listMessageGroups,
+
+        updateMessageGroup,
+
+        deleteMessageGroup,
+
+        searchMessageGroup,
+
+        getMessageGroupRecipient,
+
+        addMessageGroupRecipient,
+
+        listMessageGroupRecipients,
+
+        updateMessageGroupRecipient,
+
+        deleteMessageGroupRecipient,
+
+        searchMessageGroupRecipient,
 
     }
 }

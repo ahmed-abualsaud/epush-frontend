@@ -7,7 +7,7 @@
 
 .nav-item > a {
     color: rgba(255, 255, 255, 0.9);
-    padding: 0.5em 0.5em;
+    padding: 0.5em;
     position: relative;
     display: flex;
     align-items: center;
@@ -18,15 +18,16 @@
     -ms-transition: all 0.6s ease;
     -o-transition: all 0.6s ease;
     transition: all 0.6s ease;
-    font-size: 20.5px;
+    font-size: 20px;
 
 }
 
 .nav-icon {
-    margin-right: 0.5em;;
+    width: 13%;
+    font-size: 23px;
 }
 
 .nav-expand {
     margin-left: auto;
-    font-size: 22px;
+    font-size: 20px;
 }

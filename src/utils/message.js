@@ -1,6 +1,11 @@
 import { parseExcelFile, parseTextFile, parseWordFile } from "./file"
-import { arraysAreEqual } from "./helper"
+import { arraysAreEqual, isEmpty } from "./helper"
 import { showAlert } from "./validator"
+import { arrayCombine } from "./helper"
+
+export const convertToMessageAttributes = (keys, values) => {
+    return JSON.stringify(keys.map((key, i) => ({name: key, value: values[i]})))
+}
 
 export const getMessageTemplateKeys = (template) => {
     const regex = /{{([^{}]+)}}/g
@@ -16,13 +21,20 @@ export const generateMessages = (keys, values, template) => {
     const messages = []
     for (const valueSet of values) {
         let message = template
+        let attributes = null
+
+        if (isEmpty(valueSet)) {
+            messages.push({message: message, attributes: attributes})
+            continue
+        }
+
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i]
             const value = valueSet[i]
             const regex = new RegExp(`{{${key}}}`, 'g')
             message = message.replace(regex, value)
         }
-        messages.push(message)
+        messages.push({message: message, attributes: convertToMessageAttributes(keys, valueSet)})
     }
     return messages
 }
@@ -51,6 +63,28 @@ export const generateMessagesFromFileData = (template, data) => {
     for (let i = 0; i < messages.length; i++) {
         result.push ({title: numbers[i], content: messages[i]})
     }
+
+    return result
+}
+
+export const generateMessagesFromRecipients = (template, recipients) => {
+    let keys = getMessageTemplateKeys(template)
+
+    let result = []
+    let attributes = []
+
+    recipients.forEach(recipient => {
+        let attribute = {}
+        let message = template
+
+        attributes = JSON.parse(typeof recipient.attributes === "string" ? recipient.attributes : "[]").map(attr => ({ [attr.name]: attr.value }))
+        attributes.push({phone: recipient.number})
+        keys.forEach(key => {
+            attribute = attributes.find(attribute => attribute.hasOwnProperty(key))
+            message = message.replace("{{" + key + "}}", attribute? attribute[key] : "unknown")
+        })
+        result.push({title: recipient.number, content: message})
+    })
 
     return result
 }

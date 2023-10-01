@@ -3,10 +3,10 @@ import '../../assets/style/layout/checkbox.css'
 const Checkbox = () => {
 
     return (
-        <label class="checkbox-container">
+        <label className="checkbox-container">
             <input type="checkbox"/>
-            <div class="checkmark"></div>
-            <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg" class="celebrate">
+            <div className="checkmark"></div>
+            <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg" className="celebrate">
                 <polygon points="0,0 10,10"></polygon>
                 <polygon points="0,25 10,25"></polygon>
                 <polygon points="0,50 10,40"></polygon>

@@ -13,7 +13,7 @@ const MessagesList = ({ messages }) => {
             messages?.map(message => 
                 <div className="messages-list-item">
                     <div className="messages-list-title">{message?.title}</div>
-                    <div className="messages-list-content"><pre>{message?.content}</pre></div>
+                    <div className="messages-list-content"><pre>{message?.content ?? <span style={{color:"red", display: "flex", justifyContent: "center"}}>No Content!</span>}</pre></div>
                 </div>
             )}
             <div className="messages-list-total">Total= {messages?.length}</div>

@@ -1,13 +1,13 @@
 import TextArea from "./TextArea"
 import "../../assets/style/layout/parametrized-textarea.css"
-import { beautifulToKebabCase, randomString } from "../../utils/helper"
+import { beautifulToKebabCase, isEmpty, randomString } from "../../utils/helper"
 import { getElement } from "../../utils/dom"
 import { useEffect, useState } from "react"
 import { generateMessagesUsingExcelFileParameters, generateMessagesUsingTextFileParameters, generateMessagesUsingWordFileParameters } from "../../utils/message"
 import { render } from "../../setup/navigator"
 
 
-const ParametrizedTextArea = ({ height, placeholder, onContentChange , textInputFilterFunction }) => {
+const ParametrizedTextArea = ({ height, placeholder, onContentChange , textInputFilterFunction, onUploadFile }) => {
 
     const componentKey = randomString(8)
     const parameters = [
@@ -98,8 +98,12 @@ const ParametrizedTextArea = ({ height, placeholder, onContentChange , textInput
         }
 
         setMessage({messages: messages, content: content})
-        getElement("parametrize-messages-popup").click()
-        render("modal-content", "message-list", messages)
+        if (! isEmpty(messages)) {
+            getElement("parametrize-messages-popup").click()
+            render("modal-content", "message-list", messages.map(message => ({title: message.title, content: message.content.message})))
+        }
+
+        onUploadFile(messages)
     }
 
     const displayOptionsOnClickHandler = (e, selectName) => {

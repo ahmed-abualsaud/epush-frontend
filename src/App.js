@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import "@fontsource/lexend"
-import "@fortawesome/fontawesome-free/css/all.min.css";
+import "@fortawesome/fontawesome-free/css/all.min.css"
+import './assets/style/component/default-styles.css'
 
 import Home from './page/Home'
 import Signin from './page/Signin'

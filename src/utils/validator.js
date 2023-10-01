@@ -123,8 +123,8 @@ function addToasts(contents) {
     })
 }
 
-export function showAlert(message) {
-    addToasts([message])
+export function showAlert(...messages) {
+    addToasts(messages)
 }
 
 export function validate(formID) {

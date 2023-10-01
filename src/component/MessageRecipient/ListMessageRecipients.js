@@ -26,7 +26,13 @@ const ListMessageRecipients = () =>
         "id",
         "updated_at", 
         "deleted_at", 
-        "avatar", 
+        "avatar",
+        "message_id",
+        "message",
+        "message_group_id",
+        "message_group",
+        "message_group_recipient",
+        "message_group_recipient_id",
         "email_verified_at",
         "user_id"
     ]
@@ -40,50 +46,49 @@ const ListMessageRecipients = () =>
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
-        let clt = []
+        let msgrcip = []
         if (isEmpty(searchParams)) {
-            clt = await listMessageRecipients(perPage)
+            msgrcip = await listMessageRecipients(perPage)
         } else {
-            clt = await searchMessageRecipient(perPage, searchParams.column, searchParams.value)
+            msgrcip = await searchMessageRecipient(perPage, searchParams.column, searchParams.value)
         }
-         
-        setMessageRecipients(clt)
-        setColumns(clt?.data[0] ? Object.keys(clt?.data[0]).filter(
+        setMessageRecipients(msgrcip)
+        setColumns(msgrcip?.data[0] ? ["group_name", "number", "attributes", "message", ...Object.keys(msgrcip?.data[0]).filter(
             (column) => !excludedColumns.includes(column)
-        ) : [])
+        )] : [])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup(10) }
     }, [])
 
     const handleGetPage = async (pageUrl) => {
-        let clt = {}
+        let msgrcip = {}
         if (isEmpty(searchParams)) {
-            clt = await sendGetRequest(pageUrl)
+            msgrcip = await sendGetRequest(pageUrl)
         } else {
             if (! pageUrl.includes("search")) {
                 let url  = pageUrl.split("?")
                 pageUrl = url[0]+"/search?"+url[1]
             }
-            clt = await sendPostRequest(pageUrl, searchParams)
+            msgrcip = await sendPostRequest(pageUrl, searchParams)
         }
-        if (! isEmpty(clt)) setMessageRecipients(clt)
+        if (! isEmpty(msgrcip)) setMessageRecipients(msgrcip)
     }
 
     const searchEntityColumn = async (column, value) => {
-        const clt = await searchMessageRecipient(10, column, value)
-        if (clt) setMessageRecipients(clt)
+        const msgrcip = await searchMessageRecipient(10, column, value)
+        if (msgrcip) setMessageRecipients(msgrcip)
         setSearchParams({column: column, value: value})
     }
 
     const onCheckShowAll = async () => {
-        let clt = []
+        let msgrcip = []
         if (isEmpty(searchParams)) {
-            clt = await listMessageRecipients(1000000000000)
+            msgrcip = await listMessageRecipients(1000000000000)
         } else {
-            clt = await searchMessageRecipient(1000000000000, searchParams.column, searchParams.value)
+            msgrcip = await searchMessageRecipient(1000000000000, searchParams.column, searchParams.value)
         }
-        setMessageRecipients(clt)
+        setMessageRecipients(msgrcip)
     }
 
     return (
@@ -104,7 +109,13 @@ const ListMessageRecipients = () =>
                     </HeadRow>
                 </TableHead>
                 <TableBody>
-                    <DataRows columns={columns} rows={messageRecipients.data}/>
+                    <DataRows columns={columns} rows={messageRecipients.data.map(messageRecipient => {
+                        messageRecipient.number = messageRecipient.message_group_recipient?.number ?? "NULL"
+                        messageRecipient.attributes = messageRecipient.message_group_recipient?.attributes ?? "NULL"
+                        messageRecipient.group_name = messageRecipient.message_group_recipient?.message_group?.name ?? "NULL"
+                        messageRecipient.message = messageRecipient.message?.content ?? "NULL"
+                        return messageRecipient
+                    })}/>
                 </TableBody>
             </Table>
 

@@ -143,3 +143,10 @@ export const arraysAreEqual = (arr1, arr2) => {
 
   return true;
 }
+
+export const arrayCombine = (keys, values) => {
+  return keys.reduce((result, key, index) => {
+    result[key] = values[index];
+      return result;
+  }, {})
+}
