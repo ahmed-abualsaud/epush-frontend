@@ -1,7 +1,6 @@
 import { parseExcelFile, parseTextFile, parseWordFile } from "./file"
 import { arraysAreEqual, isEmpty } from "./helper"
 import { showAlert } from "./validator"
-import { arrayCombine } from "./helper"
 
 export const convertToMessageAttributes = (keys, values) => {
     return JSON.stringify(keys.map((key, i) => ({name: key, value: values[i]})))

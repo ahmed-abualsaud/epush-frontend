@@ -4,13 +4,13 @@ import useAxiosApi from "../../api/Api"
 import Search from '../../layout/TableOperation/Search'
 import Export from '../../layout/TableOperation/Export'
 import { isEmpty } from "../../utils/helper"
-import useCoreApi from "../../api/useCoreApi"
 import PerPageDropList from "../../layout/Pagination/PerPageDropList"
 import { useEffect, useRef, useState } from "react"
 import ShowAll from "../../layout/TableOperation/ShowAll"
 import { navigate } from "../../setup/navigator"
 import OperationContainer from "../../layout/TableOperation/OperationContainer"
 import ShowRowCell from "../../layout/TableOperation/ShowRowCell"
+import UpdateRowCell from "../../layout/TableOperation/UpdateRowCell"
 import DeleteRowCell from "../../layout/TableOperation/DeleteRowCell"
 import DataRows from "../../layout/Table/DataRows"
 import TableBody from "../../layout/Table/TableBody"
@@ -22,140 +22,128 @@ import PaginationContainer from "../../layout/Pagination/PaginationContainer"
 import HeadRow from "../../layout/Table/HeadRow"
 import TableHead from "../../layout/Table/TableHead"
 import Table from "../../layout/Table/Table"
+import useSettingsApi from "../../api/useSettingsApi"
 
 
-const ListMessages = () =>
+const ListSettings = () =>
 {
     const excludedColumns = [
 
         "id",
-        "user_id",
         "updated_at", 
         "deleted_at", 
-        "order_id",
-        "sender_id",
-        "order",
-        "sender",
-        "recipients",
-        "segments",
-        "message_language_id",
+        "avatar", 
+        "email_verified_at",
+        "user_id"
     ]
 
     const [columns, setColumns] = useState([])
-    const [messages, setMessages] = useState([])
+    const [settings, setSettings] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
-    const { listMessages, searchMessage } = useCoreApi()
+    const { listSettings, searchSettings } = useSettingsApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
-        let msg = []
+        let clt = []
         if (isEmpty(searchParams)) {
-            msg = await listMessages(perPage)
+            clt = await listSettings(perPage)
         } else {
-            msg = await searchMessage(perPage, searchParams.column, searchParams.value)
+            clt = await searchSettings(perPage, searchParams.column, searchParams.value)
         }
          
-        setMessages(msg)
-
-        let filteredColumns = [
-            "company_name", 
-            "sender_name",
-        ]
-
-        filteredColumns.push(...(msg?.data[0] ? Object.keys(msg?.data[0]).filter(
+        setSettings(clt)
+        setColumns(clt?.data[0] ? Object.keys(clt?.data[0]).filter(
             (column) => !excludedColumns.includes(column)
-        ) : []))
-    
-        setColumns(filteredColumns)
+        ) : [])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup(10) }
     }, [])
 
     const handleGetPage = async (pageUrl) => {
-        let msg = {}
+        let clt = {}
         if (isEmpty(searchParams)) {
-            msg = await sendGetRequest(pageUrl)
+            clt = await sendGetRequest(pageUrl)
         } else {
             if (! pageUrl.includes("search")) {
                 let url  = pageUrl.split("?")
                 pageUrl = url[0]+"/search?"+url[1]
             }
-            msg = await sendPostRequest(pageUrl, searchParams)
+            clt = await sendPostRequest(pageUrl, searchParams)
         }
-        if (! isEmpty(msg)) setMessages(msg)
+        if (! isEmpty(clt)) setSettings(clt)
     }
 
     const searchEntityColumn = async (column, value) => {
-        const msg = await searchMessage(10, column, value)
-        if (msg) setMessages(msg)
+        const clt = await searchSettings(10, column, value)
+        if (clt) setSettings(clt)
         setSearchParams({column: column, value: value})
     }
 
     const onCheckShowAll = async () => {
-        let msg = []
+        let clt = []
         if (isEmpty(searchParams)) {
-            msg = await listMessages(1000000000000)
+            clt = await listSettings(1000000000000)
         } else {
-            msg = await searchMessage(1000000000000, searchParams.column, searchParams.value)
+            clt = await searchSettings(1000000000000, searchParams.column, searchParams.value)
         }
-        setMessages(msg)
+        setSettings(clt)
     }
 
-    const addMessageHandler = () => {
-        navigate("content", "add-message")
+    const addSettingsHandler = () => {
+        navigate("content", "add-settings")
     }
 
-    const showMessageHandler = (message) => {
-        navigate("content", "show-message", message)
+    const showSettingsHandler = (settings) => {
+        navigate("content", "show-settings", settings)
     }
 
-    const deleteMessageHandler = (message, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-message", message, deletedRows, setDeletedRows)
+    const updateSettingsHandler = (settings) => {
+        navigate("content", "edit-settings", settings)
+    }
+
+    const deleteSettingsHandler = (settings, deletedRows, setDeletedRows) => {
+        navigate("modal-content", "delete-settings", settings, deletedRows, setDeletedRows)
     }
 
     return (
-        ! isEmpty(messages) && 
+        ! isEmpty(settings) && 
         (
         <div className="add-user-container">
-            <h1 className="add-user-header">All Messages</h1>
+            <h1 className="add-user-header">All Settings</h1>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
-                <Export columns={columns} rows={messages.data}/>
+                <Export columns={columns} rows={settings.data}/>
             </OperationContainer>
 
             <Table>
                 <TableHead>
                     <HeadRow>
                         <HeadCells columns={columns}/>
-                        <AddRowCell className="w-110px" addingFunction={addMessageHandler}/>
+                        <AddRowCell addingFunction={addSettingsHandler}/>
                     </HeadRow>
                 </TableHead>
                 <TableBody>
-                    <DataRows columns={columns} rows={messages.data.map(message => {
-                        message.company_name = message.sender?.client?.company_name ?? "NULL"
-                        message.sender_name = message.sender?.name ?? "NULL"
-                        message.language = message.language?.name ?? "NULL"
-                        return message
-                    })}>
-                        {withOperationCellParameters(ShowRowCell, "showFunction", showMessageHandler)}
-                        {withOperationCellParameters(DeleteRowCell, "deleteFunction", deleteMessageHandler)}
+                    <DataRows columns={columns} rows={settings.data}>
+                        {withOperationCellParameters(ShowRowCell, "showFunction", showSettingsHandler)}
+                        {withOperationCellParameters(UpdateRowCell, "updateFunction", updateSettingsHandler)}
+                        {withOperationCellParameters(DeleteRowCell, "deleteFunction", deleteSettingsHandler)}
                     </DataRows>
                 </TableBody>
             </Table>
 
             <PaginationContainer>
-                <PageInput url={messages.links[1].url.split("?")[0] + "?take=" + messages.per_page} numberOfPages={Math.ceil(parseFloat(messages.total/messages.per_page))} setPageHandler={handleGetPage} />
-                <Paginator links={messages.links} perPage={messages.per_page} total={messages.total} getPageHandler={ handleGetPage }/>
+                <PageInput url={settings.links[1].url.split("?")[0] + "?take=" + settings.per_page} numberOfPages={Math.ceil(parseFloat(settings.total/settings.per_page))} setPageHandler={handleGetPage} />
+                <Paginator links={settings.links} perPage={settings.per_page} total={settings.total} getPageHandler={ handleGetPage }/>
                 <PerPageDropList perPageHandler={ setup }/>
-                <PaginationInfo total={messages.total} perPage={messages.per_page}/>
+                <PaginationInfo total={settings.total} perPage={settings.per_page}/>
             </PaginationContainer>
         </div>
         )
     )
 }
 
-export default ListMessages
+export default ListSettings

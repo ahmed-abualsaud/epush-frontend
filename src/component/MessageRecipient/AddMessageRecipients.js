@@ -1,9 +1,11 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import "../../assets/style/component/add-message-recipients.css"
 import NavBar from "../../layout/Navigation/NavBar"
 import { render } from "../../setup/navigator"
 
-const AddMessageRecipients = ({ setGroupRecipients, addMessageSegmentsRenderFunction }) => {
+const AddMessageRecipients = ({ userID, setGroupRecipients, addMessageSegmentsRenderFunction }) => {
+
+    const [renderOldRecipients, setRenderOldRecipients] = useState(false)
 
     const setupLock = useRef(true)
     const setup = async () => {
@@ -13,23 +15,32 @@ const AddMessageRecipients = ({ setGroupRecipients, addMessageSegmentsRenderFunc
         if (setupLock.current) { setupLock.current = false; setup() }
     }, [])
 
+    useEffect(() => {
+        renderOldRecipients && render("add-recipients", "recipients-group-addition", userID, setGroupRecipients)
+    }, [userID])
+
     const renderExtendableForm = () => {
+        setRenderOldRecipients(false)
         render("add-recipients", "extendable-form-addition", setGroupRecipients)
     }
 
     const renderTextArea = () => {
+        setRenderOldRecipients(false)
         render("add-recipients", "text-area-addition", setGroupRecipients)
     }
 
     const renderFromFile = () => {
+        setRenderOldRecipients(false)
         render("add-recipients", "from-file-addition", setGroupRecipients)
     }
 
     const renderOldRecipientsGroup = () => {
-        render("add-recipients", "recipients-group-addition", setGroupRecipients)
+        setRenderOldRecipients(true)
+        render("add-recipients", "recipients-group-addition", userID, setGroupRecipients)
     }
 
     const importedFromParametersFile = () => {
+        setRenderOldRecipients(false)
         addMessageSegmentsRenderFunction()
     }
 

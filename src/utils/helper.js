@@ -150,3 +150,30 @@ export const arrayCombine = (keys, values) => {
       return result;
   }, {})
 }
+
+export const castVariable = (variable, type) => {
+  switch (type) {
+    case 'int':
+    case 'integer':
+      return parseInt(variable);
+    case 'float':
+      return parseFloat(variable);
+    case 'double':
+      return Number(variable);
+    case 'string':
+      return String(variable);
+    case 'bool':
+    case 'boolean':
+      return Boolean(variable);
+    case 'array':
+      return Array.isArray(variable) ? variable : [variable];
+    case 'json':
+      return JSON.stringify(variable);
+    case 'object':
+      return Object(variable);
+    case 'binary':
+      return new Uint8Array(variable.split('').map(c => c.charCodeAt(0)));
+    default:
+      return variable;
+  }
+}

@@ -1,10 +1,9 @@
-import ListUsers from "../../component/User/ListUsers"
 import TopNav from "./TopNav"
 
 const TableContent = ({ tab, children }) => {
 
     return (
-        <div>
+        <div style={{margin: "0 10px"}}>
             <TopNav tab={tab}/>
             <div>
                 { children }

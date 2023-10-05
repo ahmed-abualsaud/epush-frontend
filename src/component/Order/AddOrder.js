@@ -116,7 +116,6 @@ const AddOrder = () => {
                 <div className="d-inline-flex justify-content-center mt-5" style={{width: "85%"}}>
                     <DropList selectName="Select Pricelist" options={pricelist.map(item => item.name)} onSelect={onSelectPricelist}/>
                 </div>
-                
             </div>
 
             <div>

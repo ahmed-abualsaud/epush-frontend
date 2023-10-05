@@ -1,6 +1,6 @@
 const PaginationContainer = ({ children }) => {
 
-    children = children.length === 1 ? [children] : children
+    children = children ? (children.length === undefined ? [children] : children) : []
 
     return (
         <>

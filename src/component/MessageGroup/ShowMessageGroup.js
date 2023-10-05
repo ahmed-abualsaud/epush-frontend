@@ -2,7 +2,7 @@ import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
 
 const ShowMessageGroup = ({ messageGroup }) => {
 
-    const execludedColumns = ["id", "updated_at", "deleted_at", "recipients", "message_group_id"]
+    const execludedColumns = ["id", "user_id", "updated_at", "deleted_at", "recipients", "message_group_id", "client"]
     const filteredColumns = messageGroup ? Object.keys(messageGroup).filter(column => ! execludedColumns.includes(column)) : []
 
     const recipients = messageGroup['recipients']

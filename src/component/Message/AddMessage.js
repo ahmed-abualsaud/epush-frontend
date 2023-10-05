@@ -40,9 +40,9 @@ const AddMessage = () => {
     useEffect(() => {
         const groupNames = groupRecipients.map(groupRecipient => groupRecipient.name)
         if (!isEmpty(groupRecipients) && isEmpty(messageGroups.filter(messageGroup => groupNames.includes(messageGroup.name)))) {
-            getElement("add-message-group-input").classList.remove("d-none")            
+            getElement("add-message-group-input")?.classList.remove("d-none")            
         } else {
-            getElement("add-message-group-input").classList.add("d-none")            
+            getElement("add-message-group-input")?.classList.add("d-none")            
         }
     }, [groupRecipients])
 
@@ -121,7 +121,7 @@ const AddMessage = () => {
                     <div className="d-inline-flex align-items-center justify-content-center" style={{width: "25%", fontSize: "22px"}}>Split Length = {selectedLanguage?.split_characters_length || 0}</div>
                 </div>
 
-                <AddMessageRecipients setGroupRecipients={setGroupRecipients} addMessageSegmentsRenderFunction={renderAddMessageSegments}/>
+                <AddMessageRecipients userID={selectedClient.user_id} setGroupRecipients={setGroupRecipients} addMessageSegmentsRenderFunction={renderAddMessageSegments}/>
 
                 <div id="add-message-group-input" className="d-none" style={{fontSize: "25px", margin: "40px 10px"}}>
                     <div>The uploaded recipients data is stored to our database with group name: <span style={{color: "orange"}}>{groupRecipients[0]?.name}</span></div>

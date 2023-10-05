@@ -7,7 +7,7 @@ import { generateMessagesUsingExcelFileParameters, generateMessagesUsingTextFile
 import { render } from "../../setup/navigator"
 
 
-const ParametrizedTextArea = ({ height, placeholder, onContentChange , textInputFilterFunction, onUploadFile }) => {
+const ParametrizedTextArea = ({ height, placeholder, onContentChange , textInputFilterFunction, onUploadFile, disabled, readonly }) => {
 
     const componentKey = randomString(8)
     const parameters = [
@@ -196,7 +196,7 @@ const ParametrizedTextArea = ({ height, placeholder, onContentChange , textInput
                     </div>
                 </div>
             </div>
-            <TextArea placeholder={placeholder} content={content} height={height} onContentChange={onTextAreaContentChange} textInputFilterFunction={textInputFilterFunction} disabled={parameterized}/>
+            <TextArea placeholder={placeholder} content={content} height={height} onContentChange={onTextAreaContentChange} textInputFilterFunction={textInputFilterFunction} disabled={parameterized || disabled} readonly={readonly}/>
             <div className="parametrized-textarea-note">NOTE: The parameters file must contain a "Phone" parameter column.</div>
             <div className="parametrized-textarea-note">NOTE: You should upload the parameters file after you finish writing the entire message because the text editor is disabled after uploading.</div>
         </div>

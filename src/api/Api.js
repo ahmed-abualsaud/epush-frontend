@@ -39,7 +39,7 @@ const useAxiosApi = () =>
             showAlert("Authenticated user not found")
             return null
         }
-        showAlert(error.response?.data?.error)
+        showAlert(error.response?.data?.error ?? error.response?.data?.message)
         return null
     }
 

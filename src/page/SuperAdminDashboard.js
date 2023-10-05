@@ -73,6 +73,7 @@ const SuperAdminDashboard = () => {
                                     service.name === "file" ? "fas fa-file-alt" : 
                                     service.name === "core" ? "fas fa-atom" : 
                                     service.name === "mail" ? "fas fa-envelope" : 
+                                    service.name === "settings" ? "fas fa-gears" : 
                                     "fas fa-sack-dollar"
                                 }
                                 onClick={() => navigate("content", "service-contexts", service)}
@@ -89,7 +90,7 @@ const SuperAdminDashboard = () => {
                 >
                     <NavItems className="nav-flyout">
                         <NavItem text="Mail" icon="fas fa-envelope" onClick={ () => navigate("content", "list-mail-templates") }/>
-                        <NavItem text="SMS" icon="fas fa-comment-sms" onClick={ () => navigate("content", "list-sms") }/>
+                        <NavItem text="SMS" icon="fas fa-comment-sms" onClick={ () => navigate("content", "sms-management") }/>
                     </NavItems>
                 </NavItem>
 
@@ -157,6 +158,7 @@ const SuperAdminDashboard = () => {
                 >
                     <NavItems className="nav-flyout">
                         <NavItem text="Messages" icon="fas fa-envelope-open-text" onClick={ () => navigate("content", "list-messages") }/>
+                        <NavItem text="Unapproved Messages" icon="fas fa-comment-slash" onClick={ () => navigate("content", "list-approved-messages") }/>
                         <NavItem text="Message Groups" icon="fas fa-users-rectangle" onClick={ () => navigate("content", "list-message-groups") }/>
                         <NavItem text="Group Recipients" icon="fas fa-arrows-down-to-people" onClick={ () => navigate("content", "list-message-group-recipients") }/>
                         <NavItem text="Message Languages" icon="fas fa-language" onClick={ () => navigate("content", "list-message-languages") }/>

@@ -15,16 +15,17 @@ import DeleteRowCell from "../../layout/TableOperation/DeleteRowCell"
 import DataRows from "../../layout/Table/DataRows"
 import TableBody from "../../layout/Table/TableBody"
 import HeadCells from "../../layout/Table/HeadCells"
-import AddRowCell from "../../layout/TableOperation/AddRowCell"
 import withOperationCellParameters from "../../HOC/withOperationCellParameters"
 import PaginationInfo from "../../layout/Pagination/PaginationInfo"
 import PaginationContainer from "../../layout/Pagination/PaginationContainer"
 import HeadRow from "../../layout/Table/HeadRow"
 import TableHead from "../../layout/Table/TableHead"
 import Table from "../../layout/Table/Table"
+import OperationRowCell from "../../layout/TableOperation/OperationRowCell"
+import { showAlert } from "../../utils/validator"
 
 
-const ListMessages = () =>
+const ListApprovedMessages = () =>
 {
     const excludedColumns = [
 
@@ -36,6 +37,7 @@ const ListMessages = () =>
         "sender_id",
         "order",
         "sender",
+        "client",
         "recipients",
         "segments",
         "message_language_id",
@@ -44,15 +46,19 @@ const ListMessages = () =>
     const [columns, setColumns] = useState([])
     const [messages, setMessages] = useState([])
     const [searchParams, setSearchParams] = useState({})
+    const [approvedMessages, setApprovedMessages] = useState([])
 
-    const { listMessages, searchMessage } = useCoreApi()
+    const { updateMessage, searchMessage } = useCoreApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
+
+        setSearchParams({column: 'approved', value: false})
+
         let msg = []
         if (isEmpty(searchParams)) {
-            msg = await listMessages(perPage)
+            msg = await searchMessage(perPage, 'approved', false)
         } else {
             msg = await searchMessage(perPage, searchParams.column, searchParams.value)
         }
@@ -97,19 +103,27 @@ const ListMessages = () =>
     const onCheckShowAll = async () => {
         let msg = []
         if (isEmpty(searchParams)) {
-            msg = await listMessages(1000000000000)
+            msg = await searchMessage(1000000000000, 'approved', false)
         } else {
             msg = await searchMessage(1000000000000, searchParams.column, searchParams.value)
         }
         setMessages(msg)
     }
 
-    const addMessageHandler = () => {
-        navigate("content", "add-message")
-    }
-
     const showMessageHandler = (message) => {
         navigate("content", "show-message", message)
+    }
+
+    const updateMessageHandler = async (message) => {
+        let msg = await updateMessage(message.id, {approved: true})
+
+        if (isEmpty(msg)) {
+            showAlert("Message Approvement Failed")
+            return
+        }
+
+        setApprovedMessages([...approvedMessages, msg.id])
+        showAlert("Message Approved Successfully")
     }
 
     const deleteMessageHandler = (message, deletedRows, setDeletedRows) => {
@@ -120,7 +134,7 @@ const ListMessages = () =>
         ! isEmpty(messages) && 
         (
         <div className="add-user-container">
-            <h1 className="add-user-header">All Messages</h1>
+            <h1 className="add-user-header">Unapproved Messages</h1>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
@@ -131,11 +145,10 @@ const ListMessages = () =>
                 <TableHead>
                     <HeadRow>
                         <HeadCells columns={columns}/>
-                        <AddRowCell className="w-110px" addingFunction={addMessageHandler}/>
                     </HeadRow>
                 </TableHead>
                 <TableBody>
-                    <DataRows columns={columns} rows={messages.data.map(message => {
+                    <DataRows columns={columns} rows={messages.data.filter(message => ! approvedMessages.includes(message.id)).map(message => {
                         message.company_name = message.sender?.client?.company_name ?? "NULL"
                         message.sender_name = message.sender?.name ?? "NULL"
                         message.language = message.language?.name ?? "NULL"
@@ -143,6 +156,9 @@ const ListMessages = () =>
                     })}>
                         {withOperationCellParameters(ShowRowCell, "showFunction", showMessageHandler)}
                         {withOperationCellParameters(DeleteRowCell, "deleteFunction", deleteMessageHandler)}
+                        {withOperationCellParameters(OperationRowCell, "operationFunction", updateMessageHandler, {
+                            children: <i style={{color: "#FFBB00"}} class="fas fa-check-double"></i>
+                        })}
                     </DataRows>
                 </TableBody>
             </Table>
@@ -158,4 +174,4 @@ const ListMessages = () =>
     )
 }
 
-export default ListMessages
+export default ListApprovedMessages

@@ -1,7 +1,7 @@
 import "../../assets/style/layout/textarea.css"
 
 const 
-TextArea = ({ content, height, placeholder, onContentChange , textInputFilterFunction, disabled}) => {
+TextArea = ({ content, height, placeholder, onContentChange , textInputFilterFunction, disabled, readonly }) => {
 
     const handleKeyPress = (e) => {
         textInputFilterFunction && textInputFilterFunction(e)
@@ -36,6 +36,7 @@ TextArea = ({ content, height, placeholder, onContentChange , textInputFilterFun
                 onKeyDown={handleKeyPress}
                 onInput={onInputHandler}
                 disabled={disabled}
+                readOnly={readonly}
             ></textarea>  
         </div>
     )

@@ -844,6 +844,16 @@ const useCoreApi = () =>
         }
     }
 
+    const getClientMessageGroups = async (userID) =>
+    {
+        try {
+            return (await api.get("/client/" + userID + "/message-groups")).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
     const addMessageGroup = async (messageGroup) =>
     {
         try {
@@ -948,6 +958,66 @@ const useCoreApi = () =>
     {
         try {
             return (await api.post("/message-group-recipient/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const getMessageFilter = async (messageFilterID) =>
+    {
+        try {
+            return (await api.get("/message-filter/" + messageFilterID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const addMessageFilter = async (messageFilter) =>
+    {
+        try {
+            return (await api.post("/message-filter", messageFilter)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const listMessageFilters = async (perPage) =>
+    {
+        try {
+            return (await api.get("/message-filter?" + qs.stringify({take: perPage}))).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const updateMessageFilter = async (messageFilterID, data) =>
+    {
+        try {
+            return (await api.put("/message-filter/" + messageFilterID , data)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const deleteMessageFilter = async (messageFilterID) =>
+    {
+        try {
+            return (await api.delete("/message-filter/" + messageFilterID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+    
+    const searchMessageFilter = async (take, column, value) =>
+    {
+        try {
+            return (await api.post("/message-filter/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -1123,6 +1193,8 @@ const useCoreApi = () =>
 
         getMessageGroup,
 
+        getClientMessageGroups,
+
         addMessageGroup,
 
         listMessageGroups,
@@ -1144,6 +1216,18 @@ const useCoreApi = () =>
         deleteMessageGroupRecipient,
 
         searchMessageGroupRecipient,
+
+        getMessageFilter,
+
+        addMessageFilter,
+
+        listMessageFilters,
+
+        updateMessageFilter,
+
+        deleteMessageFilter,
+
+        searchMessageFilter,
 
     }
 }

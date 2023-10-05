@@ -34,6 +34,7 @@ const ListMessageGroups = () =>
         "deleted_at", 
         "avatar",
         "recipients",
+        "client",
         "email_verified_at",
         "user_id"
     ]
@@ -55,9 +56,9 @@ const ListMessageGroups = () =>
         }
 
         setMessageGroups(msgrp)
-        setColumns(msgrp?.data[0] ? Object.keys(msgrp?.data[0]).filter(
+        setColumns(["company_name", ...msgrp?.data[0] ? Object.keys(msgrp?.data[0]).filter(
             (column) => !excludedColumns.includes(column)
-        ) : [])
+        ) : []])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup(10) }
@@ -128,7 +129,7 @@ const ListMessageGroups = () =>
                     </HeadRow>
                 </TableHead>
                 <TableBody>
-                    <DataRows columns={columns} rows={messageGroups.data}>
+                    <DataRows columns={columns} rows={messageGroups.data.map(group => {group.company_name = group?.client?.company_name; return group})}>
                         {withOperationCellParameters(ShowRowCell, "showFunction", showMessageGroupHandler)}
                         {withOperationCellParameters(UpdateRowCell, "updateFunction", updateMessageGroupHandler)}
                         {withOperationCellParameters(DeleteRowCell, "deleteFunction", deleteMessageGroupHandler)}

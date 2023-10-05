@@ -150,7 +150,7 @@ const ListOrders = () =>
                         {withOperationCellParameters(ShowRowCell, "showFunction", showOrderHandler)}
                         {withOperationCellParameters(UpdateRowCell, "updateFunction", updateOrderHandler)}
                         {withOperationCellParameters(OperationRowCell, "operationFunction", setChosenOrder, {
-                            children: <div style={{color: "#FFBB00"}} className="date-button-icon">
+                            children: <div style={{color: "#FFBB00", padding: "0"}} className="date-button-icon">
                                         <i className="fas fa-coins"></i>
                                         <input
                                             id="date-time-input"

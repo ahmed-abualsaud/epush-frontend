@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux'
 import '../../assets/style/component/profile-nav.css'
 import useAuthApi from '../../api/useAuthApi'
 import { navigate } from '../../setup/navigator'
+import { isEmpty } from '../../utils/helper'
 
 const ProfileNav = () => {
 
@@ -14,6 +15,15 @@ const ProfileNav = () => {
         await signout()
     }
 
+    const goToSettings = () => {
+        if (! isEmpty((user?.roles ?? []).filter(role => ["admin", "super_admin"].includes(role.name)))) {
+            navigate("content", "list-settings")
+        }
+        else {
+            navigate("content", "default")
+        }
+    }
+
     return (
         <div className="profile-nav">
             <h5 className="d-inline-block m-3 text-white"><strong>{user?.user?.full_name}</strong></h5>
@@ -22,7 +32,7 @@ const ProfileNav = () => {
             <label className="for-dropdown" for="dropdown"><i className="uil uil-angle-double-down"></i></label>
             <div className="section-dropdown"> 
                 <a href="#" onClick={() => navigate("content", "profile", user?.user)}>Profile <i className="uil uil-user-md"></i></a>
-                <a href="#">Settings <i className="uil uil-setting"></i></a>
+                <a href="#" onClick={goToSettings}>Settings <i className="uil uil-setting"></i></a>
                 <a href="#" onClick={ logout }>Logout <i className="uil uil-sign-out-alt"></i></a>
             </div>
         </div>

@@ -1,38 +1,60 @@
+import Hint from "../../layout/Shared/Hint"
 import { getElement } from "../../utils/dom"
 import useCoreApi from "../../api/useCoreApi"
-import { navigate } from "../../setup/navigator"
+import { Settings } from "../../utils/settings"
 import { showAlert } from "../../utils/validator"
 import { useEffect, useRef, useState } from "react"
 import ItemsList from "../../layout/List/ItemsList"
+import useSettingsApi from "../../api/useSettingsApi"
+import { findSimilarWords } from "../../utils/strUtils"
+import { navigate, render } from "../../setup/navigator"
 import DateTimeButton from "../../layout/Shared/DateTimeButton"
+import { generateMessagesFromRecipients } from "../../utils/message"
 import ParametrizedTextArea from "../../layout/Shared/ParametrizedTextArea"
 import { isEmpty, randomString, splitStringByLength, stippize } from "../../utils/helper"
-import { generateMessagesFromRecipients } from "../../utils/message"
 
 
 const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
 
-    const { addMessage, bulkAddMessages, listMessageGroups } = useCoreApi()
+    const { addMessage, bulkAddMessages, listMessageGroups, listMessageFilters } = useCoreApi()
+
+    const { getSettingsValueByName } = useSettingsApi()
 
     const [message, setMessage] = useState([])
     const [isOldGroups, setIsOldGroups] = useState([])
     const [messageLength, setMessageLength] = useState(0)
     const [parameterized, setParameterized] = useState(false)
     const [messageSegments, setMessageSegments] = useState([])
+    const [blacklistedWords, setBlacklistedWords] = useState([])
+    const [maxNumOfSegments, setMaxNumOfSegments] = useState(null)
+    const [pushButtonEnabled, setPushButtonEnabled] = useState(true)
+    const [wordFilterThreshold, setWordFilterThreshold] = useState(null)
     const [scheduleDate, setScheduleDate] = useState("----:--:-- 00:00:00")
     const [messageRecipients, setMessageRecipients] = useState(groupRecipients)
+    const [messageApprovementLimit, setMessageApprovementLimit] = useState(null)
     const [parameterizedMessageSegments, setParameterizedMessageSegments] = useState([])
 
     const setupLock = useRef(true)
     const setup = async () => {
         getCurrentDate()
+        setWordFilterThreshold(await getSettingsValueByName(Settings.WORD_FILTER_THRESHOLD))
+        setMaxNumOfSegments(await getSettingsValueByName(Settings.MAXIMUM_NUMBER_OF_MESSAGES_SEGMENTS))
+        setMessageApprovementLimit(await getSettingsValueByName(Settings.MESSAGE_APPROVEMENT_LIMIT))
 
         const groupNames = (await listMessageGroups(1000000000000)).data.map(group => group.name)
         setIsOldGroups(! isEmpty(groupRecipients.filter(grcp => groupNames.includes(grcp.name))))
+
+        setBlacklistedWords((await listMessageFilters(1000000000000))?.data?.map(word => word.name))
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup() }
     }, [])
+
+    useEffect(() => {
+        if (maxNumOfSegments && messageSegments.length > maxNumOfSegments) {
+            showAlert("Maximum number of segments exceeded")
+        }
+    }, [messageSegments, maxNumOfSegments])
 
     const getNumberOfRecipients = () => {
         let numberOfRecipients = 0
@@ -45,8 +67,19 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
     const onTextAreaContentChange = (message, parameterized) => {
 
         let content = parameterized ? message.content : message
+        let currentMessageLength = content?.length + content?.split(/\r\n|\r|\n/).length - 1
+
+        const censoredWords = findSimilarWords(content, blacklistedWords, wordFilterThreshold)
+        if (currentMessageLength > messageLength && ! isEmpty(censoredWords)) {
+            setPushButtonEnabled(false)
+            getElement("parametrize-messages-popup").click()
+            render("modal-content", "censored-word", censoredWords[0].textWord, censoredWords[0].blacklistedWord)
+        } else {
+            setPushButtonEnabled(true)
+        }
+
         setParameterized(parameterized)
-        setMessageLength(content?.length + content?.split(/\r\n|\r|\n/).length - 1)
+        setMessageLength(currentMessageLength)
         setMessageSegments(getMessageSegments(content))
 
         if (parameterized) {
@@ -87,6 +120,11 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
 
     const addNewSMSMessage = async () => {
 
+        if (! pushButtonEnabled) {
+            showAlert("Couldn't send your message because it has a censored words")
+            return
+        }
+
         let msg = []
         
         if (parameterized) {
@@ -97,18 +135,7 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
                 message_language_id: language.id,
                 content: message,
                 scheduled_at: scheduleDate,
-                group_recipients: messageRecipients,
-                segments: parameterizedMessageSegments
-            })
-
-            console.log({
-                sender_id: sender.id,
-                user_id: sender.user_id,
-                order_id: order.id,
-                message_language_id: language.id,
-                content: message,
-                scheduled_at: scheduleDate,
-                group_recipients: messageRecipients,
+                group_recipients: messageRecipients.map(messageRecipient => {messageRecipient.user_id = sender.user_id; return messageRecipient}),
                 segments: parameterizedMessageSegments
             })
         } 
@@ -131,7 +158,7 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
                 message_language_id: language.id,
                 content: {content: message, messages: messages},
                 scheduled_at: scheduleDate,
-                group_recipients: messageRecipients,
+                group_recipients: messageRecipients.map(messageRecipient => {messageRecipient.user_id = sender.user_id; return messageRecipient}),
                 segments: segments
             })
         }
@@ -143,7 +170,7 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
                 message_language_id: language.id,
                 content: message,
                 scheduled_at: scheduleDate,
-                group_recipients: groupRecipients,
+                group_recipients: messageRecipients.map(messageRecipient => {messageRecipient.user_id = sender.user_id; return messageRecipient}),
                 segments: messageSegments.map((messageSegment, index) => {return {number: index + 1, content: messageSegment}})
             })
         }
@@ -179,6 +206,12 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
     return (
         <div className="add-user-container">
             <h1 className="add-user-header mb-5">Add New Message</h1>
+            <a id="censored-words-popup" className="d-none" href="#popup">popup</a>
+
+            <Hint>
+                <div>1- The maximum number of a message segments is : {maxNumOfSegments}</div>
+                <div>2- The maximum number of message recipients who can receive messages without admin approval is : {messageApprovementLimit}</div>
+            </Hint>
 
             <div className="mx-3 mt-5">
                 <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>Schedule Date</div>

@@ -6,7 +6,7 @@ import ListMessageGroupRecipients from "../MessageGroupRecipient/ListMessageGrou
 
 const EditMessageGroup = ({ messageGroup }) => {
 
-    const excludedColumns = ["id", "created_at", "updated_at", "recipients"]
+    const excludedColumns = ["id", "created_at", "updated_at", "recipients", "client", "company_name", "user_id"]
 
     const filteredColumns = Object.keys(messageGroup).filter(
         (column) => !excludedColumns.includes(column)

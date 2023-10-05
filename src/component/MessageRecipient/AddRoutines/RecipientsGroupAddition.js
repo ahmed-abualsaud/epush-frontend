@@ -4,19 +4,19 @@ import useCoreApi from "../../../api/useCoreApi"
 import { isEmpty } from "../../../utils/helper"
 import MessagesList from "../../../layout/List/MessagesList"
 
-const RecipientsGroupAddition = ({ setGroupRecipients}) => {
+const RecipientsGroupAddition = ({ userID, setGroupRecipients}) => {
 
     const [numbers, setNumbers] = useState([])
     const [messageGroups, setMessageGroups] = useState([])
 
-    const { listMessageGroups } = useCoreApi()
+    const { getClientMessageGroups } = useCoreApi()
 
     const setupLock = useRef(true)
     const setup = async () => {
 
-        let msgrps = await listMessageGroups(1000000000000)
+        let msgrps = await getClientMessageGroups(userID)
 
-        setMessageGroups(isEmpty(msgrps.data) ? [] : msgrps.data.map(msgrp => {
+        setMessageGroups(isEmpty(msgrps) ? [] : msgrps.map(msgrp => {
             return {
                 name: msgrp.name, 
                 content: msgrp.recipients.map(recipient => ({
@@ -44,6 +44,8 @@ const RecipientsGroupAddition = ({ setGroupRecipients}) => {
     }
 
     return (
+        isEmpty(messageGroups) ? 
+        <div className="user-no-perm">The selected company has no groups yet</div> : 
         <div className="d-flex justify-content-between">
             <div style={{width: "60%", marginTop: "15px", display: "flex", flexDirection: "column"}}>
                 <div style={{fontSize: "30px", marginLeft: "10px"}}>Select one of the following groups :</div>

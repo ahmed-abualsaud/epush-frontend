@@ -1,4 +1,4 @@
-import { isEmpty } from "../../utils/helper"
+import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
 
 const ShowMessage = ({ message }) => {
 
@@ -15,15 +15,17 @@ const ShowMessage = ({ message }) => {
         "segments",
         "message_id",
         "message_language_id",
+        "message_group_recipient",
+        "message_group_recipient_id",
     ]
 
     const filteredColumns = message ? Object.keys(message).filter(
         (column) => ! excludedColumns.includes(column)
     ) : []
 
-    const recipientsColumns = Object.keys(message['recipients'].length > 0 ? message['recipients'][0] : []).filter(
+    const recipientsColumns = ["number", "attributes", ...Object.keys(message['recipients'].length > 0 ? message['recipients'][0] : []).filter(
         (column) => ! excludedColumns.includes(column)
-    )
+    )]
 
     const segmentsColumns = Object.keys(message['segments'].length > 0 ? message['segments'][0] : []).filter(
         (column) => ! excludedColumns.includes(column)
@@ -64,16 +66,22 @@ const ShowMessage = ({ message }) => {
                             <thead>
                                 <tr>
                                     {recipientsColumns.map(recipientColumn =>
-                                        <th>{recipientColumn}</th>
+                                        <th>{snakeToBeautifulCase(recipientColumn)}</th>
                                     )}
                                 </tr>
                             </thead>
                             <tbody>
                                 {message['recipients'].map(recipient =>
                                     <tr>
-                                        {recipientsColumns?.map((col) => (
-                                            <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof recipient[col] === "boolean"? recipient[col] ? "Yes" : "No" : recipient[col] ?? "NULL"}</td>
-                                        ))}
+                                        {recipientsColumns?.map((col) => {
+                                            if (col === "number") {
+                                                return <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{recipient?.message_group_recipient?.number ?? "NULL"}</td>
+                                            } else if (col === "attributes") {
+                                                return <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{recipient?.message_group_recipient?.attributes ?? "NULL"}</td>
+                                            } else {
+                                                return <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof recipient[col] === "boolean"? recipient[col] ? "Yes" : "No" : recipient[col] ?? "NULL"}</td>
+                                            }
+                                        })}
                                     </tr>
                                 )}
                                 <tr key="last-row">
@@ -94,7 +102,7 @@ const ShowMessage = ({ message }) => {
                             <thead>
                                 <tr>
                                     {segmentsColumns.map(segmentColumn =>
-                                        <th>{segmentColumn}</th>
+                                        <th>{snakeToBeautifulCase(segmentColumn)}</th>
                                     )}
                                 </tr>
                             </thead>

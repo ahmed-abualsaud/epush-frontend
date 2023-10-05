@@ -3,7 +3,7 @@ import Checkbox from "./Checkbox"
 
 const CheckList = ({ emptyListMessage, onSelectItem, children }) => {
 
-    children = children ? children.length === 1 ? [children] : children : []
+    children = children ? (children.length === undefined ? [children] : children) : []
 
     const itemOnClickHandler = (e) => {
         e.currentTarget.classList.toggle("checklist-item-checked")

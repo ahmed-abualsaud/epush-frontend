@@ -30,10 +30,8 @@ const Handler = ({ handleGroup }) => {
     }
 
     return (
-        <div className="edit-role-container">
-            <div className="edit-role-header">
-                <h1>{handleGroup.name.charAt(0).toUpperCase() + handleGroup.name.slice(1)} Handlers</h1>
-            </div>
+        <div className="add-user-container">
+                <h1 className="add-user-header">{handleGroup.name.charAt(0).toUpperCase() + handleGroup.name.slice(1)} Handlers</h1>
             <table className="fl-table card-table">
                 <thead>
                     <tr>
