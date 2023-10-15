@@ -1,5 +1,5 @@
-import '../../assets/style/component/mail-template.css';
-import { navigate } from '../../setup/navigator';
+import '../../../assets/style/component/mail-template.css';
+import { navigate } from '../../../setup/navigator';
 
 const MailTemplate = ({ template, deletedRows, setDeletedRows, templates }) => {
 
@@ -14,13 +14,13 @@ const MailTemplate = ({ template, deletedRows, setDeletedRows, templates }) => {
                 >Edit Template</button>
 
                 <a 
-                    className="template-delete" 
+                    className="mail-template-delete" 
                     href="#popup" 
                     onClick={() => navigate("modal-content", "delete-mail-template", template, deletedRows, setDeletedRows)}
-                >X</a>
+                ><i className="fas fa-xmark"></i></a>
             </div>
-            <div dangerouslySetInnerHTML={{__html: template.template}} className="mail-template-content">
-            </div>
+            <div className="mail-template-subject">Subject: <span style={{display: "inline-block", marginLeft: "10px", color: "#063F30"}}>{template.subject}</span></div>
+            <div dangerouslySetInnerHTML={{__html: template.template}} className="mail-template-content"></div>
         </div>
     )
 }

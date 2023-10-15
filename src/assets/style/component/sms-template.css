@@ -1,0 +1,50 @@
+.sms-template-container {
+    margin: 40px 10px;
+    border: 3px solid #063F30;
+    border-radius: 10px;
+}
+
+.sms-template-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+    border-bottom: 3px solid #063F30;
+    padding: 20px;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #BFE85F -200%, #063F30 10%, #070020 100%);
+}
+
+.sms-template-name {
+    font-size: 35px;
+}
+
+.sms-template-subject {
+    font-size: 35px;
+    padding: 20px;
+    background-color: #ddd;
+}
+
+.sms-template-content {
+    padding: 20px;
+    font-size: 20px;
+    white-space: pre-line;
+}
+
+.sms-template-delete {
+    position: absolute;
+    margin-top: -110px;
+    right: 20px;
+    width: 3.3rem;
+    height: 3.3rem;
+    font-size: 30px;
+    font-weight: 300;
+    border-radius: 100%;
+    border: 3px solid #063F30;
+    background-color: #fff;
+    z-index: 4;
+    color: #000;
+    line-height: 3rem;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+}

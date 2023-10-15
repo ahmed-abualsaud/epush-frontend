@@ -144,7 +144,6 @@ export function levenshteinDistance(str1, str2) {
   
     for (const heystackWord of heystack) {
       const distance = levenshteinDistance(needle, heystackWord);
-      console.log(distance, paragraphLength, paragraphLength - heystackWord.length + 2)
       if (distance >= (paragraphLength - heystackWord.length + 2)) {
         return true; // Fuzzy match found
       }

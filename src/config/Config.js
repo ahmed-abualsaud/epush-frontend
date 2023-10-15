@@ -2,8 +2,8 @@ export class Config {
 
     static envs = process.env
 
-    static get(key) {
+    static get(key, defaultValue = null) {
 
-        return this.envs[key]
+        return this.envs[key] ?? defaultValue
     }
 }

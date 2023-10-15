@@ -18,16 +18,22 @@
     font-size: 35px;
 }
 
+.mail-template-subject {
+    font-size: 35px;
+    padding: 20px;
+    background-color: #ddd;
+}
+
 .mail-template-content {
     padding: 20px;
     font-size: 20px;
     white-space: pre-line;
 }
 
-.template-delete {
+.mail-template-delete {
     position: absolute;
     margin-top: -110px;
-    right: 10px;
+    right: 15px;
     width: 3.3rem;
     height: 3.3rem;
     font-size: 30px;

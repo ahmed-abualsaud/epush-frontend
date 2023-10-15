@@ -1,22 +1,20 @@
 import { useEffect, useRef, useState } from "react"
-import useMailApi from "../../api/useMailApi"
-import { navigate } from "../../setup/navigator"
+import useMailApi from "../../../api/useMailApi"
+import { navigate } from "../../../setup/navigator"
 import MailTemplate from "./MailTemplate"
 
-const ListMailTemplates = () => {
+const AddMailSendingTemplate = ({ handler }) => {
 
     const { listTemplates } = useMailApi()
 
     const [templates, setTemplates] = useState([])
     const [deletedRows, setDeletedRows] = useState([])
-    const [templatesList, setTemplatesList] = useState([])
 
     const setupLock = useRef(true)
     const setup = async () => {
         const tpl = await listTemplates()
         if (tpl) {
             setTemplates(tpl)
-            setTemplatesList(tpl.map(template => ({name: template.name, html: template.template})))
         }
     }
     useEffect(() => {
@@ -26,7 +24,7 @@ const ListMailTemplates = () => {
     return (
         <div className="add-user-container">
             <h1 className="add-user-header">
-                All Mail Templates
+                Select One of The System Mail Templates
                 <button 
                     style={{
                         marginLeft: "auto", 
@@ -34,7 +32,7 @@ const ListMailTemplates = () => {
                         backgroundImage: "none"
                     }} 
                     className="button" 
-                    onClick={() => navigate("content", "add-mail-template", templatesList)}
+                    onClick={() => navigate("mail-management", "add-new-mail-template", handler)}
                 >
                     Add New Mail Template
                 </button>
@@ -43,13 +41,14 @@ const ListMailTemplates = () => {
             {templates.map(template =>  (
                 ! deletedRows.includes(template.id) &&
                 <MailTemplate 
-                    template={template} 
+                    template={template}
+                    handler={handler}
                     deletedRows={deletedRows} 
-                    setDeletedRows={setDeletedRows} 
-                    templates={templatesList}/>
+                    setDeletedRows={setDeletedRows}
+                />
             ))}
         </div>
     )
 }
 
-export default ListMailTemplates
+export default AddMailSendingTemplate

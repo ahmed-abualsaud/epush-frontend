@@ -1,3 +1,4 @@
+import qs from "qs"
 import useAxiosApi from "./Api"
 
 const useMailApi = () => 
@@ -55,9 +56,68 @@ const useMailApi = () =>
         }
     }
 
+    const getMailSendingHandler = async (mailSendingHandlerID) =>
+    {
+        try {
+            return (await api.get("/mail/sending-handler/" + mailSendingHandlerID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const addMailSendingHandler = async (mailSendingHandler) =>
+    {
+        try {
+            return (await api.post("/mail/sending-handler", mailSendingHandler)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const listMailSendingHandlers = async (perPage) =>
+    {
+        try {
+            return (await api.get("/mail/sending-handler?" + qs.stringify({take: perPage}))).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const updateMailSendingHandler = async (mailSendingHandlerID, data) =>
+    {
+        try {
+            return (await api.put("/mail/sending-handler/" + mailSendingHandlerID , data)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const deleteMailSendingHandler = async (mailSendingHandlerID) =>
+    {
+        try {
+            return (await api.delete("/mail/sending-handler/" + mailSendingHandlerID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+    
+    const searchMailSendingHandler = async (take, column, value) =>
+    {
+        try {
+            return (await api.post("/mail/sending-handler/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
 
     return {
-
 
         getTemplate,
 
@@ -68,6 +128,18 @@ const useMailApi = () =>
         updateTemplate,
 
         deleteTemplate,
+
+        getMailSendingHandler,
+
+        addMailSendingHandler,
+
+        listMailSendingHandlers,
+
+        updateMailSendingHandler,
+
+        deleteMailSendingHandler,
+
+        searchMailSendingHandler,
     }
 }
 

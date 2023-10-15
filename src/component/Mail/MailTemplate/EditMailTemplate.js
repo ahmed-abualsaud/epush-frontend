@@ -1,8 +1,8 @@
 import { useState } from "react"
-import useMailApi from "../../api/useMailApi"
-import Editor from "../../layout/Shared/Editor"
-import { showAlert } from "../../utils/validator"
-import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
+import useMailApi from "../../../api/useMailApi"
+import Editor from "../../../layout/Shared/Editor"
+import { showAlert } from "../../../utils/validator"
+import { isEmpty, snakeToBeautifulCase } from "../../../utils/helper"
 
 const EditMailTemplate = ({ template, templates }) => {
 

@@ -6,7 +6,7 @@ import { randomString } from "../../utils/helper"
 const NavBar = ({ children }) => {
 
     const navbarKey = randomString(8)
-    children = children ? (children.length === undefined ? [children] : children) : []
+    children = children ? ([1, undefined].includes(children.length) ? [children] : children) : []
 
     const setupLock = useRef(true)
     const setup = async () => {

@@ -11,6 +11,7 @@ import { addRoute, navigate } from "../setup/navigator"
 import TableContent from "../layout/Shared/TableContent"
 import React, { useEffect, useRef, useState } from "react"
 import ListUsers from "../component/User/ListUsers"
+import Notification from "../layout/Shared/Notification"
 
 const SuperAdminDashboard = () => {
 
@@ -73,8 +74,10 @@ const SuperAdminDashboard = () => {
                                     service.name === "file" ? "fas fa-file-alt" : 
                                     service.name === "core" ? "fas fa-atom" : 
                                     service.name === "mail" ? "fas fa-envelope" : 
+                                    service.name === "sms" ? "fas fa-sms" : 
                                     service.name === "settings" ? "fas fa-gears" : 
-                                    "fas fa-sack-dollar"
+                                    service.name === "expense" ? "fas fa-sack-dollar" : 
+                                    "fas fa-bell"
                                 }
                                 onClick={() => navigate("content", "service-contexts", service)}
                             />
@@ -89,8 +92,9 @@ const SuperAdminDashboard = () => {
                     onMouseLeave={handleLeave}
                 >
                     <NavItems className="nav-flyout">
-                        <NavItem text="Mail" icon="fas fa-envelope" onClick={ () => navigate("content", "list-mail-templates") }/>
+                        <NavItem text="Mail" icon="fas fa-envelope" onClick={ () => navigate("content", "mail-management") }/>
                         <NavItem text="SMS" icon="fas fa-comment-sms" onClick={ () => navigate("content", "sms-management") }/>
+                        <NavItem text="Notifications" icon="fas fa-bell" onClick={ () => navigate("content", "notification-management") }/>
                     </NavItems>
                 </NavItem>
 
@@ -174,6 +178,7 @@ const SuperAdminDashboard = () => {
                     <ListUsers/>
                 </TableContent>
             </Content>
+            <Notification/>
         </Dashboard>
     )
 }

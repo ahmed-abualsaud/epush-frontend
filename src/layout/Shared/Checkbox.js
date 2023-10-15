@@ -1,10 +1,10 @@
 import '../../assets/style/layout/checkbox.css'
 
-const Checkbox = () => {
+const Checkbox = ({ checked }) => {
 
     return (
         <label className="checkbox-container">
-            <input type="checkbox"/>
+            <input type="checkbox" defaultChecked={checked}/>
             <div className="checkmark"></div>
             <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg" className="celebrate">
                 <polygon points="0,0 10,10"></polygon>

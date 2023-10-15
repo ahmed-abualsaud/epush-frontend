@@ -14,7 +14,6 @@ const EditMessageGroupRecipient = ({ messageGroupRecipient }) => {
     const [messageGroups, setMessageGroups] = useState([])
     const [selectedGroupID, setSelectedGroupID] = useState(messageGroupRecipient.message_group?.id)
     const [recipientAttributes, setRecipientAttributes] = useState(JSON.parse(messageGroupRecipient.attributes) ?? [])
-    console.log(messageGroupRecipient)
 
     const setupLock = useRef(true)
     const setup = async () => {

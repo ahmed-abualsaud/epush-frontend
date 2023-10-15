@@ -6,14 +6,14 @@ const SMSManagement = () => {
 
     const setupLock = useRef(true)
     const setup = async () => {
-        render("sms-management", "sending-sms")
+        render("sms-management", "list-sms-sending-handlers")
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup() }
     }, [])
 
     const renderSendingSMS = () => {
-        render("sms-management", "sending-sms")
+        render("sms-management", "list-sms-sending-handlers")
     }
 
     const renderFilterSMS = () => {
@@ -23,8 +23,8 @@ const SMSManagement = () => {
     return (
         <div className="add-user-container">
             <NavBar>
-                <div onClick={renderSendingSMS}><i className="fas fa-diagram-next"></i>Sending SMS</div>
-                <div onClick={renderFilterSMS}><i className="far fa-rectangle-list"></i>Filter SMS</div>
+                <div onClick={renderSendingSMS}><i className="fas fa-sms"></i>Sending SMS</div>
+                <div onClick={renderFilterSMS}><i className="fas fa-filter"></i>Filter SMS</div>
             </NavBar>
 
             <div style={{marginTop: "25px"}} id="sms-management"></div>

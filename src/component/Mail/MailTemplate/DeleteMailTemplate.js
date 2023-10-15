@@ -1,5 +1,5 @@
-import useMailApi from "../../api/useMailApi";
-import { showAlert } from "../../utils/validator";
+import useMailApi from "../../../api/useMailApi";
+import { showAlert } from "../../../utils/validator";
 
 const DeleteMailTemplate = ({ template, deletedRows, setDeletedRows }) => {
 

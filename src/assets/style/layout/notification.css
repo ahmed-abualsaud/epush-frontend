@@ -1,0 +1,107 @@
+.notification-container {
+  position: fixed;
+  right: 10px;
+  top: 90px;
+  text-align: center;
+  border: 1px solid #fff;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  overflow: hidden;
+  transition: 
+    width 0.5s ease-in-out, 
+    height 0.5s ease-in-out, 
+    transform 0.5s ease-in-out,
+    border-radius 0.5s ease-in-out;
+  z-index: 9999;
+  background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 80%, #BFE85F 200%);
+}
+
+.notification-icon {
+  width: 70px;
+  height: 70px;
+  cursor: pointer;
+  color: #fff;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+  font-size: 40px;
+}
+
+.notification-count {
+  position: absolute;
+  color: #fff;
+  font-size: 20px;
+}
+
+.notification-expand {
+  width: 550px;
+  height: 450px;
+  border-radius: 10px;
+  cursor: auto;
+}
+
+.notification-expand .notification-icon {
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-top-left-radius: 1000%;
+  color: #fff;
+  background-color: #000;
+  padding-left: 10px;
+  padding-top: 10px;
+  cursor: pointer;
+}
+
+.notification-content {
+  border-radius: 10px;
+  transition: all 0.5s ease-in-out;
+}
+
+.notifications-list {
+  overflow: auto;
+  height: 380px;
+  color:#fff
+}
+
+.notification-item {
+  border: 1px dashed #fff;
+  margin: 20px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.notification-subject {
+  background-color: #070020;
+  border-bottom: 1px solid #fff;
+  padding: 10px;
+}
+
+.notification-subject {
+  background-color: #070020;
+  border-bottom: 1px solid #fff;
+  padding: 10px;
+  text-align: center;
+  font-size: 25px;
+}
+
+.notification-content {
+  padding: 10px;
+  text-align: start;
+}
+
+.notification-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  color: red;
+  height: 90%;
+}
+
+.notification-not-empty {
+  color: red;
+}

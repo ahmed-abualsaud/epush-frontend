@@ -4,7 +4,7 @@ import { randomString } from "../../utils/helper"
 
 const Hint = ({ children }) => {
     const hintKey = "hint-" + randomString(8)
-    children = children ? (children.length === undefined ? [children] : children) : []
+    children = children ? ([1, undefined].includes(children.length) ? [children] : children) : []
 
     const removeHint = () => {
         let hint = getElement(hintKey)

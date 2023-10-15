@@ -1,3 +1,4 @@
+import qs from "qs"
 import useAxiosApi from "./Api"
 
 const useOrchiApi = () => 
@@ -46,6 +47,16 @@ const useOrchiApi = () =>
     }
   }
 
+  const listHandlers = async (perPage) => 
+  {
+    try {
+      return (await api.get("/orchi/handler?" + qs.stringify({take: perPage})))?.data?.data
+
+    } catch (error) {
+      return handleErrorResponse(error)
+    }
+  }
+
   const updateHandler = async (handlerID, data) => 
   {
     try {
@@ -55,6 +66,16 @@ const useOrchiApi = () =>
       return handleErrorResponse(error)
     }
   }
+
+  const searchHandler = async (take, column, value) =>
+    {
+        try {
+            return (await api.post("/orchi/handler/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
 
   const updateHandleGroup = async (handleGroupID, data) => 
   {
@@ -90,7 +111,11 @@ const useOrchiApi = () =>
   return { 
     listServices,
 
+    listHandlers,
+
     updateService,
+
+    searchHandler,
 
     updateContext,
 

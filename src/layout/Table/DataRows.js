@@ -6,7 +6,8 @@ const DataRows = ({ columns, rows, children }) => {
 
     const [deletedRows, setDeletedRows] = useState([])
 
-    children = children ? (children.length === undefined ? [children] : children) : []
+    children = children ? ([1, undefined].includes(children.length) ? [children] : children) : []
+    children = typeof children === "function" ? [children] : children
 
     return (
         <>
