@@ -44,8 +44,8 @@ const AddSettings = () => {
     }
 
     return (
-        <div id="add-settings-form" className="add-user-container">
-            <h1 className="add-user-header mb-5">Add New Settings</h1>
+        <div id="add-settings-form" className="component-container">
+            <h1 className="content-header mb-5">Add New Settings</h1>
 
             <Input id="add-settings-name" type="text" placeholder="Name" validrules="required">
                 <i className="input-icon fas fa-pen"></i>
@@ -65,7 +65,7 @@ const AddSettings = () => {
                 <TextArea height="300px" placeholder="Enter a Description" onContentChange={onEnteringDescription}/>
             </div>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => addNewSettings()}>Add New Settings</button>
             </div>
         </div>

@@ -30,9 +30,9 @@ const RoleList = ({ userID }) => {
 
         if (! isEmpty(assignedRolesID) && (await assignUserRoles(userID, assignedRolesID))) {
             showAlert("Roles assigned successfully")
-            let childElements = getElement("assign-user-roles-list").children
+            let childElements = getElement("assign-user-cards-list").children
             for (let i = 0; i < childElements.length; i++) {
-                childElements[i].querySelector(".role-card-head").classList.add("role-card-head-not-checked")
+                childElements[i].querySelector(".card-item-head").classList.add("card-item-head-not-checked")
                 childElements[i].querySelector("input").checked = false
             }
             setAssignedRolesID([]);
@@ -58,8 +58,8 @@ const RoleList = ({ userID }) => {
 
         const rolePermissionsList = getElement(roleListId)
         rolePermissionsList.innerHTML = ""
-        rolePermissionsList.classList.toggle("show-role-permissions-list")
-        if (rolePermissionsList.classList.contains("show-role-permissions-list")) {
+        rolePermissionsList.classList.toggle("expand-card-item-list")
+        if (rolePermissionsList.classList.contains("expand-card-item-list")) {
             updateElement([
                 <span>Hide Permissions</span>,
                 <i class="uil uil-angle-up"></i>
@@ -76,7 +76,7 @@ const RoleList = ({ userID }) => {
         const rolePermList = rolePermsIsEmpty ? prm : rolePerms.permissions
 
         updateElement(
-            isEmpty(rolePermList)? <div class="user-no-perm" style="margin-top: 0;"> Role has no permissions! </div> :
+            isEmpty(rolePermList)? <div class="no-data" style="margin-top: 0;"> Role has no permissions! </div> :
             <table class="fl-table">
                 <thead>
                     <tr>
@@ -103,7 +103,7 @@ const RoleList = ({ userID }) => {
         let roleCardIcon = getElement(iconId)
 
         if (getElement(checkboxId).checked) {
-            roleCardHead.classList.remove("role-card-head-not-checked")
+            roleCardHead.classList.remove("card-item-head-not-checked")
             roleCardIcon.classList.add("uil-check-circle")
             roleCardIcon.classList.remove("uil-exclamation-circle")
             roleCardIcon.previousElementSibling.textContent = "Assigned"
@@ -111,7 +111,7 @@ const RoleList = ({ userID }) => {
             setAssignedRolesID([...assignedRolesID, roleID])
 
         } else {
-            roleCardHead.classList.add("role-card-head-not-checked")
+            roleCardHead.classList.add("card-item-head-not-checked")
             roleCardIcon.classList.add("uil-exclamation-circle")
             roleCardIcon.classList.remove("uil-check-circle")
             roleCardIcon.previousElementSibling.textContent = "Not Assigned"
@@ -125,21 +125,21 @@ const RoleList = ({ userID }) => {
 
 
     return (
-        <div className="add-user-container">
+        <div className="component-container">
             <div className="assign-role-header">
                 <h1>Available Roles</h1>
             </div>
-            {<div id="assign-user-roles-list" className="roles-list">
+            {<div id="assign-user-cards-list" className="cards-list">
                 {roles.map((role) => (
-                    <div className="role-card">
-                        <div id={role["name"] + "-role-assign-head"} className="role-card-head role-card-head-not-checked">
+                    <div className="card-item">
+                        <div id={role["name"] + "-role-assign-head"} className="card-item-head card-item-head-not-checked">
                             <div>Role Name</div>
                             <div>
                                 <span>Not Assigned</span>
                                 <i id={role["name"] + "-role-assign-icon"} className="uil uil-exclamation-circle"></i>
                             </div>
                         </div>
-                        <div className="role-card-body">
+                        <div className="card-item-body">
                             <div>{ role["name"] }</div>
                             <div>
                                 <input 
@@ -151,16 +151,16 @@ const RoleList = ({ userID }) => {
                                     Check this box to assign the role
                             </div>
                         </div>
-                        <div id={role["id"] + "-show-permissions-button"} className="show-role-permissions" onClick={() => showRolePermissions(role["id"], role["name"] + "-role-assign-permissions-list")}>
+                        <div id={role["id"] + "-show-permissions-button"} className="expand-card-item" onClick={() => showRolePermissions(role["id"], role["name"] + "-role-assign-permissions-list")}>
                             <span>Show Permissions</span>
                             <i className="uil uil-angle-down"></i>
                         </div>
-                        <ul id={role["name"] + "-role-assign-permissions-list"} className="role-permissions-list"></ul>
+                        <ul id={role["name"] + "-role-assign-permissions-list"} className="card-item-subitems"></ul>
                     </div>                            
                 ))}
             </div>}
             {! isEmpty(roles) && 
-                <div className="update-user">
+                <div className="button-container">
                     <button className="button" onClick={() => assignRoles()}>Assign Selected Roles</button>
                 </div>
             }

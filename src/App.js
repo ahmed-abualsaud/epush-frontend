@@ -10,9 +10,9 @@ import Modal from './layout/Shared/Modal'
 import { Provider } from 'react-redux'
 import store from './container/redux/store'
 import ProtectedRoute from './layout/Shared/ProtectedRoute'
-import SuperAdminDashboard from './page/SuperAdminDashboard'
+import SuperAdminDashboard from './page/dashboard/SuperAdminDashboard'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import AdminDashboard from './page/AdminDashboard'
+import AdminDashboard from './page/dashboard/AdminDashboard'
 import ErrorBoundary from './setup/ErrorBoundary'
 
 function App() {

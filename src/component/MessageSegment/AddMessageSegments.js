@@ -204,8 +204,8 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
     }
 
     return (
-        <div className="add-user-container">
-            <h1 className="add-user-header mb-5">Add New Message</h1>
+        <div className="component-container">
+            <h1 className="content-header mb-5">Add New Message</h1>
             <a id="censored-words-popup" className="d-none" href="#popup">popup</a>
 
             <Hint>
@@ -263,9 +263,9 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
                 <div>Total Cost: {(order.pricelist.price * (parameterized ? parameterizedMessageSegments.length : (messageSegments.length * getNumberOfRecipients())) || 0).toFixed(2)}</div>
             </div>
 
-            <h1 className="add-user-header my-5">Message Segments</h1>
+            <h1 className="content-header my-5">Message Segments</h1>
             <ItemsList items={messageSegments}/>
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={addNewSMSMessage}>Push</button>
             </div>
         </div>

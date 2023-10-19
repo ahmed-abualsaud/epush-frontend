@@ -87,8 +87,8 @@ const AddMessage = () => {
     }
 
     return (
-        <div id="add-message-form" className="add-user-container">
-            <h1 className="add-user-header mb-5">Add New Message</h1>
+        <div id="add-message-form" className="component-container">
+            <h1 className="content-header mb-5">Add New Message</h1>
 
             <div>
                 <div className="d-inline-flex align-items-center" style={{width: "15%", fontSize: "25px"}}>Company Name</div>
@@ -97,12 +97,12 @@ const AddMessage = () => {
                 </div>
             </div>
 
-            {selectedClient.balance <= 0 ? <div className="user-no-perm">Your wallet is empty</div> :
-            isEmpty(clientOrder)? <div className="user-no-perm">You have to make an order first</div> :
-            clientOrder?.pricelist?.price > selectedClient.balance? <div className="user-no-perm">You Don't have enough credits</div> :
+            {selectedClient.balance <= 0 ? <div className="no-data">Your wallet is empty</div> :
+            isEmpty(clientOrder)? <div className="no-data">You have to make an order first</div> :
+            clientOrder?.pricelist?.price > selectedClient.balance? <div className="no-data">You Don't have enough credits</div> :
             <div>
                 <div id="client-senders-droplist" className="mt-5 d-none">
-                    {isEmpty(senders)? <div className="user-no-perm">The selected client does'nt have any senders yet!</div>: 
+                    {isEmpty(senders)? <div className="no-data">The selected client does'nt have any senders yet!</div>: 
                         <div>
                             <div className="d-inline-flex align-items-center" style={{width: "15%", fontSize: "25px"}}>Sender Name</div>
                             <div className="d-inline-flex justify-content-center" style={{width: "85%"}}>
@@ -152,7 +152,7 @@ const AddMessage = () => {
                     </div>
                 </div>
 
-                <div className="update-user">
+                <div className="button-container">
                     <button className="button" onClick={next}>Next</button>
                 </div>
             </div>}

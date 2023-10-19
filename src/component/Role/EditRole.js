@@ -78,7 +78,7 @@ const EditRole = ({ role }) => {
         let permissionCardIcon = getElement(iconId)
 
         if (getElement(checkboxId).checked) {
-            permissionCardHead.classList.remove("role-card-head-not-checked")
+            permissionCardHead.classList.remove("card-item-head-not-checked")
             permissionCardIcon.classList.add("uil-check-circle")
             permissionCardIcon.classList.remove("uil-exclamation-circle")
             permissionCardIcon.previousElementSibling.textContent = "Assigned"
@@ -86,7 +86,7 @@ const EditRole = ({ role }) => {
             setUnassignedPermissionsID(unassignedPermissionsID.filter(value => value !== permissionID))
 
         } else {
-            permissionCardHead.classList.add("role-card-head-not-checked")
+            permissionCardHead.classList.add("card-item-head-not-checked")
             permissionCardIcon.classList.add("uil-exclamation-circle")
             permissionCardIcon.classList.remove("uil-check-circle")
             permissionCardIcon.previousElementSibling.textContent = "Not Assigned"
@@ -124,7 +124,7 @@ const EditRole = ({ role }) => {
                     </tbody>
                 </table>
 
-                <div className="update-role">
+                <div className="button-container">
                     <button className="button" onClick={() => updateSpecificRole()}>Update Role</button>
                 </div>
             </div>
@@ -134,11 +134,11 @@ const EditRole = ({ role }) => {
                     <h1>Role Permissions</h1>
                     <button className="button" onClick={() => navigate("content", "permission-list", "Role", role["id"])}>Assign New Permission</button>
                 </div>
-                {isEmpty(rolePermissions)? <div className="user-no-perm"> Role has no permissions! </div> :
-                    <div className="roles-list">
+                {isEmpty(rolePermissions)? <div className="no-data"> Role has no permissions! </div> :
+                    <div className="cards-list">
                         {rolePermissions.map((rolePermission) => (
-                            <div id={rolePermission["name"] + "-edit-role-permissions-card"} className="role-card">
-                                <div id={rolePermission["name"] + "-edit-role-head"} className="role-card-head">
+                            <div id={rolePermission["name"] + "-edit-role-permissions-card"} className="card-item">
+                                <div id={rolePermission["name"] + "-edit-role-head"} className="card-item-head">
                                     <div>Permission Name</div>
                                     <div>Permission Description</div>
                                     <div>
@@ -146,7 +146,7 @@ const EditRole = ({ role }) => {
                                         <i id={rolePermission["name"] + "-edit-role-icon"} className="uil uil-check-circle"></i>
                                     </div>
                                 </div>
-                                <div className="role-card-body">
+                                <div className="card-item-body">
                                     <div>{ rolePermission["name"] }</div>
                                     <div>{ rolePermission["description"] }</div>
                                     <div>
@@ -163,7 +163,7 @@ const EditRole = ({ role }) => {
                         ))}
                     </div>
                 }
-                <div className="update-user">
+                <div className="button-container">
                     <button className="button" onClick={() => updateRolePermissions()}>Update Role Permissions</button>
                 </div>
             </div>

@@ -1,5 +1,3 @@
-import '../../assets/style/component/add-user.css'
-
 import Input from '../../layout/Shared/Input'
 import { isEmpty } from '../../utils/helper'
 import { useEffect, useRef, useState } from 'react'
@@ -55,8 +53,8 @@ const AddAdmin = () => {
 
 
     return (
-        <div id="add-user-form" className="add-user-container">
-            <h1 className="add-user-header">Add New Admin</h1>
+        <div id="add-user-form" className="component-container">
+            <h1 className="content-header">Add New Admin</h1>
 
             <div className="user-image">
                 <div className="avatar-hint">Click on the image to select the admin profile avatar!</div>
@@ -105,7 +103,7 @@ const AddAdmin = () => {
                 <label for="add-user-enabled"></label>
             </div>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => addNewAdmin()}>Add New Admin</button>
             </div>
         </div>

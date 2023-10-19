@@ -1,22 +1,3 @@
-.info-input {
-    padding: 0;
-    width: 400px;
-    height: 50px;
-}
-
-.info-input input {
-    margin: 5px 0;
-    padding: 2px 15px;
-    width: 98%;
-    height: inherit;
-    border-radius: 8px;
-    border: none;
-    font-size: 20px;
-    color: #063F30;
-    border: 1px dashed #063F30;
-    background-color: rgb(235, 235, 235);
-}
-
 .edit-role-container td {
     font-size: 25px;
 }

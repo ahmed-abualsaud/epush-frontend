@@ -1,6 +1,6 @@
 import '../../assets/style/layout/input.css'
 
-const Input = ({ id, type, value, className, placeholder, validrules, accept, children, onFocus, onInput, style, maxLength }) => {
+const Input = ({ id, type, value, className, placeholder, validrules, accept, children, onFocus, onInput, onKeyDown, style, maxLength }) => {
 
     return (
         <div className={`form-group my-2 ${className}`}>
@@ -8,6 +8,7 @@ const Input = ({ id, type, value, className, placeholder, validrules, accept, ch
                 style={style}
                 onFocus={onFocus}
                 onInput={onInput}
+                onKeyDown={onKeyDown}
                 type={type}
                 name={id}
                 className="form-style"

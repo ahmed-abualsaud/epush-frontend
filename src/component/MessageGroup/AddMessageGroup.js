@@ -93,8 +93,8 @@ const AddMessageGroup = () => {
     }
 
     return (
-        <div id="add-message-group-form" className="add-user-container">
-            <h1 className="add-user-header mb-5">Add New Message Group</h1>
+        <div id="add-message-group-form" className="component-container">
+            <h1 className="content-header mb-5">Add New Message Group</h1>
 
             <Input id="add-message-group-name" type="text" placeholder="Name" validrules="required">
                 <i className="input-icon fas fa-pen"></i>
@@ -137,7 +137,7 @@ const AddMessageGroup = () => {
 
             </div>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => addNewMessageGroup()}>Add New Message Group</button>
             </div>
         </div>

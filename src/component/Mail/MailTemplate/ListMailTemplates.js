@@ -24,8 +24,8 @@ const ListMailTemplates = () => {
     }, [])
 
     return (
-        <div className="add-user-container">
-            <h1 className="add-user-header">
+        <div className="component-container">
+            <h1 className="content-header">
                 All Mail Templates
                 <button 
                     style={{

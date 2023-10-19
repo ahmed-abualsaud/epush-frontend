@@ -34,8 +34,8 @@ const AddMessageLanguage = () => {
     }
 
     return (
-        <div id="add-message-language-form" className="add-user-container">
-            <h1 className="add-user-header mb-5">Add New Message Language</h1>
+        <div id="add-message-language-form" className="component-container">
+            <h1 className="content-header mb-5">Add New Message Language</h1>
 
             <Input id="add-message-language-name" type="text" placeholder="Name" validrules="required">
                 <i className="input-icon fas fa-pen"></i>
@@ -49,7 +49,7 @@ const AddMessageLanguage = () => {
                 <i className="input-icon fas fa-arrow-up-9-1"></i>
             </Input>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => addNewMessageLanguage()}>Add New Message Language</button>
             </div>
         </div>

@@ -17,10 +17,10 @@ const DeleteBusinessField = ({ businessField, deletedRows, setDeletedRows }) => 
 
     return (
         <div>
-            <h1 className="delete-header">Delete Business Field</h1>
-            <p className="delete-content">Do you want to delete this business field?</p>
-            <div className="delete-button-wrapper">
-                <a href="#"><button className="button delete-botton" onClick={() => deleteEntity()}>Delete</button></a>
+            <h1 className="popup-header">Delete Business Field</h1>
+            <p className="popup-content">Do you want to delete this business field?</p>
+            <div className="popup-button-wrapper">
+                <a href="#"><button className="button delete-button" onClick={() => deleteEntity()}>Delete</button></a>
             </div>
         </div>
     )

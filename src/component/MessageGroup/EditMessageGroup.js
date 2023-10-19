@@ -47,8 +47,8 @@ const EditMessageGroup = ({ messageGroup }) => {
 
 
     return (
-        <div className="add-user-container">
-            <h1 className="add-user-header mb-5">Message Group Information</h1>
+        <div className="component-container">
+            <h1 className="content-header mb-5">Message Group Information</h1>
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -73,7 +73,7 @@ const EditMessageGroup = ({ messageGroup }) => {
                 </tbody>
             </table>
 
-            <div className="update-role">
+            <div className="button-container">
                 <button className="button" onClick={() => updateSpecificMessageGroup()}>Update Message Group</button>
             </div>
 

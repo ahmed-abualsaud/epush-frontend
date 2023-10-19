@@ -13,8 +13,8 @@ const ShowSMSCBinding = ({ smscBinding }) => {
     const filteredColumns = smscBinding ? Object.keys(smscBinding).filter(column => ! excludedColumns.includes(column)) : []
 
     return (
-        <div className="add-user-container">
-            <h1 className="add-user-header">General Information</h1>
+        <div className="component-container">
+            <h1 className="content-header">General Information</h1>
             <table className="fl-table">
                 <thead>
                     <tr>

@@ -63,8 +63,8 @@ const EditSMSCBinding = ({ smscBinding }) => {
 
 
     return (
-        <div className="add-user-container">
-            <h1 className="add-user-header mb-5">Update New SMSC Binding</h1>
+        <div className="component-container">
+            <h1 className="content-header mb-5">Update New SMSC Binding</h1>
 
             <div>
                 <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "40px"}}>Country: </div>
@@ -102,7 +102,7 @@ const EditSMSCBinding = ({ smscBinding }) => {
                 <label for="edit-smsc-binding-default"></label>
             </div>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => updateNewSMSCBinding()}>Update New SMSC Binding</button>
             </div>
         </div>

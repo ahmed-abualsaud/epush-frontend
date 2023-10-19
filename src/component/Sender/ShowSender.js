@@ -53,8 +53,8 @@ const ShowSender = ({ sender }) => {
 
     return (
         <div>
-            <div className="add-user-container">
-                <h1 className="add-user-header">General Information</h1>
+            <div className="component-container">
+                <h1 className="content-header">General Information</h1>
                 <table className="fl-table">
                     <thead>
                         <tr>
@@ -76,9 +76,9 @@ const ShowSender = ({ sender }) => {
                 </table>
             </div>
 
-            <div className="add-user-container" style={{marginTop: "100px"}}>
-                <h1 className="add-user-header">Sender SMS Connections</h1>
-                { isEmpty(senderConnections) ? <div className="user-no-perm"> Sender Has No SMS Connections! </div> :
+            <div className="component-container" style={{marginTop: "100px"}}>
+                <h1 className="content-header">Sender SMS Connections</h1>
+                { isEmpty(senderConnections) ? <div className="no-data"> Sender Has No SMS Connections! </div> :
                 <Table>
                     <TableHead>
                         <HeadRow>

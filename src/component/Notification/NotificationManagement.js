@@ -17,7 +17,7 @@ const NotificationManagement = () => {
     }
 
     return (
-        <div className="add-user-container">
+        <div className="component-container">
             <NavBar>
                 <div onClick={renderSendingNotification}><i className="fas fa-bell"></i>Sending Notification</div>
             </NavBar>

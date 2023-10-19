@@ -84,8 +84,8 @@ const EditSenderConnection = ({ senderConnection }) => {
 
 
     return (
-        <div id="edit-sender-connection-form" className="add-user-container">
-            <h1 className="add-user-header mb-5">
+        <div id="edit-sender-connection-form" className="component-container">
+            <h1 className="content-header mb-5">
                 Edit Sender Connection
             </h1>
 
@@ -127,7 +127,7 @@ const EditSenderConnection = ({ senderConnection }) => {
                 <div className="d-inline-flex align-items-center justify-content-center" style={{width: "20%", fontSize: "22px"}}>SMSC Value = {selectedSMSCVAlue}</div>
             </div>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => editSenderConnection()}>Edit Sender Connection</button>
             </div>
         </div>

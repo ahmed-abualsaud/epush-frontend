@@ -21,7 +21,7 @@ const MailManagement = () => {
     }
 
     return (
-        <div className="add-user-container">
+        <div className="component-container">
             <NavBar>
                 <div onClick={renderSendingMail}><i class="fas fa-envelope"></i>Sending Mail</div>
                 <div onClick={renderMailTemplates}><i className="far fa-rectangle-list"></i>Mail Templates</div>

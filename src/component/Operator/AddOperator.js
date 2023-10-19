@@ -33,8 +33,8 @@ const AddOperator = () => {
     }
 
     return (
-        <div id="add-operator-form" className="add-user-container">
-            <h1 className="add-user-header mb-5">Add New Operator</h1>
+        <div id="add-operator-form" className="component-container">
+            <h1 className="content-header mb-5">Add New Operator</h1>
 
             <Input id="add-operator-name" type="text" placeholder="Name" validrules="required">
                 <i className="input-icon fas fa-pen"></i>
@@ -44,7 +44,7 @@ const AddOperator = () => {
                 <i className="input-icon fas fa-hashtag"></i>
             </Input>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => addNewOperator()}>Add New Operator</button>
             </div>
         </div>

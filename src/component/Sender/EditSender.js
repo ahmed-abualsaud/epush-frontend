@@ -4,6 +4,7 @@ import { beautifulToKebabCase, isEmpty, snakeToBeautifulCase } from "../../utils
 import { showAlert } from "../../utils/validator"
 import { getElement } from "../../utils/dom"
 import DropList from "../../layout/Shared/DropList"
+import "../../assets/style/layout/list.css"
 
 const EditSender = ({ sender }) => {
 
@@ -68,8 +69,8 @@ const EditSender = ({ sender }) => {
 
 
     return (
-        <div className="add-user-container">
-            <h1 className="add-user-header mb-5">Sender Information</h1>
+        <div className="component-container">
+            <h1 className="content-header mb-5">Sender Information</h1>
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -105,12 +106,14 @@ const EditSender = ({ sender }) => {
                 <label for="edit-sender-approved"></label>
             </div>
 
-            <div className="update-role">
+            <div className="button-container">
                 <button className="button" onClick={() => updateSpecificSender()}>Update Sender</button>
             </div>
 
-            <h1 className="add-user-header mb-5 mt-5">Sender Operators</h1>
-            {[...new Set(currentSenderConnections.map(conn => conn.smsc.operator.name))].map(currentSenderOperator => (
+            <h1 className="content-header mb-5 mt-5">Sender Operators</h1>
+            {isEmpty(currentSenderConnections) ?
+            <div className="no-data">The sender has no operators</div> :
+            [...new Set(currentSenderConnections.map(conn => conn.smsc.operator.name))].map(currentSenderOperator => (
                 <div className="list-container">
                     <div className="master-list-item-container">
                         <div className="master-list-item">

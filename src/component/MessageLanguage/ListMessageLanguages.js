@@ -110,8 +110,8 @@ const ListMessageLanguages = () =>
     return (
         ! isEmpty(messageLanguages) && 
         (
-        <div className="add-user-container">
-            <h1 className="add-user-header">All MessageLanguages</h1>
+        <div className="component-container">
+            <h1 className="content-header">All MessageLanguages</h1>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>

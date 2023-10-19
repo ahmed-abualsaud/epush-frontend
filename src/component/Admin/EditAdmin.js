@@ -91,9 +91,9 @@ const EditAdmin = ({ admin }) => {
 
 
     return (
-        <div className="edit-user-container">
+        <div className="component-container">
+            <h1 className="content-header">Admin Information</h1>
             <div className="user-info">
-                <h1 className="edit-user-header">Admin Information</h1>
                 <div className="user-avatar-password">
                     <div className="user-image">
                         <div className="avatar-hint">Click on your avatar if you want to change it!</div>
@@ -164,7 +164,7 @@ const EditAdmin = ({ admin }) => {
                         </tr>
                     </tbody>
                 </table>
-                <div className="update-user">
+                <div className="button-container">
                     <button className="button" onClick={() => updateAdminInfo()}>Update Admin Info</button>
                 </div>
             </div>

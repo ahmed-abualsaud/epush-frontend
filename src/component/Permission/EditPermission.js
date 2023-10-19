@@ -71,7 +71,7 @@ const EditPermission = ({ permission }) => {
                     </tr>
                 </tbody>
             </table>
-            <div className="update-role">
+            <div className="button-container">
                 <button className="button" onClick={() => updateSpecificPermission()}>Update Permission</button>
             </div>
         </div>

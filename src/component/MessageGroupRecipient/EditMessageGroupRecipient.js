@@ -96,8 +96,8 @@ const EditMessageGroupRecipient = ({ messageGroupRecipient }) => {
     }
 
     return (
-        <div id="edit-message-group-recipient-form" className="add-user-container">
-            <h1 className="add-user-header mb-5">Edit New Message Group Recipient</h1>
+        <div id="edit-message-group-recipient-form" className="component-container">
+            <h1 className="content-header mb-5">Edit New Message Group Recipient</h1>
 
             <div className="mt-5 mb-5">
                 <div className="d-inline-flex align-items-center" style={{width: "15%", fontSize: "25px"}}>Message Group</div>
@@ -148,7 +148,7 @@ const EditMessageGroupRecipient = ({ messageGroupRecipient }) => {
                     </div>
                 ))}
             </div>
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => editNewMessageGroupRecipient()}>Update Message Group Recipient</button>
             </div>
         </div>

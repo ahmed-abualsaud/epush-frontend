@@ -34,8 +34,8 @@ const ShowMessage = ({ message }) => {
 
     return (
         <div>
-            <div className="add-user-container">
-                <h1 className="add-user-header">General Information</h1>
+            <div className="component-container">
+                <h1 className="content-header">General Information</h1>
                 <table className="fl-table">
                     <thead>
                         <tr>
@@ -57,9 +57,9 @@ const ShowMessage = ({ message }) => {
                 </table>
             </div>
 
-            <div className="add-user-container mt-5">
-                <h1 className="add-user-header">Recipients Information</h1>
-                {isEmpty(message['recipients'])? <div className="user-no-perm">Message has no recipients</div>:
+            <div className="component-container mt-5">
+                <h1 className="content-header">Recipients Information</h1>
+                {isEmpty(message['recipients'])? <div className="no-data">Message has no recipients</div>:
                     <div>
                         <div className="d-flex justify-content-center m-3" style={{fontSize: "20px"}}>Total Number of Recipients = {message['recipients'].length}</div>
                         <table className="fl-table">
@@ -93,9 +93,9 @@ const ShowMessage = ({ message }) => {
                 }
             </div>
 
-            <div className="add-user-container mt-5">
-                <h1 className="add-user-header">Segments Information</h1>
-                {isEmpty(message['segments'])? <div className="user-no-perm">Message has no segments</div>:
+            <div className="component-container mt-5">
+                <h1 className="content-header">Segments Information</h1>
+                {isEmpty(message['segments'])? <div className="no-data">Message has no segments</div>:
                     <div>
                         <div className="d-flex justify-content-center m-3" style={{fontSize: "20px"}}>Total Number of Segments = {message['segments'].length}</div>
                         <table className="fl-table">

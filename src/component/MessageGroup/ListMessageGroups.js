@@ -113,8 +113,8 @@ const ListMessageGroups = () =>
     return (
         ! isEmpty(messageGroups) && 
         (
-        <div className="add-user-container">
-            <h1 className="add-user-header">All Message Groups</h1>
+        <div className="component-container">
+            <h1 className="content-header">All Message Groups</h1>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>

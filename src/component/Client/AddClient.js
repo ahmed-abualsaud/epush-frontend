@@ -1,5 +1,3 @@
-import '../../assets/style/component/add-user.css'
-
 import Input from '../../layout/Shared/Input'
 import { isEmpty } from '../../utils/helper'
 import { useEffect, useRef, useState } from 'react'
@@ -107,8 +105,8 @@ const AddClient = () => {
 
 
     return (
-        <div id="add-client-form" className="add-user-container">
-            <h1 className="add-user-header">Add New Client</h1>
+        <div id="add-client-form" className="component-container">
+            <h1 className="content-header">Add New Client</h1>
 
             <div className="user-image">
                 <div className="avatar-hint">Click on the image to select the client profile avatar!</div>
@@ -186,7 +184,7 @@ const AddClient = () => {
                 <DropList selectName="Select Business Field" options={businessField.map(item => item.name)} onSelect={onSelectBusinessField}/>
             </div>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => addNewClient()}>Add New Client</button>
             </div>
 

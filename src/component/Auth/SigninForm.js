@@ -3,17 +3,57 @@ import Form from '../../layout/Shared/Form'
 import Input from '../../layout/Shared/Input';
 import { Link } from "react-router-dom";
 import SubmitSignin from './SubmitSignin';
+import { isEmpty } from '../../utils/helper';
+import { showAlert } from '../../utils/validator';
+import { getElement } from '../../utils/dom';
+import useAuthApi from "../../api/useAuthApi"
+import { useNavigate } from "react-router-dom"
+
 
 const SigninForm = ({ className }) => {
+
+    const navigate = useNavigate()
+    const { signin } = useAuthApi()
+
+    const onKeyDownHandler = (e) => {
+        if (e.key === 'Enter'){
+            if (isEmpty(getElement("username").value) || isEmpty(getElement("password").value)) {
+                showAlert("Please enter a valid email address or password to login")
+            } else {
+                submitSigninHandler()
+            }
+        }
+    }
+
+    const submitSigninHandler = async () => {
+        let data = await signin()
+    
+        if (! isEmpty(data) && roleExists(data.roles, "super_admin")) {
+          navigate("/super-admin")
+        }
+    
+        if (! isEmpty(data) && roleExists(data.roles, "admin")) {
+          navigate("/admin")
+        }
+    
+        if (! isEmpty(data) && roleExists(data.roles, "client")) {
+          navigate("/client")
+        }
+    
+        if (isEmpty(data) || isEmpty(data.roles)) {
+          navigate("/")
+          showAlert("Your Role is Unknown!")
+        }
+      }
 
     return (
         <Form id ="signin_form" className={ className }>
             <h4 className="mb-4 pb-3 text-white form-title">Sign In</h4>
-            <Input id="username" type="name" placeholder="Username" validrules="required">
+            <Input id="username" type="name" placeholder="Username" validrules="required" onKeyDown={onKeyDownHandler}>
                 <i className="input-icon uil uil-user-check"></i>
             </Input>
 
-            <Input id="password" type="password" placeholder="Password" validrules="required">
+            <Input id="password" type="password" placeholder="Password" validrules="required" onKeyDown={onKeyDownHandler}>
                 <i className="input-icon uil uil-lock-alt"></i>
             </Input>
 
@@ -23,7 +63,15 @@ const SigninForm = ({ className }) => {
                 <Link to="/" className="link">Forgot your password?</Link>
             </p>
         </Form>
-    );
-  };
+    )
+}
   
-  export default SigninForm;
+export default SigninForm
+
+const roleExists = (roles, roleName) =>
+{
+  const filterdeRoles = roles?.filter(
+    (role) => role.name === roleName
+  )
+  return ! isEmpty(filterdeRoles)
+}

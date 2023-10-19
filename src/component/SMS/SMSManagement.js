@@ -21,7 +21,7 @@ const SMSManagement = () => {
     }
 
     return (
-        <div className="add-user-container">
+        <div className="component-container">
             <NavBar>
                 <div onClick={renderSendingSMS}><i className="fas fa-sms"></i>Sending SMS</div>
                 <div onClick={renderFilterSMS}><i className="fas fa-filter"></i>Filter SMS</div>

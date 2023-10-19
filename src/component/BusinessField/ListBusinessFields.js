@@ -50,27 +50,26 @@ const ListBusinessFields = () => {
     }
 
     return (
-        ! isEmpty(businessFields) && 
-        (
-            <div className="add-user-container">
-                <h1 className="add-user-header">All Business Field</h1>
-                <Table>
-                    <TableHead>
-                        <HeadRow>
-                            <HeadCells columns={columns}/>
-                            <AddRowCell addingFunction={addBusinessFieldHandler}/>
-                        </HeadRow>
-                    </TableHead>
-                    <TableBody>
-                        <DataRows columns={columns} rows={businessFields}>
-                            {withOperationCellParameters(ShowRowCell, "showFunction", showBusinessFieldHandler, {popup: true})}
-                            {withOperationCellParameters(UpdateRowCell, "updateFunction", updateBusinessFieldHandler)}
-                            {withOperationCellParameters(DeleteRowCell, "deleteFunction", deleteBusinessFieldHandler)}
-                        </DataRows>
-                    </TableBody>
-                </Table>
-            </div>
-        )
+        <div className="component-container">
+            <h1 className="content-header">All Business Field</h1>
+            <Table>
+                <TableHead>
+                    <HeadRow>
+                        <HeadCells columns={columns}/>
+                        <AddRowCell addingFunction={addBusinessFieldHandler}/>
+                    </HeadRow>
+                </TableHead>
+                <TableBody>
+                    {isEmpty(businessFields) ?
+                    <div className="no-data">No Business Fields <i class="ms-3 fa-solid fa-ban"></i></div> :
+                    <DataRows columns={columns} rows={businessFields}>
+                        {withOperationCellParameters(ShowRowCell, "showFunction", showBusinessFieldHandler, {popup: true})}
+                        {withOperationCellParameters(UpdateRowCell, "updateFunction", updateBusinessFieldHandler)}
+                        {withOperationCellParameters(DeleteRowCell, "deleteFunction", deleteBusinessFieldHandler)}
+                    </DataRows>}
+                </TableBody>
+            </Table>
+        </div>
     )
 }
 

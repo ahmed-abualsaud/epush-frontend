@@ -1,166 +1,167 @@
-import Home from '../page/Home'
-import Profile from '../page/Profile'
-import Service from '../component/Orchi/Service'
-import Handler from '../component/Orchi/Handler'
-import AddRole from "../component/Role/AddRole"
-import AddSales from '../component/Sales/AddSales'
-import EditUser from '../component/User/EditUser'
-import EditRole from '../component/Role/EditRole'
-import RoleList from "../component/Role/RoleList"
-import EditAdmin from '../component/Admin/EditAdmin'
-import EditSales from '../component/Sales/EditSales'
-import ListSales from '../component/Sales/ListSales'
-import ListRoles from "../component/Role/ListRoles"
-import EditClient from '../component/Client/EditClient'
-import TableContent from '../layout/Shared/TableContent'
-import HandleGroup from '../component/Orchi/HandleGroup'
-import ListAdmins from '../component/Admin/ListAdmins'
-import ListClients from '../component/Client/ListClients'
-import AddPricelist from '../component/Pricelist/AddPricelist'
-import AddAdmin from '../component/Admin/AddAdmin'
-import EditPricelist from '../component/Pricelist/EditPricelist'
-import AddClient from "../component/Client/AddClient"
-import ListPricelist from '../component/Pricelist/ListPricelist'
-import EditPermission from '../component/Permission/EditPermission'
-import PermissionList from "../component/Permission/PermissionList"
-import AddUser from "../component/User/AddUser"
-import ServiceContexts from '../component/Orchi/ServiceContexts'
-import AddWebsiteModal from '../component/Client/AddWebsiteModal'
-import ListPermissions from "../component/Permission/ListPermissions"
-import AddBusinessField from '../component/BusinessField/AddBusinessField'
-import AddPaymentMethod from '../component/PaymentMethod/AddPaymentMethod'
-import EditBusinessField from '../component/BusinessField/EditBusinessField'
-import EditPaymentMethod from '../component/PaymentMethod/EditPaymentMethod'
-import ListBusinessFields from '../component/BusinessField/ListBusinessFields'
-import ListPaymentMethods from '../component/PaymentMethod/ListPaymentMethods'
-import GeneratePasswordModal from "../component/Auth/GeneratePasswordModal"
-import ShowClient from '../component/Client/ShowClient'
-import DeleteClient from '../component/Client/DeleteClient'
-import ShowAdmin from '../component/Admin/ShowAdmin'
-import DeleteAdmin from '../component/Admin/DeleteAdmin'
-import ListUsers from '../component/User/ListUsers'
-import DeleteUser from '../component/User/DeleteUser'
-import ShowUser from '../component/User/ShowUser'
-import ShowRole from '../component/Role/ShowRole'
-import DeleteRole from '../component/Role/DeleteRole'
-import ShowPermission from '../component/Permission/ShowPermission'
-import DeletePermission from '../component/Permission/DeletePermission'
-import ShowPricelist from '../component/Pricelist/ShowPricelist'
-import DeletePricelist from '../component/Pricelist/DeletePricelist'
-import ShowSales from '../component/Sales/ShowSales'
-import DeleteSales from '../component/Sales/DeleteSales'
-import ShowBusinessField from '../component/BusinessField/ShowBusinessField'
-import DeleteBusinessField from '../component/BusinessField/DeleteBusinessField'
-import ShowPaymentMethod from '../component/PaymentMethod/ShowPaymentMethod'
-import DeletePaymentMethod from '../component/PaymentMethod/DeletePaymentMethod'
-import ListOrders from '../component/Order/ListOrders'
-import AddOrder from '../component/Order/AddOrder'
-import ShowOrder from '../component/Order/ShowOrder'
-import ListCountries from '../component/Country/ListCountries'
-import ShowCountry from '../component/Country/ShowCountry'
-import EditCountry from '../component/Country/EditCountry'
-import AddCountry from '../component/Country/AddCountry'
-import DeleteCountry from '../component/Country/DeleteCountry'
-import ListSMSCs from '../component/SMSC/ListSMSCs'
-import AddSMSC from '../component/SMSC/AddSMSC'
-import EditSMSC from '../component/SMSC/EditSMSC'
-import ShowSMSC from '../component/SMSC/ShowSMSC'
-import DeleteSMSC from '../component/SMSC/DeleteSMSC'
-import NotFound from '../page/NotFound'
-import ListOperators from '../component/Operator/ListOperators'
-import AddOperator from '../component/Operator/AddOperator'
-import ShowOperator from '../component/Operator/ShowOperator'
-import EditOperator from '../component/Operator/EditOperator'
-import DeleteOperator from '../component/Operator/DeleteOperator'
-import ListSMSCBindings from '../component/SMSCBinding/ListSMSCBindings'
-import ShowSMSCBinding from '../component/SMSCBinding/ShowSMSCBinding'
-import AddSMSCBinding from '../component/SMSCBinding/AddSMSCBinding'
-import DeleteSMSCBinding from '../component/SMSCBinding/DeleteSMSCBinding'
-import EditSMSCBinding from '../component/SMSCBinding/EditSMSCBinding'
-import ListSenders from '../component/Sender/ListSenders'
-import AddSender from '../component/Sender/AddSender'
-import ShowSender from '../component/Sender/ShowSender'
-import DeleteSender from '../component/Sender/DeleteSender'
-import EditSender from '../component/Sender/EditSender'
-import ListSendersConnections from '../component/SenderConnection/ListSendersConnections'
-import ShowSenderConnection from '../component/SenderConnection/ShowSenderConnection'
-import DeleteSenderConnection from '../component/SenderConnection/DeleteSenderConnection'
-import AddSenderConnection from '../component/SenderConnection/AddSenderConnection'
-import EditSenderConnection from '../component/SenderConnection/EditSenderConnection'
-import AddSenderAndSenderConnection from '../component/SenderConnection/AddSenderAndSenderConnection'
-import EditOrder from '../component/Order/EditOrder'
-import ListMailTemplates from '../component/Mail/MailTemplate/ListMailTemplates'
-import AddMailTemplate from '../component/Mail/MailTemplate/AddMailTemplate'
-import DeleteMailTemplate from '../component/Mail/MailTemplate/DeleteMailTemplate'
-import EditMailTemplate from '../component/Mail/MailTemplate/EditMailTemplate'
-import ListMessageLanguages from '../component/MessageLanguage/ListMessageLanguages'
-import AddMessageLanguage from '../component/MessageLanguage/AddMessageLanguage'
-import DeleteMessageLanguage from '../component/MessageLanguage/DeleteMessageLanguage'
-import ShowMessageLanguage from '../component/MessageLanguage/ShowMessageLanguage'
-import EditMessageLanguage from '../component/MessageLanguage/EditMessageLanguage'
-import ListMessages from '../component/Message/ListMessages'
-import ShowMessage from '../component/Message/ShowMessage'
-import DeleteMessage from '../component/Message/DeleteMessage'
-import AddMessage from '../component/Message/AddMessage'
-import ExtendableFormAddition from '../component/MessageRecipient/AddRoutines/ExtendableFormAddition'
-import TextAreaAddition from '../component/MessageRecipient/AddRoutines/TextAreaAddition'
-import FromFileAddition from '../component/MessageRecipient/AddRoutines/FromFileAddition'
-import AddMessageSegments from '../component/MessageSegment/AddMessageSegments'
-import ListMessageSegments from '../component/MessageSegment/ListMessageSegments'
-import ListMessageRecipients from '../component/MessageRecipient/ListMessageRecipients'
-import MessagesList from '../layout/List/MessagesList'
-import WordFileExample from '../component/MessageSegment/ImportParametersFileExamples/WordFileExample'
-import ExcelFileExample from '../component/MessageSegment/ImportParametersFileExamples/ExcelFileExample'
-import TextFileExample from '../component/MessageSegment/ImportParametersFileExamples/TextFileExample'
-import RecipientsGroupAddition from '../component/MessageRecipient/AddRoutines/RecipientsGroupAddition'
-import ListMessageGroups from '../component/MessageGroup/ListMessageGroups'
-import AddMessageGroup from '../component/MessageGroup/AddMessageGroup'
-import ShowMessageGroup from '../component/MessageGroup/ShowMessageGroup'
-import EditMessageGroup from '../component/MessageGroup/EditMessageGroup'
-import DeleteMessageGroup from '../component/MessageGroup/DeleteMessageGroup'
-import ListMessageGroupRecipients from '../component/MessageGroupRecipient/ListMessageGroupRecipients'
-import AddMessageGroupRecipient from '../component/MessageGroupRecipient/AddMessageGroupRecipient'
-import EditMessageGroupRecipient from '../component/MessageGroupRecipient/EditMessageGroupRecipient'
-import DeleteMessageGroupRecipient from '../component/MessageGroupRecipient/DeleteMessageGroupRecipient'
-import ImportRecipientsData from '../component/MessageGroup/ImportRecipientsData'
-import ListSettings from '../component/Settings/ListSettings'
-import EditSettings from '../component/Settings/EditSettings'
-import AddSettings from '../component/Settings/AddSettings'
-import ShowSettings from '../component/Settings/ShowSettings'
-import DeleteSettings from '../component/Settings/DeleteSettings'
-import ListApprovedMessages from '../component/Message/ListApprovedMessages'
-import SMSManagement from '../component/SMS/SMSManagement'
-import ListMessageFilters from '../component/MessageFilter/ListMessageFilters'
-import AddMessageFilter from '../component/MessageFilter/AddMessageFilter'
-import EditMessageFilter from '../component/MessageFilter/EditMessageFilter'
-import ShowMessageFilter from '../component/MessageFilter/ShowMessageFilter'
-import DeleteMessageFilter from '../component/MessageFilter/DeleteMessageFilter'
-import CensoredWord from '../component/MessageFilter/CensoredWord'
-import MailManagement from '../component/Mail/MailManagement'
-import ListMailSendingHandlers from '../component/Mail/MailSendingHandler/ListMailSendingHandlers'
-import AddMailSendingHandler from '../component/Mail/MailSendingHandler/AddMailSendingHandler'
-import AddMailSendingTemplate from '../component/Mail/MailSendingHandler/AddMailSendingTemplate'
-import AddMailSendingName from '../component/Mail/MailSendingHandler/AddMailSendingName'
-import DeleteMailSendingHandler from '../component/Mail/MailSendingHandler/DeleteMailSendingHandler'
-import AddNewMailTemplate from '../component/Mail/MailSendingHandler/AddNewMailTemplate'
-import DataCellDetails from '../layout/Table/DataCellDetails'
-import ListSMSSendingHandlers from '../component/SMS/SMSSendingHandler/ListSMSSendingHandlers'
-import AddSMSSendingHandler from '../component/SMS/SMSSendingHandler/AddSMSSendingHandler'
-import AddSMSSendingTemplate from '../component/SMS/SMSSendingHandler/AddSMSSendingTemplate'
-import AddSMSSendingName from '../component/SMS/SMSSendingHandler/AddSMSSendingName'
-import DeleteSMSSendingHandler from '../component/SMS/SMSSendingHandler/DeleteSMSSendingHandler'
-import AddNewSMSTemplate from '../component/SMS/SMSSendingHandler/AddNewSMSTemplate'
-import NotificationManagement from '../component/Notification/NotificationManagement'
-import ListNotificationSendingHandlers from '../component/Notification/NotificationSendingHandler/ListNotificationSendingHandlers'
-import AddNotificationSendingHandler from '../component/Notification/NotificationSendingHandler/AddNotificationSendingHandler'
-import AddNotificationSendingTemplate from '../component/Notification/NotificationSendingHandler/AddNotificationSendingTemplate'
-import AddNewNotificationTemplate from '../component/Notification/NotificationSendingHandler/AddNewNotificationTemplate'
-import AddNotificationSendingName from '../component/Notification/NotificationSendingHandler/AddNotificationSendingName'
-import DeleteNotificationSendingHandler from '../component/Notification/NotificationSendingHandler/DeleteNotificationSendingHandler'
-import DeleteNotificationTemplate from '../component/Notification/NotificationTemplate/DeleteNotificationTemplate'
-import DeleteSMSTemplate from '../component/SMS/SMSTemplate/DeleteSMSTemplate'
-import ListUnreadNotifications from '../component/Notification/ListUnreadNotifications'
-import ListUserNotifications from '../component/Notification/ListUserNotifications'
+import React, { lazy } from 'react';
+const Home = lazy(() => import('../page/Home'));
+const Profile = lazy(() => import('../page/Profile'));
+const Service = lazy(() => import('../component/Orchi/Service'));
+const Handler = lazy(() => import('../component/Orchi/Handler'));
+const AddRole = lazy(() => import("../component/Role/AddRole"));
+const AddSales = lazy(() => import('../component/Sales/AddSales'));
+const EditUser = lazy(() => import('../component/User/EditUser'));
+const EditRole = lazy(() => import('../component/Role/EditRole'));
+const RoleList = lazy(() => import("../component/Role/RoleList"));
+const EditAdmin = lazy(() => import('../component/Admin/EditAdmin'));
+const EditSales = lazy(() => import('../component/Sales/EditSales'));
+const ListSales = lazy(() => import('../component/Sales/ListSales'));
+const ListRoles = lazy(() => import("../component/Role/ListRoles"));
+const EditClient = lazy(() => import('../component/Client/EditClient'));
+const TableContent = lazy(() => import('../layout/Shared/TableContent'));
+const HandleGroup = lazy(() => import('../component/Orchi/HandleGroup'));
+const ListAdmins = lazy(() => import('../component/Admin/ListAdmins'));
+const ListClients = lazy(() => import('../component/Client/ListClients'));
+const AddPricelist = lazy(() => import('../component/Pricelist/AddPricelist'));
+const AddAdmin = lazy(() => import('../component/Admin/AddAdmin'));
+const EditPricelist = lazy(() => import('../component/Pricelist/EditPricelist'));
+const AddClient = lazy(() => import("../component/Client/AddClient"));
+const ListPricelist = lazy(() => import('../component/Pricelist/ListPricelist'));
+const EditPermission = lazy(() => import('../component/Permission/EditPermission'));
+const PermissionList = lazy(() => import("../component/Permission/PermissionList"));
+const AddUser = lazy(() => import("../component/User/AddUser"));
+const ServiceContexts = lazy(() => import('../component/Orchi/ServiceContexts'));
+const AddWebsiteModal = lazy(() => import('../component/Client/AddWebsiteModal'));
+const ListPermissions = lazy(() => import("../component/Permission/ListPermissions"));
+const AddBusinessField = lazy(() => import('../component/BusinessField/AddBusinessField'));
+const AddPaymentMethod = lazy(() => import('../component/PaymentMethod/AddPaymentMethod'));
+const EditBusinessField = lazy(() => import('../component/BusinessField/EditBusinessField'));
+const EditPaymentMethod = lazy(() => import('../component/PaymentMethod/EditPaymentMethod'));
+const ListBusinessFields = lazy(() => import('../component/BusinessField/ListBusinessFields'));
+const ListPaymentMethods = lazy(() => import('../component/PaymentMethod/ListPaymentMethods'));
+const GeneratePasswordModal = lazy(() => import("../component/Auth/GeneratePasswordModal"));
+const ShowClient = lazy(() => import('../component/Client/ShowClient'));
+const DeleteClient = lazy(() => import('../component/Client/DeleteClient'));
+const ShowAdmin = lazy(() => import('../component/Admin/ShowAdmin'));
+const DeleteAdmin = lazy(() => import('../component/Admin/DeleteAdmin'));
+const ListUsers = lazy(() => import('../component/User/ListUsers'));
+const DeleteUser = lazy(() => import('../component/User/DeleteUser'));
+const ShowUser = lazy(() => import('../component/User/ShowUser'));
+const ShowRole = lazy(() => import('../component/Role/ShowRole'));
+const DeleteRole = lazy(() => import('../component/Role/DeleteRole'));
+const ShowPermission = lazy(() => import('../component/Permission/ShowPermission'));
+const DeletePermission = lazy(() => import('../component/Permission/DeletePermission'));
+const ShowPricelist = lazy(() => import('../component/Pricelist/ShowPricelist'));
+const DeletePricelist = lazy(() => import('../component/Pricelist/DeletePricelist'));
+const ShowSales = lazy(() => import('../component/Sales/ShowSales'));
+const DeleteSales = lazy(() => import('../component/Sales/DeleteSales'));
+const ShowBusinessField = lazy(() => import('../component/BusinessField/ShowBusinessField'));
+const DeleteBusinessField = lazy(() => import('../component/BusinessField/DeleteBusinessField'));
+const ShowPaymentMethod = lazy(() => import('../component/PaymentMethod/ShowPaymentMethod'));
+const DeletePaymentMethod = lazy(() => import('../component/PaymentMethod/DeletePaymentMethod'));
+const ListOrders = lazy(() => import('../component/Order/ListOrders'));
+const AddOrder = lazy(() => import('../component/Order/AddOrder'));
+const ShowOrder = lazy(() => import('../component/Order/ShowOrder'));
+const ListCountries = lazy(() => import('../component/Country/ListCountries'));
+const ShowCountry = lazy(() => import('../component/Country/ShowCountry'));
+const EditCountry = lazy(() => import('../component/Country/EditCountry'));
+const AddCountry = lazy(() => import('../component/Country/AddCountry'));
+const DeleteCountry = lazy(() => import('../component/Country/DeleteCountry'));
+const ListSMSCs = lazy(() => import('../component/SMSC/ListSMSCs'));
+const AddSMSC = lazy(() => import('../component/SMSC/AddSMSC'));
+const EditSMSC = lazy(() => import('../component/SMSC/EditSMSC'));
+const ShowSMSC = lazy(() => import('../component/SMSC/ShowSMSC'));
+const DeleteSMSC = lazy(() => import('../component/SMSC/DeleteSMSC'));
+const NotFound = lazy(() => import('../page/NotFound'));
+const ListOperators = lazy(() => import('../component/Operator/ListOperators'));
+const AddOperator = lazy(() => import('../component/Operator/AddOperator'));
+const ShowOperator = lazy(() => import('../component/Operator/ShowOperator'));
+const EditOperator = lazy(() => import('../component/Operator/EditOperator'));
+const DeleteOperator = lazy(() => import('../component/Operator/DeleteOperator'));
+const ListSMSCBindings = lazy(() => import('../component/SMSCBinding/ListSMSCBindings'));
+const ShowSMSCBinding = lazy(() => import('../component/SMSCBinding/ShowSMSCBinding'));
+const AddSMSCBinding = lazy(() => import('../component/SMSCBinding/AddSMSCBinding'));
+const DeleteSMSCBinding = lazy(() => import('../component/SMSCBinding/DeleteSMSCBinding'));
+const EditSMSCBinding = lazy(() => import('../component/SMSCBinding/EditSMSCBinding'));
+const ListSenders = lazy(() => import('../component/Sender/ListSenders'));
+const AddSender = lazy(() => import('../component/Sender/AddSender'));
+const ShowSender = lazy(() => import('../component/Sender/ShowSender'));
+const DeleteSender = lazy(() => import('../component/Sender/DeleteSender'));
+const EditSender = lazy(() => import('../component/Sender/EditSender'));
+const ListSendersConnections = lazy(() => import('../component/SenderConnection/ListSendersConnections'));
+const ShowSenderConnection = lazy(() => import('../component/SenderConnection/ShowSenderConnection'));
+const DeleteSenderConnection = lazy(() => import('../component/SenderConnection/DeleteSenderConnection'));
+const AddSenderConnection = lazy(() => import('../component/SenderConnection/AddSenderConnection'));
+const EditSenderConnection = lazy(() => import('../component/SenderConnection/EditSenderConnection'));
+const AddSenderAndSenderConnection = lazy(() => import('../component/SenderConnection/AddSenderAndSenderConnection'));
+const EditOrder = lazy(() => import('../component/Order/EditOrder'));
+const ListMailTemplates = lazy(() => import('../component/Mail/MailTemplate/ListMailTemplates'));
+const AddMailTemplate = lazy(() => import('../component/Mail/MailTemplate/AddMailTemplate'));
+const DeleteMailTemplate = lazy(() => import('../component/Mail/MailTemplate/DeleteMailTemplate'));
+const EditMailTemplate = lazy(() => import('../component/Mail/MailTemplate/EditMailTemplate'));
+const ListMessageLanguages = lazy(() => import('../component/MessageLanguage/ListMessageLanguages'));
+const AddMessageLanguage = lazy(() => import('../component/MessageLanguage/AddMessageLanguage'));
+const DeleteMessageLanguage = lazy(() => import('../component/MessageLanguage/DeleteMessageLanguage'));
+const ShowMessageLanguage = lazy(() => import('../component/MessageLanguage/ShowMessageLanguage'));
+const EditMessageLanguage = lazy(() => import('../component/MessageLanguage/EditMessageLanguage'));
+const ListMessages = lazy(() => import('../component/Message/ListMessages'));
+const ShowMessage = lazy(() => import('../component/Message/ShowMessage'));
+const DeleteMessage = lazy(() => import('../component/Message/DeleteMessage'));
+const AddMessage = lazy(() => import('../component/Message/AddMessage'));
+const ExtendableFormAddition = lazy(() => import('../component/MessageRecipient/AddRoutines/ExtendableFormAddition'));
+const TextAreaAddition = lazy(() => import('../component/MessageRecipient/AddRoutines/TextAreaAddition'));
+const FromFileAddition = lazy(() => import('../component/MessageRecipient/AddRoutines/FromFileAddition'));
+const AddMessageSegments = lazy(() => import('../component/MessageSegment/AddMessageSegments'));
+const ListMessageSegments = lazy(() => import('../component/MessageSegment/ListMessageSegments'));
+const ListMessageRecipients = lazy(() => import('../component/MessageRecipient/ListMessageRecipients'));
+const MessagesList = lazy(() => import('../layout/List/MessagesList'));
+const WordFileExample = lazy(() => import('../component/MessageSegment/ImportParametersFileExamples/WordFileExample'));
+const ExcelFileExample = lazy(() => import('../component/MessageSegment/ImportParametersFileExamples/ExcelFileExample'));
+const TextFileExample = lazy(() => import('../component/MessageSegment/ImportParametersFileExamples/TextFileExample'));
+const RecipientsGroupAddition = lazy(() => import('../component/MessageRecipient/AddRoutines/RecipientsGroupAddition'));
+const ListMessageGroups = lazy(() => import('../component/MessageGroup/ListMessageGroups'));
+const AddMessageGroup = lazy(() => import('../component/MessageGroup/AddMessageGroup'));
+const ShowMessageGroup = lazy(() => import('../component/MessageGroup/ShowMessageGroup'));
+const EditMessageGroup = lazy(() => import('../component/MessageGroup/EditMessageGroup'));
+const DeleteMessageGroup = lazy(() => import('../component/MessageGroup/DeleteMessageGroup'));
+const ListMessageGroupRecipients = lazy(() => import('../component/MessageGroupRecipient/ListMessageGroupRecipients'));
+const AddMessageGroupRecipient = lazy(() => import('../component/MessageGroupRecipient/AddMessageGroupRecipient'));
+const EditMessageGroupRecipient = lazy(() => import('../component/MessageGroupRecipient/EditMessageGroupRecipient'));
+const DeleteMessageGroupRecipient = lazy(() => import('../component/MessageGroupRecipient/DeleteMessageGroupRecipient'));
+const ImportRecipientsData = lazy(() => import('../component/MessageGroup/ImportRecipientsData'));
+const ListSettings = lazy(() => import('../component/Settings/ListSettings'));
+const EditSettings = lazy(() => import('../component/Settings/EditSettings'));
+const AddSettings = lazy(() => import('../component/Settings/AddSettings'));
+const ShowSettings = lazy(() => import('../component/Settings/ShowSettings'));
+const DeleteSettings = lazy(() => import('../component/Settings/DeleteSettings'));
+const ListApprovedMessages = lazy(() => import('../component/Message/ListApprovedMessages'));
+const SMSManagement = lazy(() => import('../component/SMS/SMSManagement'));
+const ListMessageFilters = lazy(() => import('../component/MessageFilter/ListMessageFilters'));
+const AddMessageFilter = lazy(() => import('../component/MessageFilter/AddMessageFilter'));
+const EditMessageFilter = lazy(() => import('../component/MessageFilter/EditMessageFilter'));
+const ShowMessageFilter = lazy(() => import('../component/MessageFilter/ShowMessageFilter'));
+const DeleteMessageFilter = lazy(() => import('../component/MessageFilter/DeleteMessageFilter'));
+const CensoredWord = lazy(() => import('../component/MessageFilter/CensoredWord'));
+const MailManagement = lazy(() => import('../component/Mail/MailManagement'));
+const ListMailSendingHandlers = lazy(() => import('../component/Mail/MailSendingHandler/ListMailSendingHandlers'));
+const AddMailSendingHandler = lazy(() => import('../component/Mail/MailSendingHandler/AddMailSendingHandler'));
+const AddMailSendingTemplate = lazy(() => import('../component/Mail/MailSendingHandler/AddMailSendingTemplate'));
+const AddMailSendingName = lazy(() => import('../component/Mail/MailSendingHandler/AddMailSendingName'));
+const DeleteMailSendingHandler = lazy(() => import('../component/Mail/MailSendingHandler/DeleteMailSendingHandler'));
+const AddNewMailTemplate = lazy(() => import('../component/Mail/MailSendingHandler/AddNewMailTemplate'));
+const DataCellDetails = lazy(() => import('../layout/Table/DataCellDetails'));
+const ListSMSSendingHandlers = lazy(() => import('../component/SMS/SMSSendingHandler/ListSMSSendingHandlers'));
+const AddSMSSendingHandler = lazy(() => import('../component/SMS/SMSSendingHandler/AddSMSSendingHandler'));
+const AddSMSSendingTemplate = lazy(() => import('../component/SMS/SMSSendingHandler/AddSMSSendingTemplate'));
+const AddSMSSendingName = lazy(() => import('../component/SMS/SMSSendingHandler/AddSMSSendingName'));
+const DeleteSMSSendingHandler = lazy(() => import('../component/SMS/SMSSendingHandler/DeleteSMSSendingHandler'));
+const AddNewSMSTemplate = lazy(() => import('../component/SMS/SMSSendingHandler/AddNewSMSTemplate'));
+const NotificationManagement = lazy(() => import('../component/Notification/NotificationManagement'));
+const ListNotificationSendingHandlers = lazy(() => import('../component/Notification/NotificationSendingHandler/ListNotificationSendingHandlers'));
+const AddNotificationSendingHandler = lazy(() => import('../component/Notification/NotificationSendingHandler/AddNotificationSendingHandler'));
+const AddNotificationSendingTemplate = lazy(() => import('../component/Notification/NotificationSendingHandler/AddNotificationSendingTemplate'));
+const AddNewNotificationTemplate = lazy(() => import('../component/Notification/NotificationSendingHandler/AddNewNotificationTemplate'));
+const AddNotificationSendingName = lazy(() => import('../component/Notification/NotificationSendingHandler/AddNotificationSendingName'));
+const DeleteNotificationSendingHandler = lazy(() => import('../component/Notification/NotificationSendingHandler/DeleteNotificationSendingHandler'));
+const DeleteNotificationTemplate = lazy(() => import('../component/Notification/NotificationTemplate/DeleteNotificationTemplate'));
+const DeleteSMSTemplate = lazy(() => import('../component/SMS/SMSTemplate/DeleteSMSTemplate'));
+const ListUnreadNotifications = lazy(() => import('../component/Notification/ListUnreadNotifications'));
+const ListUserNotifications = lazy(() => import('../component/Notification/ListUserNotifications'));
 
 
 
@@ -338,7 +339,7 @@ const componentMap = {
     "delete-notification-sending-handler":  (notificationSendingHandler, deletedRows,setDeletedRows) => <DeleteNotificationSendingHandler notificationSendingHandler={notificationSendingHandler} deletedRows={deletedRows} setDeletedRows={setDeletedRows}/>,
 
 
-    "no-contexts":                          () => <div className="user-no-perm" style={{marginTop: "0"}}> Context has no handle groups! </div>,
+    "no-contexts":                          () => <div className="no-data" style={{marginTop: "0"}}> Context has no handle groups! </div>,
 }
 
 const getComponent = (componentKey, ...params) =>

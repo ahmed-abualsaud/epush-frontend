@@ -36,8 +36,8 @@ const AddMailSendingName = ({ template, handler }) => {
     }
 
     return (
-        <div className="add-user-container">
-            <h1 className="add-user-header mb-5">Finally, Add The Mail Name</h1>
+        <div className="component-container">
+            <h1 className="content-header mb-5">Finally, Add The Mail Name</h1>
 
             <Input id="add-mail-name" type="text" placeholder="Mail Name" validrules="required">
                 <i className="input-icon fas fa-pen"></i>
@@ -58,7 +58,7 @@ const AddMailSendingName = ({ template, handler }) => {
                 <i id="add-mail-email-icon" style={{display: "none"}} className="input-icon fas fa-pen"></i>
             </Input>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => addNewMail()}>Add New Mail</button>
             </div>
         </div>

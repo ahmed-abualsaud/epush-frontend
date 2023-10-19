@@ -9,8 +9,8 @@ const ShowMessageGroup = ({ messageGroup }) => {
     const recipientsColumns = ! isEmpty(messageGroup['recipients']) ? Object.keys(messageGroup['recipients'][0]).filter(column => ! execludedColumns.includes(column)) : []
 
     return (
-        <div className="add-user-container">
-            <h1 className="add-user-header">General Information</h1>
+        <div className="component-container">
+            <h1 className="content-header">General Information</h1>
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -31,9 +31,9 @@ const ShowMessageGroup = ({ messageGroup }) => {
                 </tbody>
             </table>
 
-            <h1 className="add-user-header mt-5">Recipients Information</h1>
+            <h1 className="content-header mt-5">Recipients Information</h1>
 
-            {isEmpty(recipients) ? <div className="user-no-perm">The current group has no recipients</div> : 
+            {isEmpty(recipients) ? <div className="no-data">The current group has no recipients</div> : 
                 <table className="fl-table">
                     <thead>
                         <tr>

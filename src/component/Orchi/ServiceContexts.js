@@ -50,8 +50,8 @@ const ServiceContexts = ({ service }) => {
 
         const contextHandleGroupsList = getElement(contextListID)
         contextHandleGroupsList.innerHTML = ""
-        contextHandleGroupsList.classList.toggle("show-role-permissions-list")
-        if (contextHandleGroupsList.classList.contains("show-role-permissions-list")) {
+        contextHandleGroupsList.classList.toggle("expand-card-item-list")
+        if (contextHandleGroupsList.classList.contains("expand-card-item-list")) {
             updateElement([
                 <span>Hide Handle Groups</span>,
                 <i class="uil uil-angle-up"></i>
@@ -75,21 +75,21 @@ const ServiceContexts = ({ service }) => {
 
 
     return (
-        <div className="add-user-container">
-            <div className="add-user-header">
+        <div className="component-container">
+            <div className="content-header">
                 <h1>{service.name.charAt(0).toUpperCase() + service.name.slice(1)} Contexts</h1>
             </div>
             { ! isEmpty(contexts) &&
-            <div className="roles-list">
+            <div className="cards-list">
                 {contexts.map((context) => (
-                    <div id={context.name + "-edit-user-role-card"} className="role-card">
-                        <div id={context.name + "-head"} className="role-card-head">
+                    <div id={context.name + "-edit-user-card-item"} className="card-item">
+                        <div id={context.name + "-head"} className="card-item-head">
                             <div>Context ID</div>
                             <div>Context Name</div>
                             <div>Online</div>
                             <div>Enabled</div>
                         </div>
-                        <div className="role-card-body">
+                        <div className="card-item-body">
                             <div>{ context.id }</div>
                             <div>{ context.name }</div>
                             <div>{ context.online ? "Yes" : "No" }</div>
@@ -105,11 +105,11 @@ const ServiceContexts = ({ service }) => {
                             </td>
 
                         </div>
-                        <div id={context.id + "-show-handle-groups-button"} className="show-role-permissions" onClick={() => showHandleGroups(context.id, context.name + "-contexts-list")}>
+                        <div id={context.id + "-show-handle-groups-button"} className="expand-card-item" onClick={() => showHandleGroups(context.id, context.name + "-contexts-list")}>
                             <span>Show Handle Groups</span>
                             <i className="uil uil-angle-down"></i>
                         </div>
-                        <ul id={context.name + "-contexts-list"} className="role-permissions-list"></ul>
+                        <ul id={context.name + "-contexts-list"} className="card-item-subitems"></ul>
                     </div>                            
                 ))}
             </div>}

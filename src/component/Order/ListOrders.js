@@ -124,8 +124,8 @@ const ListOrders = () =>
     return (
         ! isEmpty(orders) && 
         (
-        <div className="add-user-container">
-            <h1 className="add-user-header">Orders</h1>
+        <div className="component-container">
+            <h1 className="content-header">Orders</h1>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>

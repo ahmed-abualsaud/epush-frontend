@@ -120,8 +120,8 @@ const ListMessageGroupRecipients = ({messageGroup}) =>
     return (
         ! isEmpty(messageGroupRecipients) && 
         (
-        <div className="add-user-container">
-            <h1 className="add-user-header">Message Group Recipients</h1>
+        <div className="component-container">
+            <h1 className="content-header">Message Group Recipients</h1>
             <OperationContainer>
             {! isEmpty(messageGroup) ? 
                 <div className="mt-3 w-100 d-flex justify-content-center">

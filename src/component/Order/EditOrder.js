@@ -71,8 +71,8 @@ const EditOrder = ({ order }) => {
 
 
     return (
-        <div id="add-order-form" className="add-user-container">
-            <h1 className="add-user-header">Edit Order</h1>
+        <div id="add-order-form" className="component-container">
+            <h1 className="content-header">Edit Order</h1>
 
             <div>
                 <div className="d-inline-flex align-items-center" style={{width: "25%", fontSize: "25px"}}>Payment Method</div>

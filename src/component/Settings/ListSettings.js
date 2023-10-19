@@ -111,8 +111,8 @@ const ListSettings = () =>
     return (
         ! isEmpty(settings) && 
         (
-        <div className="add-user-container">
-            <h1 className="add-user-header">All Settings</h1>
+        <div className="component-container">
+            <h1 className="content-header">All Settings</h1>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>

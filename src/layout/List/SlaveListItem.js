@@ -11,7 +11,7 @@ const SlaveListItem = ({ onSelectItem, children }) => {
 
     return (
         <div className="slave-list-item" onClick={itemOnClickHandler}>
-            <Checkbox/>
+            <Checkbox inactive={true}/>
             { children }
         </div>
     )

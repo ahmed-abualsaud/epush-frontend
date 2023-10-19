@@ -19,8 +19,8 @@ const ShowAdmin = ({ admin }) => {
 
 
     return (
-        <div className="add-user-container">
-            <h1 className="add-user-header">General Information</h1>
+        <div className="component-container">
+            <h1 className="content-header">General Information</h1>
             <div className="user-image">
                 <div className="image-wrapper">
                     <img src={currentAdmin.avatar ?? "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg"} alt="Avatar" />

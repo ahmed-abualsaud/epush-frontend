@@ -69,8 +69,8 @@ const AddSMSCBinding = () => {
 
 
     return (
-        <div className="add-user-container">
-            <h1 className="add-user-header mb-5">Add New SMSC Binding</h1>
+        <div className="component-container">
+            <h1 className="content-header mb-5">Add New SMSC Binding</h1>
 
             <div>
                 <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "40px"}}>Country: </div>
@@ -108,7 +108,7 @@ const AddSMSCBinding = () => {
                 <label for="add-smsc-binding-default"></label>
             </div>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => addNewSMSCBinding()}>Add New SMSC Binding</button>
             </div>
         </div>

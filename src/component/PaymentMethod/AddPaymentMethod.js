@@ -33,14 +33,14 @@ const AddPaymentMethod = () => {
     }
 
     return (
-        <div id="add-payment-method-form" className="add-user-container">
-            <h1 className="add-user-header mb-5">Add New Payment Method</h1>
+        <div id="add-payment-method-form" className="component-container">
+            <h1 className="content-header mb-5">Add New Payment Method</h1>
 
             <Input id="add-payment-method-name" type="text" placeholder="Name" validrules="required">
                 <i className="input-icon fas fa-pen"></i>
             </Input>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => addNewPaymentMethod()}>Add Payment Method</button>
             </div>
         </div>

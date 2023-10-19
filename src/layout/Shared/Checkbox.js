@@ -1,9 +1,8 @@
 import '../../assets/style/layout/checkbox.css'
-
-const Checkbox = ({ checked }) => {
+const Checkbox = ({ checked, inactive}) => {
 
     return (
-        <label className="checkbox-container">
+        <label style={{pointerEvents: `${inactive ? "none" : ""}`}} className="checkbox-container">
             <input type="checkbox" defaultChecked={checked}/>
             <div className="checkmark"></div>
             <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg" className="celebrate">

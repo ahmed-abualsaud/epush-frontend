@@ -7,6 +7,8 @@ import getComponent from '../setup/component-map'
 import { getElement } from '../utils/dom'
 import { isEmpty } from '../utils/helper'
 import ErrorBoundary from './ErrorBoundary'
+import { Suspense } from 'react'
+import Loader from '../layout/Shared/Loader'
 
 let currentRoute = -1
 
@@ -45,14 +47,17 @@ export function render(containerID, componentKey, ...params)
 {
     const container = getElement(containerID)
     ! isEmpty(container) && createRoot(container).render(
+        <Suspense fallback={<Loader/>}>
 
         <ErrorBoundary fallback={<p>Something went wrong</p>}>
             <Provider store={store}>
                 <BrowserRouter> 
-                    { getComponent(componentKey, ...params) } 
+                        { getComponent(componentKey, ...params) } 
                 </BrowserRouter> 
             </Provider>
         </ErrorBoundary>
+        </Suspense>
+
     )
 }
 
@@ -63,26 +68,31 @@ export function navigate(containerID, componentKey, ...params)
     const container = getElement(containerID)
     ! isEmpty(container) && createRoot(container).render(
 
+        <Suspense fallback={<Loader/>}>
         <ErrorBoundary fallback={<p>Something went wrong</p>}>
             <Provider store={store}>
-                <BrowserRouter> 
-                    { getComponent(componentKey, ...params) }
+                <BrowserRouter>
+                        { getComponent(componentKey, ...params) }
                 </BrowserRouter>
             </Provider>
         </ErrorBoundary>
+        </Suspense>
+
     )
 }
 
 export function hydrate(component, containerID) {
     ReactDOM.hydrate(
+        <Suspense fallback={<Loader/>}>
 
         <ErrorBoundary fallback={<p>Something went wrong</p>}>
             <Provider store={store}>
-                <BrowserRouter> 
-                    { component } 
+                <BrowserRouter>
+                        { component }
                 </BrowserRouter> 
             </Provider>
         </ErrorBoundary>
+        </Suspense>
 
     , getElement(containerID))
 }

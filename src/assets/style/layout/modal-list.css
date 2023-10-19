@@ -1,5 +1,5 @@
 .modal-list-container {
-    width: calc(100% - margin);
+    width: calc(100% - 20px);
     margin: 20px;
 }
 

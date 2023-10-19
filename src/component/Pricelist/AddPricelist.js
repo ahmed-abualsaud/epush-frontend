@@ -33,8 +33,8 @@ const AddPricelist = () => {
     }
 
     return (
-        <div id="add-pricelist-form" className="add-user-container">
-            <h1 className="add-user-header mb-5">Add New Price</h1>
+        <div id="add-pricelist-form" className="component-container">
+            <h1 className="content-header mb-5">Add New Price</h1>
 
             <Input id="add-pricelist-name" type="text" placeholder="Name" validrules="required">
                 <i className="input-icon fas fa-pen"></i>
@@ -44,7 +44,7 @@ const AddPricelist = () => {
                 <i className="input-icon uil uil-dollar-sign"></i>
             </Input>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => addNewPricelist()}>Add New Price</button>
             </div>
         </div>

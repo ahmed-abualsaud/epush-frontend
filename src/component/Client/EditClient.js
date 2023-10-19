@@ -9,13 +9,22 @@ const EditClient = ({ client }) => {
 
     const excludedColumns = [
         "id", 
-        "full_name", 
+        "full_name",
+        "sales_id",
+        "pricelist_id",
+        "balance",
         "avatar", 
         "enabled", 
         "created_at", 
         "updated_at", 
         "deleted_at", 
-        "email_verified_at"
+        "email_verified_at",
+        "business_field_id",
+        "user_id",
+        "governmentId",
+        "areaId",
+        "adminId",
+        "FDelete"
     ]
 
     const filteredColumns = Object.keys(client).filter(
@@ -78,10 +87,13 @@ const EditClient = ({ client }) => {
 
         let userInfoInput = document.querySelectorAll(query.substring(0, query.length - 2))
         let data = new FormData()
-        userInfoInput.forEach(usrInp => ! isEmpty(usrInp.value) && (data.append(usrInp.id.split("-")[0], usrInp.value)))
+        userInfoInput.forEach(usrInp => {
+            if(! isEmpty(usrInp.value)) {data.append(usrInp.id.split("-")[0], usrInp.value)}
+        })
         isEmpty(data) && showAlert("You need to insert new client information")
         if (! isEmpty(data)) {
             let newClient = await updateClient(client["user_id"], data)
+            console.log(newClient)
             if (! isEmpty(newClient)) {
                 setCurrentClient(newClient)
                 showAlert("Client information updated successfully")
@@ -147,9 +159,9 @@ const EditClient = ({ client }) => {
 
 
     return (
-        <div className="edit-user-container">
+        <div className="component-container">
+            <h1 className="content-header">Client Information</h1>
             <div className="user-info">
-                <h1 className="edit-user-header">Client Information</h1>
                 <div className="user-avatar-password">
                     <div className="user-image">
                         <div className="avatar-hint">Click on your avatar if you want to change it!</div>
@@ -222,14 +234,14 @@ const EditClient = ({ client }) => {
                                         <a className="modal-button btn-del"><i className="uil uil-trash-alt"></i></a>
                                     </td>
                                 </tr>
-                            )) : <tr><td colSpan={3}><div className="user-no-perm"> Client has no Websites! </div></td></tr>)
+                            )) : <tr><td colSpan={3}><div className="no-data"> Client has no Websites! </div></td></tr>)
                         }
                         <tr>
                             <td className="last-row" colSpan={3}></td>
                         </tr>
                     </tbody>
                 </table>
-                <div className="update-user">
+                <div className="button-container">
                     <button className="button" onClick={() => updateClientWebsites()}>Update Client Websites</button>
                 </div>
 
@@ -249,7 +261,7 @@ const EditClient = ({ client }) => {
                     </thead>
                     <tbody>
                         {filteredColumns?.map((column) => (
-                            ! ["websites", "sales", "business_field"].includes(column)  &&
+                            ! ["websites", "sales", "business_field", "businessfield"].includes(column)  &&
                             <tr>
                                 <td>{ column }</td>
                                 <td>{ typeof currentClient[column] === "boolean"? currentClient[column] ? "Yes" : "No" : currentClient[column] ?? "NULL"}</td>
@@ -265,7 +277,7 @@ const EditClient = ({ client }) => {
                         </tr>
                     </tbody>
                 </table>
-                <div className="update-user">
+                <div className="button-container">
                     <button className="button" onClick={() => updateClientInfo()}>Update Client Info</button>
                 </div>
             </div>

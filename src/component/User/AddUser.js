@@ -1,5 +1,3 @@
-import '../../assets/style/component/add-user.css'
-
 import RoleList from '../Role/RoleList'
 import Input from '../../layout/Shared/Input'
 import { isEmpty } from '../../utils/helper'
@@ -59,8 +57,8 @@ const AddUser = () => {
 
 
     return (
-        <div id="add-user-form" className="add-user-container">
-            <h1 className="add-user-header">Add New User</h1>
+        <div id="add-user-form" className="component-container">
+            <h1 className="content-header">Add New User</h1>
 
             <div className="user-image">
                 <div className="avatar-hint">Click on the image to select the user profile avatar!</div>
@@ -109,7 +107,7 @@ const AddUser = () => {
                 <label for="add-user-enabled"></label>
             </div>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => addNewUser()}>Add New User</button>
             </div>
             <RoleList userID={currentUser["id"]}/>

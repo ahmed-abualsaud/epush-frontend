@@ -45,7 +45,7 @@ const RecipientsGroupAddition = ({ userID, setGroupRecipients}) => {
 
     return (
         isEmpty(messageGroups) ? 
-        <div className="user-no-perm">The selected company has no groups yet</div> : 
+        <div className="no-data">The selected company has no groups yet</div> : 
         <div className="d-flex justify-content-between">
             <div style={{width: "60%", marginTop: "15px", display: "flex", flexDirection: "column"}}>
                 <div style={{fontSize: "30px", marginLeft: "10px"}}>Select one of the following groups :</div>

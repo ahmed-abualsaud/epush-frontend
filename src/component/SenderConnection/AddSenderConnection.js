@@ -99,8 +99,8 @@ const AddSenderConnection = () => {
 
 
     return (
-        <div id="add-sender-connection-form" className="add-user-container">
-            <h1 className="add-user-header mb-5">
+        <div id="add-sender-connection-form" className="component-container">
+            <h1 className="content-header mb-5">
                 Add New Sender Connection
                 <button style={{marginLeft: "auto", backgroundColor: "#070020", backgroundImage: "none"}} className="button" onClick={() => navigate("content", "add-sender")}>Add New Sender</button>
             </h1>
@@ -157,7 +157,7 @@ const AddSenderConnection = () => {
                 </List>
             ))}
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => addNewSenderConnection()}>Add New Sender Connection</button>
             </div>
         </div>

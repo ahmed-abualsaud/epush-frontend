@@ -1,24 +1,35 @@
-import Header from "../layout/Shared/Header"
-import Sidebar from "../layout/Navigation/Sidebar"
-import Content from "../layout/Shared/Content"
-import NavItem from "../layout/Navigation/NavItem"
-import NavItems from "../layout/Navigation/NavItems"
-import Dashboard from "../layout/Shared/Dashboard"
-import ProfileNav from "../component/Header/ProfileNav"
-import TableContent from "../layout/Shared/TableContent"
-import { addRoute, navigate } from "../setup/navigator"
-import ListUsers from "../component/User/ListUsers"
-import { useEffect, useRef } from "react"
+import Header from "../../layout/Shared/Header"
+import useOrchiApi from "../../api/useOrchiApi"
+import Content from "../../layout/Shared/Content"
+import Sidebar from "../../layout/Navigation/Sidebar"
+import NavItem from "../../layout/Navigation/NavItem"
+import Dashboard from "../../layout/Shared/Dashboard"
+import NavItems from "../../layout/Navigation/NavItems"
+import ProfileNav from "../../component/Header/ProfileNav"
 
-const AdminDashboard = () => {
+import { addRoute, navigate } from "../../setup/navigator"
+import TableContent from "../../layout/Shared/TableContent"
+import React, { useEffect, useRef, useState } from "react"
+import ListUsers from "../../component/User/ListUsers"
+import Notification from "../../layout/Shared/Notification"
+
+const SuperAdminDashboard = () => {
+
+    const { listServices } = useOrchiApi()
+    const [services, setServices] = useState([])
+
 
     const setupLock = useRef(true)
     const setup = async () => {
+        const srv = await listServices()
+        if (srv) setServices(srv)
         addRoute("content", "list-users", [])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup() }
     }, [])
+
+
 
     const handleClick = (e) => {
         e.stopPropagation()
@@ -41,6 +52,52 @@ const AdminDashboard = () => {
             </Header>
 
             <Sidebar>
+                <NavItem
+                    text="Services"
+                    icon="fas fa-box-open"
+                    onClick={handleClick}
+                    onMouseLeave={handleLeave}
+                >
+                    <NavItems className="nav-flyout">
+                        <NavItem 
+                            key="all"
+                            text="All"
+                            icon="uil uil-align-alt"
+                            onClick={() => navigate("content", "all-services", services)}
+                        />
+                        {services.map((service) => (
+                            <NavItem 
+                                key={service.id} 
+                                text={service.name.charAt(0).toUpperCase() + service.name.slice(1)} 
+                                icon={ 
+                                    service.name === "auth" ? "fas fa-lock" : 
+                                    service.name === "file" ? "fas fa-file-alt" : 
+                                    service.name === "core" ? "fas fa-atom" : 
+                                    service.name === "mail" ? "fas fa-envelope" : 
+                                    service.name === "sms" ? "fas fa-sms" : 
+                                    service.name === "settings" ? "fas fa-gears" : 
+                                    service.name === "expense" ? "fas fa-sack-dollar" : 
+                                    "fas fa-bell"
+                                }
+                                onClick={() => navigate("content", "service-contexts", service)}
+                            />
+                        ))}
+                    </NavItems>
+                </NavItem>
+
+                <NavItem
+                    text="Syetem Management"
+                    icon="fas fa-sliders"
+                    onClick={handleClick}
+                    onMouseLeave={handleLeave}
+                >
+                    <NavItems className="nav-flyout">
+                        <NavItem text="Mail" icon="fas fa-envelope" onClick={ () => navigate("content", "mail-management") }/>
+                        <NavItem text="SMS" icon="fas fa-comment-sms" onClick={ () => navigate("content", "sms-management") }/>
+                        <NavItem text="Notifications" icon="fas fa-bell" onClick={ () => navigate("content", "notification-management") }/>
+                    </NavItems>
+                </NavItem>
+
                 <NavItem
                     text="Authorization"
                     icon="fas fa-user-shield"
@@ -121,8 +178,9 @@ const AdminDashboard = () => {
                     <ListUsers/>
                 </TableContent>
             </Content>
+            <Notification/>
         </Dashboard>
     )
 }
 
-export default AdminDashboard
+export default SuperAdminDashboard

@@ -109,8 +109,8 @@ const ListSMSCs = () =>
     return (
         ! isEmpty(smscs) && 
         (
-        <div className="add-user-container">
-            <h1 className="add-user-header">All SMSCs</h1>
+        <div className="component-container">
+            <h1 className="content-header">All SMSCs</h1>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>

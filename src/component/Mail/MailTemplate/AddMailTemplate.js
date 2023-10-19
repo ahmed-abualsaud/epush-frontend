@@ -32,8 +32,8 @@ const AddMailTemplate = ({ templates }) => {
     }
 
     return (
-        <div id="add-operator-form" className="add-user-container">
-            <h1 className="add-user-header mb-5">Add New Mail Template</h1>
+        <div id="add-operator-form" className="component-container">
+            <h1 className="content-header mb-5">Add New Mail Template</h1>
             <Input id="add-mail-template-name" type="text" placeholder="Template Name" validrules="required">
                 <i className="input-icon fas fa-pen"></i>
             </Input>
@@ -47,7 +47,7 @@ const AddMailTemplate = ({ templates }) => {
                 <Editor onContentChange={onContentChange} templates={templates}/>
             </div>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => addNewTemplate()}>Add Mail Template</button>
             </div>
         </div>

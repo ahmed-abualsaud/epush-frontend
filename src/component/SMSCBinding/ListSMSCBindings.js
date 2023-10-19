@@ -126,8 +126,8 @@ const ListSMSCBindings = () =>
     return (
         ! isEmpty(smscBindings) && 
         (
-        <div className="add-user-container">
-            <h1 className="add-user-header">All SMSC Bindings</h1>
+        <div className="component-container">
+            <h1 className="content-header">All SMSC Bindings</h1>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>

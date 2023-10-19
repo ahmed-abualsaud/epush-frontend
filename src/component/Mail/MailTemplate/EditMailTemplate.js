@@ -41,8 +41,8 @@ const EditMailTemplate = ({ template, templates }) => {
     }
 
     return (
-        <div className="add-user-container">
-            <h1 className="add-user-header mb-5">Mail Template Information</h1>
+        <div className="component-container">
+            <h1 className="content-header mb-5">Mail Template Information</h1>
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -72,7 +72,7 @@ const EditMailTemplate = ({ template, templates }) => {
                 <Editor onContentChange={onContentChange} initialContent={template.template} templates={templates}/>
             </div>
 
-            <div className="update-role">
+            <div className="button-container">
                 <button className="button" onClick={() => updateSpecificTemplate()}>Update Mail Template</button>
             </div>
         </div>

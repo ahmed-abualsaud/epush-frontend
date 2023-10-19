@@ -1,6 +1,5 @@
 import useAuthApi from '../../api/useAuthApi'
 import { showAlert } from '../../utils/validator'
-import '../../assets/style/component/edit-user.css'
 import { useEffect, useRef, useState } from 'react'
 import { navigate, render } from '../../setup/navigator'
 import { useDispatch, useSelector } from 'react-redux'
@@ -63,8 +62,8 @@ const EditUser = ({ user }) => {
 
         const rolePermissionsList = getElement(roleListId)
         rolePermissionsList.innerHTML = ""
-        rolePermissionsList.classList.toggle("show-role-permissions-list")
-        if (rolePermissionsList.classList.contains("show-role-permissions-list")) {
+        rolePermissionsList.classList.toggle("expand-card-item-list")
+        if (rolePermissionsList.classList.contains("expand-card-item-list")) {
             updateElement([
                 <span>Hide Permissions</span>,
                 <i class="uil uil-angle-up"></i>
@@ -81,7 +80,7 @@ const EditUser = ({ user }) => {
         const rolePermList = rolePermsIsEmpty ? prm : rolePerms.permissions
 
         updateElement(
-            isEmpty(rolePermList)? <div class="user-no-perm" style="margin-top: 0;"> Role has no permissions! </div> :
+            isEmpty(rolePermList)? <div class="no-data" style="margin-top: 0;"> Role has no permissions! </div> :
             <table class="fl-table">
                 <thead>
                     <tr>
@@ -109,7 +108,7 @@ const EditUser = ({ user }) => {
         let roleCardIcon = getElement(iconId)
 
         if (getElement(checkboxId).checked) {
-            roleCardHead.classList.remove("role-card-head-not-checked")
+            roleCardHead.classList.remove("card-item-head-not-checked")
             roleCardIcon.classList.add("uil-check-circle")
             roleCardIcon.classList.remove("uil-exclamation-circle")
             roleCardIcon.previousElementSibling.textContent = "Assigned"
@@ -121,7 +120,7 @@ const EditUser = ({ user }) => {
                 setUnassignedPermissionsID(unassignedPermissionsID.filter(value => value !== updateID))
             }
         } else {
-            roleCardHead.classList.add("role-card-head-not-checked")
+            roleCardHead.classList.add("card-item-head-not-checked")
             roleCardIcon.classList.add("uil-exclamation-circle")
             roleCardIcon.classList.remove("uil-check-circle")
             roleCardIcon.previousElementSibling.textContent = "Not Assigned"
@@ -176,7 +175,7 @@ const EditUser = ({ user }) => {
         {
             showAlert("User Roles Updated Successfully")
             let removedCards =  userRoles.filter(role => unassignedRolesID.includes(role["id"])).map(role => {
-                return "#" + role["name"] + "-edit-user-role-card"
+                return "#" + role["name"] + "-edit-user-card-item"
             })
             let elements = document.querySelectorAll(removedCards.join(", "))
             for (let i = 0; i < elements.length; i++) {
@@ -239,9 +238,9 @@ const EditUser = ({ user }) => {
 
 
     return (
-        <div className="edit-user-container">
+        <div className="component-container">
+            <h1 className="content-header">User Information</h1>
             <div className="user-info">
-                <h1 className="edit-user-header">User Information</h1>
                 <div className="user-avatar-password">
                     <div className="user-image">
                         <div className="avatar-hint">Click on your avatar if you want to change it!</div>
@@ -304,7 +303,7 @@ const EditUser = ({ user }) => {
                         </tr>
                     </tbody>
                 </table>
-                <div className="update-user">
+                <div className="button-container">
                     <button className="button" onClick={() => updateUserInfo()}>Update User Info</button>
                 </div>
             </div>
@@ -312,22 +311,22 @@ const EditUser = ({ user }) => {
 
 
             <div className="user-roles">
-                <div className="edit-user-header d-flex justify-content-between">
+                <div className="content-header d-flex justify-content-between">
                     <h1>User Roles</h1>
                     <button className="button" onClick={() => navigate("content", "role-list", user["id"])}>Assign New Role</button>
                 </div>
-                {isEmpty(userRoles)? <div className="user-no-perm"> User has no roles! </div> :
-                    <div className="roles-list">
+                {isEmpty(userRoles)? <div className="no-data"> User has no roles! </div> :
+                    <div className="cards-list">
                         {userRoles.map((userRole) => (
-                            <div id={userRole["name"] + "-edit-user-role-card"} className="role-card">
-                                <div id={userRole["name"] + "-head"} className="role-card-head">
+                            <div id={userRole["name"] + "-edit-user-card-item"} className="card-item">
+                                <div id={userRole["name"] + "-head"} className="card-item-head">
                                     <div>Role Name</div>
                                     <div>
                                         <span>Assigned</span>
                                         <i id={userRole["name"] + "-icon"} className="uil uil-check-circle"></i>
                                     </div>
                                 </div>
-                                <div className="role-card-body">
+                                <div className="card-item-body">
                                     <div>{ userRole["name"] }</div>
                                     <div>
                                         <input 
@@ -339,17 +338,17 @@ const EditUser = ({ user }) => {
                                             Check this box to assign the role
                                     </div>
                                 </div>
-                                <div id={userRole["id"] + "-show-permissions-button"} className="show-role-permissions" onClick={() => showRolePermissions(userRole["id"], userRole["name"] + "-permissions-list")}>
+                                <div id={userRole["id"] + "-show-permissions-button"} className="expand-card-item" onClick={() => showRolePermissions(userRole["id"], userRole["name"] + "-permissions-list")}>
                                     <span>Show Permissions</span>
                                     <i className="uil uil-angle-down"></i>
                                 </div>
-                                <ul id={userRole["name"] + "-permissions-list"} className="role-permissions-list"></ul>
+                                <ul id={userRole["name"] + "-permissions-list"} className="card-item-subitems"></ul>
                             </div>                            
                         ))}
                     </div>
                 }
                 {! isEmpty(userRoles) && 
-                    <div className="update-user">
+                    <div className="button-container">
                         <button className="button" onClick={() => updateUserRoles()}>Update User Roles</button>
                     </div>
                 }
@@ -358,15 +357,15 @@ const EditUser = ({ user }) => {
 
 
             <div className="user-permissons">
-                <div className="edit-user-header d-flex justify-content-between">
+                <div className="content-header d-flex justify-content-between">
                     <h1>User Permissions</h1>
                     <button className="button" onClick={() => navigate("content", "permission-list", "User", user["id"])}>Assign New Permission</button>
                 </div>
-                {isEmpty(userPermissions)? <div className="user-no-perm"> User has no permissions! </div> :
-                    <div className="roles-list">
+                {isEmpty(userPermissions)? <div className="no-data"> User has no permissions! </div> :
+                    <div className="cards-list">
                         {userPermissions.map((userPermission) => (
-                            <div id={userPermission["name"] + "-edit-user-permissions-card"} className="role-card">
-                                <div id={userPermission["name"] + "-head"} className="role-card-head">
+                            <div id={userPermission["name"] + "-edit-user-permissions-card"} className="card-item">
+                                <div id={userPermission["name"] + "-head"} className="card-item-head">
                                     <div>Permission Name</div>
                                     <div>Permission Description</div>
                                     <div>
@@ -374,7 +373,7 @@ const EditUser = ({ user }) => {
                                         <i id={userPermission["name"] + "-icon"} className="uil uil-check-circle"></i>
                                     </div>
                                 </div>
-                                <div className="role-card-body">
+                                <div className="card-item-body">
                                     <div>{ userPermission["name"] }</div>
                                     <div>{ userPermission["description"] }</div>
                                     <div>
@@ -391,7 +390,7 @@ const EditUser = ({ user }) => {
                         ))}
                     </div>
                 }
-                <div className="update-user">
+                <div className="button-container">
                     <button className="button" onClick={() => updateUserPermissions()}>Update User Permissions</button>
                 </div>
             </div>

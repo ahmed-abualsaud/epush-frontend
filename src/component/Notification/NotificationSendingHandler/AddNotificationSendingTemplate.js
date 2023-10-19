@@ -22,8 +22,8 @@ const AddNotificationSendingTemplate = ({ handler }) => {
     }, [])
 
     return (
-        <div className="add-user-container">
-            <h1 className="add-user-header">
+        <div className="component-container">
+            <h1 className="content-header">
                 Select One of The System Notification Templates
                 <button 
                     style={{

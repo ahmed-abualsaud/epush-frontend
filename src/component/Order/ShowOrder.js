@@ -24,8 +24,8 @@ const ShowOrder = ({ order }) => {
 
 
     return (<>
-        <div className="add-user-container">
-            <h1 className="add-user-header">General Information</h1>
+        <div className="component-container">
+            <h1 className="content-header">General Information</h1>
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -47,8 +47,8 @@ const ShowOrder = ({ order }) => {
             </table>
         </div>
 
-        <div className="add-user-container my-5">
-            <h1 className="add-user-header">Client Information</h1>
+        <div className="component-container my-5">
+            <h1 className="content-header">Client Information</h1>
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -70,8 +70,8 @@ const ShowOrder = ({ order }) => {
             </table>
         </div>
 
-        <div className="add-user-container my-5">
-            <h1 className="add-user-header">Pricelist Information</h1>
+        <div className="component-container my-5">
+            <h1 className="content-header">Pricelist Information</h1>
             <table className="fl-table">
                 <thead>
                     <tr>

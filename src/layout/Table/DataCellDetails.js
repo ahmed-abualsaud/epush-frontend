@@ -15,15 +15,15 @@ const DataCellDetails = ({ column, value }) => {
 
     return (
         <div>
-            <h1 className="delete-header">{snakeToBeautifulCase(column)}</h1>
-            <div className="delete-content m-0 p-4">{
+            <h1 className="popup-header">{snakeToBeautifulCase(column)}</h1>
+            <div className="popup-content m-0 p-4">{
                 typeof value === "boolean" ? (
                     value ? <i className="fa-solid fa-check"></i> : <i className="fa-solid fa-xmark"></i>
                 ) : (
                     value ?? <i className="fas fa-ban"></i>
                     )
             }</div>
-            <div className="delete-button-wrapper m-3">
+            <div className="popup-button-wrapper m-3">
                 <button className="button" onClick={() => copyToClipboard()}>Copy to Clipboard <i className="uil uil-copy"></i></button>
             </div>
         </div>

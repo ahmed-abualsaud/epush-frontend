@@ -128,7 +128,7 @@ const ListMessageFilters = () =>
     return (
         ! isEmpty(messageFilters) && 
         (
-        <div className="add-user-container">           
+        <div className="component-container">           
 
             <div className="m-5">
                 <div style={{display: "inline-flex", alignContent: "center", width: "25%", fontSize: "25px"}}>Word Filter Threshold</div>

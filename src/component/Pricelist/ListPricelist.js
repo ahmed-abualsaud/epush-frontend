@@ -48,28 +48,27 @@ const ListPricelist = () => {
         navigate("modal-content", "delete-pricelist", pricelist, deletedRows, setDeletedRows)
     }
 
-    return (
-        ! isEmpty(pricelists) && 
-        (
-            <div className="add-user-container">
-                <h1 className="add-user-header">All Pricelist</h1>
-                <Table>
-                    <TableHead>
-                        <HeadRow>
-                            <HeadCells columns={columns}/>
-                            <AddRowCell addingFunction={addPricelistHandler}/>
-                        </HeadRow>
-                    </TableHead>
-                    <TableBody>
-                        <DataRows columns={columns} rows={pricelists}>
-                            {withOperationCellParameters(ShowRowCell, "showFunction", showPricelistHandler, {popup: true})}
-                            {withOperationCellParameters(UpdateRowCell, "updateFunction", updatePricelistHandler)}
-                            {withOperationCellParameters(DeleteRowCell, "deleteFunction", deletePricelistHandler)}
-                        </DataRows>
-                    </TableBody>
-                </Table>
-            </div>
-        )
+    return ( 
+        (<div className="component-container">
+            <h1 className="content-header">All Pricelist</h1>
+            <Table>
+                <TableHead>
+                    <HeadRow>
+                        <HeadCells columns={columns}/>
+                        <AddRowCell addingFunction={addPricelistHandler}/>
+                    </HeadRow>
+                </TableHead>
+                <TableBody>
+                    {isEmpty(pricelists) ?
+                    <div className="no-data">No Pricelists <i class="ms-3 fa-solid fa-ban"></i></div> :
+                    <DataRows columns={columns} rows={pricelists}>
+                        {withOperationCellParameters(ShowRowCell, "showFunction", showPricelistHandler, {popup: true})}
+                        {withOperationCellParameters(UpdateRowCell, "updateFunction", updatePricelistHandler)}
+                        {withOperationCellParameters(DeleteRowCell, "deleteFunction", deletePricelistHandler)}
+                    </DataRows>}
+                </TableBody>
+            </Table>
+        </div>)
     )
 }
 

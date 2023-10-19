@@ -15,7 +15,7 @@ const CheckList = ({ emptyListMessage, onSelectItem, children }) => {
 
     return (
         <div className="checklist-container">
-            {isEmpty(children) ? <div className="user-no-perm">{emptyListMessage ?? "List has no Items!"}</div> : 
+            {isEmpty(children) ? <div className="no-data">{emptyListMessage ?? "List has no Items!"}</div> : 
             children.map(child => (
                 <div className="checklist-item" onClick={itemOnClickHandler}>
                     <Checkbox/>

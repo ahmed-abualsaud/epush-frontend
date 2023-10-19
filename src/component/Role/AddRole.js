@@ -35,9 +35,9 @@ const AddRole = () =>{
             showAlert("Role created successfully")
             if (! isEmpty(assignedPermissionsID) && (await assignRolePermissions(newRole.id, assignedPermissionsID))) {
                 showAlert("Permissions assigned successfully") 
-                let childElements = getElement("assign-role-permissions-list").children
+                let childElements = getElement("assign-card-item-subitems").children
                 for (let i = 0; i < childElements.length; i++) {
-                    childElements[i].querySelector(".role-card-head").classList.add("role-card-head-not-checked")
+                    childElements[i].querySelector(".card-item-head").classList.add("card-item-head-not-checked")
                     childElements[i].querySelector("input").checked = false
                 }
                 setAssignedPermissionsID([])
@@ -52,7 +52,7 @@ const AddRole = () =>{
         let permissionCardIcon = getElement(iconId)
 
         if (getElement(checkboxId).checked) {
-            permissionCardHead.classList.remove("role-card-head-not-checked")
+            permissionCardHead.classList.remove("card-item-head-not-checked")
             permissionCardIcon.classList.add("uil-check-circle")
             permissionCardIcon.classList.remove("uil-exclamation-circle")
             permissionCardIcon.previousElementSibling.textContent = "Assigned"
@@ -60,7 +60,7 @@ const AddRole = () =>{
             setAssignedPermissionsID([...assignedPermissionsID, permissionID])
 
         } else {
-            permissionCardHead.classList.add("role-card-head-not-checked")
+            permissionCardHead.classList.add("card-item-head-not-checked")
             permissionCardIcon.classList.add("uil-exclamation-circle")
             permissionCardIcon.classList.remove("uil-check-circle")
             permissionCardIcon.previousElementSibling.textContent = "Not Assigned"
@@ -73,11 +73,10 @@ const AddRole = () =>{
 
 
     return (
-        <div>
+        <div className="component-container">
+            <h1 className="content-header">Role Information</h1>
+
             <div id="add-role-form">
-                <div className="assign-role-header mb-5">
-                    <h1>Role Information</h1>
-                </div>
                 <li className="my-3"><h4 className="d-inline-block">Eneter Role Name</h4></li>
                 <Input className="mb-5" id="add-role-name" type="text" placeholder="Role Name" validrules="required">
                     <i className="input-icon uil uil-user-md"></i>
@@ -87,10 +86,10 @@ const AddRole = () =>{
                 <div className="assign-role-header">
                     <h1>Available Permissions</h1>
                 </div>
-                {<div id="assign-role-permissions-list" className="roles-list">
+                {<div id="assign-card-item-subitems" className="cards-list">
                     {permissions.map((permission) => (
-                        <div className="role-card">
-                            <div id={permission["name"] + "-permission-assign-head"} className="role-card-head role-card-head-not-checked">
+                        <div className="card-item">
+                            <div id={permission["name"] + "-permission-assign-head"} className="card-item-head card-item-head-not-checked">
                                 <div>Permission Name</div>
                                 <div>Permission Description</div>
                                 <div>
@@ -98,7 +97,7 @@ const AddRole = () =>{
                                     <i id={permission["name"] + "-permission-assign-icon"} className="uil uil-exclamation-circle"></i>
                                 </div>
                             </div>
-                            <div className="role-card-body">
+                            <div className="card-item-body">
                                 <div>{ permission["name"] }</div>
                                 <div style={{width:"60%"}}>{ permission["description"] }</div>
                                 <div>
@@ -114,7 +113,7 @@ const AddRole = () =>{
                         </div>
                     ))}
                 </div>}
-                <div className="update-user">
+                <div className="button-container">
                     <button style={{width: "505px"}} className="button" onClick={() => addNewRole()}>Add New Role</button>
                 </div>
             </div>

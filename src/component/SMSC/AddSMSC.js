@@ -33,8 +33,8 @@ const AddSMSC = () => {
     }
 
     return (
-        <div id="add-smsc-form" className="add-user-container">
-            <h1 className="add-user-header mb-5">Add New SMSC</h1>
+        <div id="add-smsc-form" className="component-container">
+            <h1 className="content-header mb-5">Add New SMSC</h1>
 
             <Input id="add-smsc-name" type="text" placeholder="Name" validrules="required">
                 <i className="input-icon fas fa-pen"></i>
@@ -44,7 +44,7 @@ const AddSMSC = () => {
                 <i className="input-icon fas fa-plug"></i>
             </Input>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => addNewSMSC()}>Add New SMSC</button>
             </div>
         </div>

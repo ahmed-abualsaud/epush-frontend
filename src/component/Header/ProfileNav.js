@@ -26,7 +26,7 @@ const ProfileNav = () => {
 
     return (
         <div className="profile-nav">
-            <h5 className="d-inline-block m-3 text-white"><strong>{user?.user?.full_name}</strong></h5>
+            <h5 className="d-inline-block m-3 text-white"><strong>{user?.user?.full_name ?? (user?.user?.first_name + " " + user?.user?.last_name)}</strong></h5>
             <img src={user?.user?.avatar ?? "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg"} className="rounded-circle" style={{width: "70px", height: "70px"}} alt="Avatar" />
             <input className="dropdown d-none" type="checkbox" id="dropdown" name="dropdown"/>
             <label className="for-dropdown" for="dropdown"><i className="uil uil-angle-double-down"></i></label>

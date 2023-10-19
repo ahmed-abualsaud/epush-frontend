@@ -68,8 +68,8 @@ const ListRoles = () =>
     return (
         ! isEmpty(roles) && 
         (
-            <div className="add-user-container">
-                <h1 className="add-user-header">All Roles</h1>
+            <div className="component-container">
+                <h1 className="content-header">All Roles</h1>
                 <Table>
                     <TableHead>
                         <HeadRow>

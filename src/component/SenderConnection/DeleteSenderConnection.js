@@ -17,10 +17,10 @@ const DeleteSenderConnection = ({ senderConnection, deletedRows, setDeletedRows 
 
     return (
         <div>
-            <h1 style={{fontSize: "55px"}} className="delete-header">Delete Sender Connection</h1>
-            <p className="delete-content">Do you want to delete this sender connection?</p>
-            <div className="delete-button-wrapper">
-                <a href="#"><button className="button delete-botton" onClick={() => deleteEntity()}>Delete</button></a>
+            <h1 style={{fontSize: "55px"}} className="popup-header">Delete Sender Connection</h1>
+            <p className="popup-content">Do you want to delete this sender connection?</p>
+            <div className="popup-button-wrapper">
+                <a href="#"><button className="button delete-button" onClick={() => deleteEntity()}>Delete</button></a>
             </div>
         </div>
     )

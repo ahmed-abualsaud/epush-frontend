@@ -62,8 +62,8 @@ const ListPermissions = () =>
     return (
         ! isEmpty(permissions) && 
         (
-            <div className="add-user-container">
-                <h1 className="add-user-header">All Permissions</h1>
+            <div className="component-container">
+                <h1 className="content-header">All Permissions</h1>
                 <Table>
                     <TableHead>
                         <HeadRow>

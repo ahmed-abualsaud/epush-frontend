@@ -1,5 +1,3 @@
-import '../../assets/style/component/add-user.css'
-
 import Input from '../../layout/Shared/Input'
 import { isEmpty } from '../../utils/helper'
 import { useEffect, useRef, useState } from 'react'
@@ -86,8 +84,8 @@ const AddOrder = () => {
 
 
     return (
-        <div id="add-order-form" className="add-user-container">
-            <h1 className="add-user-header">Add New Order</h1>
+        <div id="add-order-form" className="component-container">
+            <h1 className="content-header">Add New Order</h1>
 
             <div style={{fontSize: "30px"}} className="d-flex justify-content-around m-5">
                 <div>
@@ -132,7 +130,7 @@ const AddOrder = () => {
                 </div>
             </div>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => addNewOrder()}>Add New Order</button>
             </div>
 

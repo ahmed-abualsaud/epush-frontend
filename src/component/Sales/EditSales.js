@@ -46,8 +46,8 @@ const EditSales = ({ sales }) => {
 
 
     return (
-        <div className="add-user-container">
-            <h1 className="add-user-header mb-5">Sales Information</h1>
+        <div className="component-container">
+            <h1 className="content-header mb-5">Sales Information</h1>
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -72,7 +72,7 @@ const EditSales = ({ sales }) => {
                 </tbody>
             </table>
 
-            <div className="update-role">
+            <div className="button-container">
                 <button className="button" onClick={() => updateSpecificSales()}>Update Sales</button>
             </div>
         </div>

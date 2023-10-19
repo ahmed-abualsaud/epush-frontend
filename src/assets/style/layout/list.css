@@ -76,6 +76,7 @@
   width: 100%;
   padding: 20px;
   border-top: 2px solid #063F30;
+  cursor: pointer;
 }
 
 .slave-list-item-checked {

@@ -37,8 +37,8 @@ const AddSMSSendingName = ({ template, handler }) => {
     }
 
     return (
-        <div className="add-user-container">
-            <h1 className="add-user-header mb-5">Finally, Add The SMS Name</h1>
+        <div className="component-container">
+            <h1 className="content-header mb-5">Finally, Add The SMS Name</h1>
 
             <Input id="add-sms-name" type="text" placeholder="SMS Name" validrules="required">
                 <i className="input-icon fas fa-pen"></i>
@@ -59,7 +59,7 @@ const AddSMSSendingName = ({ template, handler }) => {
                 <i id="add-sms-phone-icon" style={{display: "none"}} className="input-icon fas fa-pen"></i>
             </Input>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => addNewSMS()}>Add New SMS</button>
             </div>
         </div>

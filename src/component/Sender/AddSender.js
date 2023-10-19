@@ -56,8 +56,8 @@ const AddSender = () => {
 
 
     return (
-        <div id="add-sender-form" className="add-user-container">
-            <h1 className="add-user-header mb-5">Add New Sender</h1>
+        <div id="add-sender-form" className="component-container">
+            <h1 className="content-header mb-5">Add New Sender</h1>
 
             <div className="mb-3">Note: the maximum sender name length is 11 characters and it should be in english</div>
             <Input id="add-sender-name" type="text" placeholder="Name" validrules="required" maxLength={11} onInput={senderNameOnInputHandler}>
@@ -77,7 +77,7 @@ const AddSender = () => {
                 <label for="add-sender-approved"></label>
             </div>
 
-            <div className="update-user">
+            <div className="button-container">
                 <button className="button" onClick={() => addNewSender()}>Add New Sender</button>
             </div>
         </div>

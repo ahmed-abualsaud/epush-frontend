@@ -29,8 +29,8 @@ const ShowClient = ({ client }) => {
 
     return (<>
 
-        <div className="add-user-container mb-5">
-            <h1 className="add-user-header">General Information</h1>
+        <div className="component-container mb-5">
+            <h1 className="content-header">General Information</h1>
             <div className="user-image">
                 <div className="image-wrapper">
                     <img src={currentClient.avatar ?? "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg"} alt="Avatar" />
@@ -74,9 +74,9 @@ const ShowClient = ({ client }) => {
             </table>
         </div>
 
-        <div className="add-user-container my-5">
-            <h1 className="add-user-header">Client Orders</h1>
-            {isEmpty(currentClientOrders) ? <div className="user-no-perm"> Client has no Orders! </div> :
+        <div className="component-container my-5">
+            <h1 className="content-header">Client Orders</h1>
+            {isEmpty(currentClientOrders) ? <div className="no-data"> Client has no Orders! </div> :
             <table className="fl-table">
                 <thead>
                     <tr>

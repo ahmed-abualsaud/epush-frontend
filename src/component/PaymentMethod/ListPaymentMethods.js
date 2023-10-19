@@ -50,27 +50,26 @@ const ListPaymentMethods = () => {
     }
 
     return (
-        ! isEmpty(paymentMethods) && 
-        (
-            <div className="add-user-container">
-                <h1 className="add-user-header">All Payment Method</h1>
-                <Table>
-                    <TableHead>
-                        <HeadRow>
-                            <HeadCells columns={columns}/>
-                            <AddRowCell addingFunction={addPaymentMethodHandler}/>
-                        </HeadRow>
-                    </TableHead>
-                    <TableBody>
-                        <DataRows columns={columns} rows={paymentMethods}>
-                            {withOperationCellParameters(ShowRowCell, "showFunction", showPaymentMethodHandler, {popup: true})}
-                            {withOperationCellParameters(UpdateRowCell, "updateFunction", updatePaymentMethodHandler)}
-                            {withOperationCellParameters(DeleteRowCell, "deleteFunction", deletePaymentMethodHandler)}
-                        </DataRows>
-                    </TableBody>
-                </Table>
-            </div>
-        )
+        <div className="component-container">
+            <h1 className="content-header">All Payment Method</h1>
+            <Table>
+                <TableHead>
+                    <HeadRow>
+                        <HeadCells columns={columns}/>
+                        <AddRowCell addingFunction={addPaymentMethodHandler}/>
+                    </HeadRow>
+                </TableHead>
+                <TableBody>
+                    {isEmpty(paymentMethods) ?
+                    <div className="no-data">No Payment Methods <i class="ms-3 fa-solid fa-ban"></i></div> :
+                    <DataRows columns={columns} rows={paymentMethods}>
+                        {withOperationCellParameters(ShowRowCell, "showFunction", showPaymentMethodHandler, {popup: true})}
+                        {withOperationCellParameters(UpdateRowCell, "updateFunction", updatePaymentMethodHandler)}
+                        {withOperationCellParameters(DeleteRowCell, "deleteFunction", deletePaymentMethodHandler)}
+                    </DataRows>}
+                </TableBody>
+            </Table>
+        </div>
     )
 }
 
