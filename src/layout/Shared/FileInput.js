@@ -1,6 +1,6 @@
-import { randomString } from "../../utils/helper"
 import "../../assets/style/layout/file-input.css"
 import { getElement } from "../../utils/dom"
+import { randomString } from "../../utils/strUtils"
 
 const FileInput = ({ onSelectFile }) => {
 

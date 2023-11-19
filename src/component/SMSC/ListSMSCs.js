@@ -23,6 +23,10 @@ import PaginationContainer from "../../layout/Pagination/PaginationContainer"
 import HeadRow from "../../layout/Table/HeadRow"
 import TableHead from "../../layout/Table/TableHead"
 import Table from "../../layout/Table/Table"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import { encodeString } from "../../utils/strUtils"
+import useSearchApi from "../../api/useSearchApi"
+import Page from "../../page/Page"
 
 
 const ListSMSCs = () =>
@@ -39,20 +43,25 @@ const ListSMSCs = () =>
     const [columns, setColumns] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
+    const { search } = useSearchApi()
     const { listSMSCs, searchSMSC } = useCoreApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
-        let clt = []
+        let smsc = []
         if (isEmpty(searchParams)) {
-            clt = await listSMSCs(perPage)
-        } else {
-            clt = await searchSMSC(perPage, searchParams.column, searchParams.value)
+            smsc = await listSMSCs(perPage)
+        }
+        else if (searchParams.hasOwnProperty('criteria')) {
+            smsc = await search(searchParams.enti, searchParams.crit, perPage)
+        }
+        else {
+            smsc = await searchSMSC(perPage, searchParams.column, searchParams.value)
         }
          
-        setSMSCs(clt)
-        setColumns(clt?.data[0] ? Object.keys(clt?.data[0]).filter(
+        setSMSCs(smsc)
+        setColumns(smsc?.data[0] ? Object.keys(smsc?.data[0]).filter(
             (column) => !excludedColumns.includes(column)
         ) : [])
     }
@@ -61,33 +70,41 @@ const ListSMSCs = () =>
     }, [])
 
     const handleGetPage = async (pageUrl) => {
-        let clt = {}
+        let smsc = {}
         if (isEmpty(searchParams)) {
-            clt = await sendGetRequest(pageUrl)
+            smsc = await sendGetRequest(pageUrl)
         } else {
             if (! pageUrl.includes("search")) {
                 let url  = pageUrl.split("?")
                 pageUrl = url[0]+"/search?"+url[1]
             }
-            clt = await sendPostRequest(pageUrl, searchParams)
+            smsc = await sendPostRequest(pageUrl, searchParams)
         }
-        if (! isEmpty(clt)) setSMSCs(clt)
+        if (! isEmpty(smsc)) setSMSCs(smsc)
     }
 
     const searchEntityColumn = async (column, value) => {
-        const clt = await searchSMSC(10, column, value)
-        if (clt) setSMSCs(clt)
+        const smsc = await searchSMSC(10, column, value)
+        if (smsc) setSMSCs(smsc)
         setSearchParams({column: column, value: value})
     }
 
+    const onSearch = async (criteria) => {
+        const smsc = await search("smsc", criteria, 10)
+        if (smsc) setSMSCs(smsc)
+        setSearchParams({entity: encodeString("smsc"), criteria: encodeString(criteria), enti: "smsc", crit: criteria})
+    }
+
     const onCheckShowAll = async () => {
-        let clt = []
+        let smsc = []
         if (isEmpty(searchParams)) {
-            clt = await listSMSCs(1000000000000)
+            smsc = await listSMSCs(1000000000000)
+        } else if (searchParams.hasOwnProperty('criteria')) {
+            smsc = await search(searchParams.enti, searchParams.crit, 1000000000000)
         } else {
-            clt = await searchSMSC(1000000000000, searchParams.column, searchParams.value)
+            smsc = await searchSMSC(1000000000000, searchParams.column, searchParams.value)
         }
-        setSMSCs(clt)
+        setSMSCs(smsc)
     }
 
     const addSMSCHandler = () => {
@@ -102,15 +119,15 @@ const ListSMSCs = () =>
         navigate("content", "edit-smsc", smsc)
     }
 
-    const deleteSMSCHandler = (smsc, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-smsc", smsc, deletedRows, setDeletedRows)
+    const deleteSMSCHandler = (smsc, onDelete) => {
+        navigate("modal-content", "delete-smsc", smsc, onDelete)
     }
 
     return (
         ! isEmpty(smscs) && 
         (
-        <div className="component-container">
-            <h1 className="content-header">All SMSCs</h1>
+        <Page title="SMSCs">
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
@@ -139,7 +156,7 @@ const ListSMSCs = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={smscs.total} perPage={smscs.per_page}/>
             </PaginationContainer>
-        </div>
+        </Page>
         )
     )
 }

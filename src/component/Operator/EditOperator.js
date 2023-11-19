@@ -2,6 +2,7 @@ import useCoreApi from "../../api/useCoreApi"
 import { useEffect, useRef, useState } from "react"
 import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
 import { showAlert } from "../../utils/validator"
+import Page from "../../page/Page"
 
 const EditOperator = ({ operator }) => {
 
@@ -46,8 +47,7 @@ const EditOperator = ({ operator }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header mb-5">Operator Information</h1>
+        <Page title="Operator Information">
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -75,7 +75,7 @@ const EditOperator = ({ operator }) => {
             <div className="button-container">
                 <button className="button" onClick={() => updateSpecificOperator()}>Update Operator</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

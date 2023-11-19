@@ -18,7 +18,7 @@ const Search = ({ columns, searchColumn }) => {
 
   const selectColumnOnClickHandler = (e) => {
     e.stopPropagation()
-    let label = e.currentTarget.querySelector('.option__label')
+    let label = e.currentTarget.querySelector('.option-label')
     let selectbox = getElement('select-column')
     getElement('display-columns').innerHTML = label.innerHTML
     let column = label.getAttribute('data-value')
@@ -58,7 +58,7 @@ const Search = ({ columns, searchColumn }) => {
   return (
     <div className="search-container">
       <div id="select-column" className="selectbox selectbox--unselect" data-option="">
-        <div id="display-columns" className="selectbox__displayWord" onClick={displayColumnsOnClickHandler}>
+        <div id="display-columns" className="selectbox-displayWord" onClick={displayColumnsOnClickHandler}>
           Select Column <i className="ms-1 uil uil-angle-double-down"></i>
         </div>
         <div className="option-container">
@@ -66,9 +66,9 @@ const Search = ({ columns, searchColumn }) => {
               <input style={{padding: "10px"}} className="form-style" onInput={searchDroplistColumns} type="text" placeholder="Type Column Name"/>
           </div>
           {currentColumns.map((column, index) => (
-            <div className="option-container__option" onClick={selectColumnOnClickHandler} key={index}>
-              <input type="radio" className="option__radio" name="category" />
-              <label className="option__label" data-value={column}>
+            <div className="option-container-option" onClick={selectColumnOnClickHandler} key={index}>
+              <input type="radio" className="option-radio" name="category" />
+              <label className="option-label" data-value={column}>
                 {snakeToBeautifulCase(column)}
               </label>
             </div>

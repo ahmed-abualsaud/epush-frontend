@@ -2,7 +2,7 @@ import { useState } from "react"
 import FileInput from "../../../layout/Shared/FileInput"
 import ItemsList from "../../../layout/List/ItemsList"
 import { parseExcelFile, parseTextFile, parseWordFile } from "../../../utils/file"
-import { randomString } from "../../../utils/helper"
+import { randomString } from "../../../utils/strUtils"
 
 const FromFileAddition = ({ setGroupRecipients }) => {
 

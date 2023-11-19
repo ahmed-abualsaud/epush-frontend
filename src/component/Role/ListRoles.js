@@ -19,35 +19,61 @@ import withOperationCellParameters from "../../HOC/withOperationCellParameters"
 import PaginationContainer from "../../layout/Pagination/PaginationContainer"
 import PaginationInfo from "../../layout/Pagination/PaginationInfo"
 import { navigate } from "../../setup/navigator"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import useSearchApi from "../../api/useSearchApi"
+import { encodeString } from "../../utils/strUtils"
+import Page from "../../page/Page"
 
 const ListRoles = () =>
 {
-    const excludedColumns = ["updated_at", "deleted_at"]
-
-    const { listRoles } = useAuthApi()
-    const { sendGetRequest } = useAxiosApi()
+    const excludedColumns = ["id", "updated_at", "deleted_at"]
 
     const [roles, setRoles] = useState([])
     const [columns, setColumns] = useState([])
+    const [searchParams, setSearchParams] = useState({})
+
+    const { search } = useSearchApi()
+    const { listRoles } = useAuthApi()
+    const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
-        const rol = await listRoles(perPage)
-        if (rol) setRoles(rol)
+        let rol = []
+        if (isEmpty(searchParams)) {
+            rol = await listRoles(perPage)
+        } else {
+            rol = await search(searchParams.enti, searchParams.crit, perPage)
+        }
 
+        setRoles(rol)
         setColumns(rol?.data[0] ? Object.keys(rol?.data[0]).filter(
             (column) => !excludedColumns.includes(column)
         ) : [])
     }
 
+    const handleGetPage = async (pageUrl) => {
+        let rol = {}
+        if (isEmpty(searchParams)) {
+            rol = await sendGetRequest(pageUrl)
+        } else {
+            if (! pageUrl.includes("search")) {
+                let url  = pageUrl.split("?")
+                pageUrl = url[0]+"/search?"+url[1]
+            }
+            rol = await sendPostRequest(pageUrl, searchParams)
+        }
+        if (! isEmpty(rol)) setRoles(rol)
+    }
+
+    const onSearch = async (criteria) => {
+        const rol = await search("role", criteria, 10)
+        if (rol) setRoles(rol)
+        setSearchParams({entity: encodeString("role"), criteria: encodeString(criteria), enti: "role", crit: criteria})
+    }
+
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup(10) }
     }, [])
-
-    const handleGetPage = async (pageUrl) => {
-        const rol = await sendGetRequest(pageUrl)
-        if (rol) setRoles(rol)
-    }
 
     const addRoleHandler = () => {
         navigate("content", "add-role")
@@ -61,15 +87,15 @@ const ListRoles = () =>
         navigate("content", "edit-role", role)
     }
 
-    const deleteRoleHandler = (role, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-role", role, deletedRows, setDeletedRows)
+    const deleteRoleHandler = (role, onDelete) => {
+        navigate("modal-content", "delete-role", role, onDelete)
     }
 
     return (
         ! isEmpty(roles) && 
         (
-            <div className="component-container">
-                <h1 className="content-header">All Roles</h1>
+            <Page title="Roles">
+                <ComplexSearch columns={columns} onSearch={onSearch}/>
                 <Table>
                     <TableHead>
                         <HeadRow>
@@ -92,7 +118,7 @@ const ListRoles = () =>
                     <PerPageDropList perPageHandler={ setup }/>
                     <PaginationInfo total={roles.total} perPage={roles.per_page}/>
                 </PaginationContainer>
-            </div>
+            </Page>
         )
     )
 }

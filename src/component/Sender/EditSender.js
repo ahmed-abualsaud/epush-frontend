@@ -5,6 +5,7 @@ import { showAlert } from "../../utils/validator"
 import { getElement } from "../../utils/dom"
 import DropList from "../../layout/Shared/DropList"
 import "../../assets/style/layout/list.css"
+import Page from "../../page/Page"
 
 const EditSender = ({ sender }) => {
 
@@ -14,7 +15,7 @@ const EditSender = ({ sender }) => {
     const [currentSender, setCurrentSender] = useState([])
     const [selectedUserID, setSelectedUserID] = useState(sender.user_id)
     const [currentSenderConnections, setCurrentSenderConnections] = useState([])
-    const [selectedCompany, setSelectedCompany] = useState(sender.client.company_name);
+    const [selectedCompany, setSelectedCompany] = useState(sender.company_name ?? sender.client.company_name);
 
     const setupLock = useRef(true)
     const setup = async () => {
@@ -69,8 +70,7 @@ const EditSender = ({ sender }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header mb-5">Sender Information</h1>
+        <Page title="Sender Information">
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -135,7 +135,7 @@ const EditSender = ({ sender }) => {
                     </div>
                 </div>
             ))}
-        </div>
+        </Page>
     )
 }
 

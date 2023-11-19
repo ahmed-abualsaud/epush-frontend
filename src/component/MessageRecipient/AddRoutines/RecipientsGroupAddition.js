@@ -51,7 +51,7 @@ const RecipientsGroupAddition = ({ userID, setGroupRecipients}) => {
                 <div style={{fontSize: "30px", marginLeft: "10px"}}>Select one of the following groups :</div>
                 <ModalList items={messageGroups} setSelectedContents={setGroupAndRecipients}/>
             </div>
-            <div style={{width: "40%"}}>
+            <div style={{width: "40%", marginLeft: "20px"}}>
                 <MessagesList messages={numbers}/>
             </div>
         </div>

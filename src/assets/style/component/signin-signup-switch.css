@@ -10,7 +10,7 @@
   padding: 0;
   margin: 10px auto;
   cursor: pointer;
-  background-color: #BFE85F;
+  background-color: var(--support-color);
 }
 .checkbox:checked + label:before,
 .checkbox:not(:checked) + label:before{
@@ -19,8 +19,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  color: #BFE85F;
-  background-color: #070020;
+  color: var(--support-color);
+  background-color: var(--secondary-color);
   font-family: 'unicons-line';
   content: '\eb4f';
   z-index: 20;

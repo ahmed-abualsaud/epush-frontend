@@ -24,6 +24,9 @@ import ShowRowCell from "../../layout/TableOperation/ShowRowCell"
 import UpdateRowCell from "../../layout/TableOperation/UpdateRowCell"
 import DeleteRowCell from "../../layout/TableOperation/DeleteRowCell"
 import OperationContainer from "../../layout/TableOperation/OperationContainer"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import useSearchApi from "../../api/useSearchApi"
+import { encodeString } from "../../utils/strUtils"
 
 
 const ListClients = () =>
@@ -43,6 +46,7 @@ const ListClients = () =>
         "userId", 
         "adminId", 
         "pricelist_Id", 
+        "pricelist_id", 
         "show_msg_details", 
         "birthDate", 
         "FDelete", 
@@ -72,6 +76,7 @@ const ListClients = () =>
     const [columns, setColumns] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
+    const { search } = useSearchApi()
     const { listClients, searchClient } = useCoreApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
@@ -80,7 +85,11 @@ const ListClients = () =>
         let clt = []
         if (isEmpty(searchParams)) {
             clt = await listClients(perPage)
-        } else {
+        }
+        else if (searchParams.hasOwnProperty('criteria')) {
+            clt = await search(searchParams.enti, searchParams.crit, perPage)
+        }
+        else {
             clt = await searchClient(perPage, searchParams.column, searchParams.value)
         }
          
@@ -113,16 +122,23 @@ const ListClients = () =>
         setSearchParams({column: column, value: value})
     }
 
+    const onSearch = async (criteria) => {
+        const clt = await search("client", criteria, 10)
+        if (clt) setClients(clt)
+        setSearchParams({entity: encodeString("client"), criteria: encodeString(criteria), enti: "client", crit: criteria})
+    }
+
     const onCheckShowAll = async () => {
         let clt = []
         if (isEmpty(searchParams)) {
             clt = await listClients(1000000000000)
+        } else if (searchParams.hasOwnProperty('criteria')) {
+            clt = await search(searchParams.enti, searchParams.crit, 1000000000000)
         } else {
             clt = await searchClient(1000000000000, searchParams.column, searchParams.value)
         }
         setClients(clt)
     }
-
 
     const addClientHandler = () => {
         navigate("content", "add-client")
@@ -136,14 +152,15 @@ const ListClients = () =>
         navigate("content", "edit-client", client)
     }
 
-    const deleteClientHandler = (client, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-client", client, deletedRows, setDeletedRows)
+    const deleteClientHandler = (client, onDelete) => {
+        navigate("modal-content", "delete-client", client, onDelete)
     }
 
     return (
         ! isEmpty(clients) && 
         (
         <>
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>

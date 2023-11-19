@@ -13,24 +13,39 @@ import UpdateRowCell from "../../layout/TableOperation/UpdateRowCell"
 import { navigate } from "../../setup/navigator"
 import { useEffect, useRef, useState } from "react"
 import { isEmpty } from "../../utils/helper"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import useSearchApi from "../../api/useSearchApi"
+import Page from "../../page/Page"
+import Export from "../../layout/TableOperation/Export"
 
 
 const ListSales = () => {
 
+    const excludedColumns = [
+        "id",
+        "updated_at",
+    ]
 
     const [columns, setColumns] = useState([])
     const [sales, setSales] = useState([])
+
+    const { search } = useSearchApi()
     const { listSales } = useCoreApi()
 
     const setupLock = useRef(true)
     const setup = async () => {
-        const prclst = await listSales()
-        if (prclst) setSales(prclst)
-        setColumns(prclst[0] ? Object.keys(prclst[0]) : [])
+        const sls = await listSales()
+        if (sls) setSales(sls)
+        setColumns((sls[0] ? Object.keys(sls[0]) : []).filter(column => ! excludedColumns.includes(column)))
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup() }
     }, [])
+
+    const onSearch = async (criteria) => {
+        const sls = await search("sales", criteria)
+        setSales(sls)
+    }
 
     const addSalesHandler = () => {
         navigate("content", "add-sales")
@@ -44,32 +59,34 @@ const ListSales = () => {
         navigate("content", "edit-sales", sales)
     }
 
-    const deleteSalesHandler = (sales, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-sales", sales, deletedRows, setDeletedRows)
+    const deleteSalesHandler = (sales, onDelete) => {
+        navigate("modal-content", "delete-sales", sales, onDelete)
     }
 
     return (
-        ! isEmpty(sales) && 
-        (
-            <div className="component-container">
-                <h1 className="content-header">All Sales</h1>
-                <Table>
-                    <TableHead>
-                        <HeadRow>
-                            <HeadCells columns={columns}/>
-                            <AddRowCell addingFunction={addSalesHandler}/>
-                        </HeadRow>
-                    </TableHead>
-                    <TableBody>
-                        <DataRows columns={columns} rows={sales}>
-                            {withOperationCellParameters(ShowRowCell, "showFunction", showSalesHandler, {popup: true})}
-                            {withOperationCellParameters(UpdateRowCell, "updateFunction", updateSalesHandler)}
-                            {withOperationCellParameters(DeleteRowCell, "deleteFunction", deleteSalesHandler)}
-                        </DataRows>
-                    </TableBody>
-                </Table>
+        <Page title="Sales">
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
+            <div style={{display: "flex", justifyContent: "center"}}>
+                <Export columns={columns} rows={sales}/>
             </div>
-        )
+            <Table>
+                <TableHead>
+                    <HeadRow>
+                        <HeadCells columns={columns}/>
+                        <AddRowCell addingFunction={addSalesHandler}/>
+                    </HeadRow>
+                </TableHead>
+                <TableBody>
+                    {isEmpty(sales) ?
+                    <div className="no-data">No Sales <i class="ms-3 fa-solid fa-ban"></i></div> :
+                    <DataRows columns={columns} rows={sales}>
+                        {withOperationCellParameters(ShowRowCell, "showFunction", showSalesHandler, {popup: true})}
+                        {withOperationCellParameters(UpdateRowCell, "updateFunction", updateSalesHandler)}
+                        {withOperationCellParameters(DeleteRowCell, "deleteFunction", deleteSalesHandler)}
+                    </DataRows>}
+                </TableBody>
+            </Table>
+        </Page>
     )
 }
 

@@ -1,15 +1,15 @@
 import useAuthApi from "../../api/useAuthApi";
 import { showAlert } from "../../utils/validator";
 
-const DeleteRole = ({ role, deletedRows, setDeletedRows }) => {
+const DeleteRole = ({ role, onDelete }) => {
 
     const { deleteRole } = useAuthApi()
 
     const deleteEntity = async () => {
 
         if (await deleteRole(role.id)) {
+            onDelete()
             showAlert("Role Deleted Successfully")
-            setDeletedRows([...deletedRows, role.id])
         } else {
             showAlert("Delete Role Failed")
         }

@@ -1,15 +1,15 @@
 import useCoreApi from "../../api/useCoreApi";
 import { showAlert } from "../../utils/validator";
 
-const DeleteBusinessField = ({ businessField, deletedRows, setDeletedRows }) => {
+const DeleteBusinessField = ({ businessField, onDelete }) => {
 
     const { deleteBusinessField } = useCoreApi()
 
     const deleteEntity = async () => {
 
         if (await deleteBusinessField(businessField.id)) {
+            onDelete()
             showAlert("Business Field Deleted Successfully")
-            setDeletedRows([...deletedRows, businessField.id])
         } else {
             showAlert("Delete Business Field Failed")
         }

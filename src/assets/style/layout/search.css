@@ -1,11 +1,4 @@
 
-:root {
-    --select-theme: #063F30;
-    --select-theme-hover: #070020;
-    --option-color: #fff;
-    --background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 80%, #BFE85F 200%);
-}
-
 .search-container {
     display: flex;
     justify-content: space-evenly;
@@ -14,11 +7,11 @@
     margin-bottom: 1rem;
     padding: 1rem 2rem;
     border-radius: 30px;
-    background-image: var(--background-image);
+    background-image: var(--background-image), linear-gradient(43deg, var(--secondary-color) 0%, var(--primary-color) 80%, var(--support-color) 200%);
     z-index: 1000;
 }
 
-.selectbox {
+.search-container .selectbox {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -26,9 +19,9 @@
     max-width: 200px;
 }
 
-.option-container {
-    background-color: var(--select-theme);
-    color: var(--option-color);
+.search-container .option-container {
+    background-color: var(--primary-color);
+    color: var(--boundry-color);
     max-height: 0;
     opacity: 0;
     transition: all 0.4s ease;
@@ -36,36 +29,36 @@
     overflow: hidden;
 }
   
-.selectbox--active .option-container {
+.search-container .selectbox--active .option-container {
     max-height: 240px;
     opacity: 1;
     overflow-y: scroll;
 }
   
-.selectbox__displayWord,
-.option-container__option {
+.search-container .selectbox-displayWord,
+.search-container .option-container-option {
     padding: 12px 24px;
     cursor: pointer;
 }
   
-.selectbox__displayWord {
+.search-container .selectbox-displayWord {
     position: relative;
-    background-color: var(--select-theme);
-    color: var(--option-color)!important;
+    background-color: var(--primary-color);
+    color: var(--boundry-color)!important;
     border-radius: 8px;
     height: 40px;
     display: flex;
     margin-right: 1rem;
     justify-content: center;
     align-items: center;
-    border: 1px solid #fff;
+    border: 1px solid var(--boundry-color);
 }
 
-.selectbox__displayWord i {
+.search-container .selectbox-displayWord i {
     transition: all 0.4s linear;
 }
 
-.selectbox__displayWord::after {
+.search-container .selectbox-displayWord::after {
     position: absolute;
     top: 50%;
     right: 16px;
@@ -80,71 +73,71 @@
     color: #f5f6fa;
     transform: translateY(-50%);
 }
-.selectbox--active .selectbox__displayWord::after {
+.search-container .selectbox--active .selectbox-displayWord::after {
     transform: translateY(-50%) rotateZ(180deg);
 }
 
-.selectbox--unselect .selectbox__displayWord {
+.search-container .selectbox--unselect .selectbox-displayWord {
     color: gray;
 }
 
-.selectbox--shake {
+.search-container .selectbox--shake {
     animation: shake 0.3s forwards;
 }
 
-.option-container {
+.search-container .option-container {
     position: absolute;
     top: 50px;
     left: 0;
     width: 100%;
 }
 
-.option-container__option:hover {
-    background-color: var(--select-theme-hover);
+.search-container .option-container-option:hover {
+    background-color: var(--secondary-color);
 }
 
-.option__radio {
+.search-container .option-radio {
     display: none;
 }
 
-.option__label {
+.search-container .option-label {
     cursor: pointer;
 }
 
-.search-columns i {
-    color: var(--select-theme);
+.search-container .search-columns i {
+    color: var(--primary-color);
 }
 
-.search-input {
+.search-container .search-input {
     width: 60%;
     border-radius: 10px;
     padding: 10px 10px;
 }
 
-.search-button {
-    color: white;
+.search-container .search-button {
+    color: var(--boundry-color);
     float: right;
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: var(--select-theme-hover);
+    background: var(--secondary-color);
     display: flex;
     justify-content: center;
     align-items: center;
     margin-left: 1rem;
-    border: 1px solid #fff;
+    border: 1px solid var(--boundry-color);
 }
 
-.search-button:hover {
+.search-container .search-button:hover {
     transform: scale(1.2) rotate(-45deg);
 }
 
-.search-button:active {
+.search-container .search-button:active {
     cursor: grab;
     transform: scale(0.95);
 }
 
-.rotate-180 {
+.search-container .rotate-180 {
     transform: rotate(180deg);
 }
 

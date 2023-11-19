@@ -1,15 +1,15 @@
 import useExpenseApi from "../../api/useExpenseApi";
 import { showAlert } from "../../utils/validator";
 
-const DeletePaymentMethod = ({ paymentMethod, deletedRows, setDeletedRows }) => {
+const DeletePaymentMethod = ({ paymentMethod, onDelete }) => {
 
     const { deletePaymentMethod } = useExpenseApi()
 
     const deleteEntity = async () => {
 
         if (await deletePaymentMethod(paymentMethod.id)) {
+            onDelete()
             showAlert("Payment Method Deleted Successfully")
-            setDeletedRows([...deletedRows, paymentMethod.id])
         } else {
             showAlert("Delete Payment Method Failed")
         }

@@ -14,11 +14,12 @@ import SuperAdminDashboard from './page/dashboard/SuperAdminDashboard'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import AdminDashboard from './page/dashboard/AdminDashboard'
 import ErrorBoundary from './setup/ErrorBoundary'
+import ClientDashboard from './page/dashboard/ClientDashboard'
 
 function App() {
   return (
     <>
-      <ErrorBoundary fallback={<p>Something went wrong</p>}>
+      {/* <ErrorBoundary fallback={<p>Something went wrong</p>}> */}
         <Provider store={store}>
           <BrowserRouter>
           <Modal/>
@@ -33,14 +34,15 @@ function App() {
 
               {/* Protected Routes */}
               <Route path="/" element={<ProtectedRoute />}>
-                <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/super-admin" element={<SuperAdminDashboard />} />
+                <Route path="/client" element={<ClientDashboard/>} />
+                <Route path="/admin" element={<AdminDashboard/>} />
+                <Route path="/super-admin" element={<SuperAdminDashboard/>} />
               </Route>
 
             </Routes>
           </BrowserRouter>
         </Provider> 
-      </ErrorBoundary>
+      {/* </ErrorBoundary> */}
     </>   
   )
 }

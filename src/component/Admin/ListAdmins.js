@@ -23,6 +23,10 @@ import PaginationContainer from "../../layout/Pagination/PaginationContainer"
 import HeadRow from "../../layout/Table/HeadRow"
 import TableHead from "../../layout/Table/TableHead"
 import Table from "../../layout/Table/Table"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import useSearchApi from "../../api/useSearchApi"
+import { encodeString } from "../../utils/strUtils"
+import Page from "../../page/Page"
 
 
 const ListAdmins = () =>
@@ -41,20 +45,25 @@ const ListAdmins = () =>
     const [columns, setColumns] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
+    const { search } = useSearchApi()
     const { listAdmins, searchAdmin } = useCoreApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
-        let clt = []
+        let adm = []
         if (isEmpty(searchParams)) {
-            clt = await listAdmins(perPage)
-        } else {
-            clt = await searchAdmin(perPage, searchParams.column, searchParams.value)
+            adm = await listAdmins(perPage)
+        }
+        else if (searchParams.hasOwnProperty('criteria')) {
+            adm = await search(searchParams.enti, searchParams.crit, perPage)
+        }
+        else {
+            adm = await searchAdmin(perPage, searchParams.column, searchParams.value)
         }
          
-        setAdmins(clt)
-        setColumns(clt?.data[0] ? Object.keys(clt?.data[0]).filter(
+        setAdmins(adm)
+        setColumns(adm?.data[0] ? Object.keys(adm?.data[0]).filter(
             (column) => !excludedColumns.includes(column)
         ) : [])
     }
@@ -63,33 +72,41 @@ const ListAdmins = () =>
     }, [])
 
     const handleGetPage = async (pageUrl) => {
-        let clt = {}
+        let adm = {}
         if (isEmpty(searchParams)) {
-            clt = await sendGetRequest(pageUrl)
+            adm = await sendGetRequest(pageUrl)
         } else {
             if (! pageUrl.includes("search")) {
                 let url  = pageUrl.split("?")
                 pageUrl = url[0]+"/search?"+url[1]
             }
-            clt = await sendPostRequest(pageUrl, searchParams)
+            adm = await sendPostRequest(pageUrl, searchParams)
         }
-        if (! isEmpty(clt)) setAdmins(clt)
+        if (! isEmpty(adm)) setAdmins(adm)
     }
 
     const searchEntityColumn = async (column, value) => {
-        const clt = await searchAdmin(10, column, value)
-        if (clt) setAdmins(clt)
+        const adm = await searchAdmin(10, column, value)
+        if (adm) setAdmins(adm)
         setSearchParams({column: column, value: value})
     }
 
+    const onSearch = async (criteria) => {
+        const adm = await search("admin", criteria, 10)
+        if (adm) setAdmins(adm)
+        setSearchParams({entity: encodeString("admin"), criteria: encodeString(criteria), enti: "admin", crit: criteria})
+    }
+
     const onCheckShowAll = async () => {
-        let clt = []
+        let adm = []
         if (isEmpty(searchParams)) {
-            clt = await listAdmins(1000000000000)
+            adm = await listAdmins(1000000000000)
+        } else if (searchParams.hasOwnProperty('criteria')) {
+            adm = await search(searchParams.enti, searchParams.crit, 1000000000000)
         } else {
-            clt = await searchAdmin(1000000000000, searchParams.column, searchParams.value)
+            adm = await searchAdmin(1000000000000, searchParams.column, searchParams.value)
         }
-        setAdmins(clt)
+        setAdmins(adm)
     }
 
     const addAdminHandler = () => {
@@ -104,14 +121,15 @@ const ListAdmins = () =>
         navigate("content", "edit-admin", admin)
     }
 
-    const deleteAdminHandler = (admin, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-admin", admin, deletedRows, setDeletedRows)
+    const deleteAdminHandler = (admin, onDelete) => {
+        navigate("modal-content", "delete-admin", admin, onDelete)
     }
 
     return (
         ! isEmpty(admins) && 
         (
-        <>
+        <div>
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
@@ -140,7 +158,7 @@ const ListAdmins = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={admins.total} perPage={admins.per_page}/>
             </PaginationContainer>
-        </>
+        </div>
         )
     )
 }

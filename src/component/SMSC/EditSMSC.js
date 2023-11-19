@@ -2,6 +2,7 @@ import useCoreApi from "../../api/useCoreApi"
 import { useEffect, useRef, useState } from "react"
 import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
 import { showAlert } from "../../utils/validator"
+import Page from "../../page/Page"
 
 const EditSMSC = ({ smsc }) => {
 
@@ -46,8 +47,7 @@ const EditSMSC = ({ smsc }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header mb-5">SMSC Information</h1>
+        <Page title="SMSC Information">
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -75,7 +75,7 @@ const EditSMSC = ({ smsc }) => {
             <div className="button-container">
                 <button className="button" onClick={() => updateSpecificSMSC()}>Update SMSC</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

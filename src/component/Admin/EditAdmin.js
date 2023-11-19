@@ -4,6 +4,8 @@ import { showAlert } from "../../utils/validator"
 import { useEffect, useRef, useState } from "react"
 import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
 import { render } from "../../setup/navigator"
+import Avatar from "../../layout/Shared/Avatar"
+import Page from "../../page/Page"
 
 const EditAdmin = ({ admin }) => {
 
@@ -24,24 +26,18 @@ const EditAdmin = ({ admin }) => {
 
     const { updateAdmin } = useCoreApi()
     const [currentAdmin, setCurrentAdmin] = useState([])
-    const [imagePreview, setImagePreview] = useState(admin["avatar"] ?? "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg")
+    const [avatar, setAvatar] = useState({})
 
     const setupLock = useRef(true)
     const setup = async () => {
         setCurrentAdmin(admin)
-        document.querySelector('.uil-camera-plus').addEventListener("click", () => getElement("edit-admin-avatar-input").click())
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup() }
     }, [])
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0]
-        const reader = new FileReader()
-        reader.onload = function (e) {
-            setImagePreview(e.target.result)
-        }
-        reader.readAsDataURL(file)
+    const onSelectAvatar = (avatar) => {
+        setAvatar(avatar)
     }
 
     const enableDisableAdmin = async (checkboxId) => {
@@ -56,7 +52,6 @@ const EditAdmin = ({ admin }) => {
     }
 
     const updateAdminAvatar = async () => {
-        let avatar = getElement("edit-admin-avatar-input").files[0]
         if (! isEmpty(avatar)) {
             let data = new FormData()
             data.append("avatar", avatar)
@@ -91,19 +86,16 @@ const EditAdmin = ({ admin }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header">Admin Information</h1>
+        <Page title="Admin Information">
             <div className="user-info">
                 <div className="user-avatar-password">
-                    <div className="user-image">
-                        <div className="avatar-hint">Click on your avatar if you want to change it!</div>
-                        <div className="image-wrapper">
-                            <img src={ imagePreview } alt="Avatar" />
-                            <input id="edit-admin-avatar-input" type="file" accept="image/*" onChange={handleImageChange}/>
-                            <i className="uil uil-camera-plus"></i>
+                    <div>
+                        <Avatar imageUrl={admin.avatar} onSelectAvatar={onSelectAvatar}/>
+                        <div className="w-100 d-flex justify-content-center">
+                                <button className="button" onClick={() => updateAdminAvatar()}>Update Avatar</button>
                         </div>
-                        <button className="button" onClick={() => updateAdminAvatar()}>Update Avatar</button>
                     </div>
+
                     <div className="user-generate-password">
                         <div className="password-hint">Click the button to create a new password for this admin and update their old password with the new one.</div>
                         <a href="#popup">
@@ -132,7 +124,7 @@ const EditAdmin = ({ admin }) => {
                     </div>
                 </div>
 
-                <table style={{marginTop: "100px"}} className="fl-table">
+                <table className="fl-table">
                     <thead>
                         <tr>
                             <th colSpan={3}>Information</th>
@@ -168,7 +160,7 @@ const EditAdmin = ({ admin }) => {
                     <button className="button" onClick={() => updateAdminInfo()}>Update Admin Info</button>
                 </div>
             </div>
-        </div>
+        </Page>
     )
 }
 

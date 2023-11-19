@@ -2,6 +2,7 @@ import { showAlert } from "../../utils/validator"
 import useExpenseApi from "../../api/useExpenseApi"
 import { useEffect, useRef, useState } from "react"
 import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
+import Page from "../../page/Page"
 
 
 const EditPaymentMethod = ({ paymentMethod }) => {
@@ -47,8 +48,7 @@ const EditPaymentMethod = ({ paymentMethod }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header mb-5">Payment Method Information</h1>
+        <Page title="Payment Method Information">
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -76,7 +76,7 @@ const EditPaymentMethod = ({ paymentMethod }) => {
             <div className="button-container">
                 <button className="button" onClick={() => updateSpecificPaymentMethod()}>Update Payment Method</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

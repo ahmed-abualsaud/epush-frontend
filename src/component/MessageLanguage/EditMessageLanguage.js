@@ -2,6 +2,7 @@ import useCoreApi from "../../api/useCoreApi"
 import { useEffect, useRef, useState } from "react"
 import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
 import { showAlert } from "../../utils/validator"
+import Page from "../../page/Page"
 
 const EditMessageLanguage = ({ messageLanguage }) => {
 
@@ -46,8 +47,7 @@ const EditMessageLanguage = ({ messageLanguage }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header mb-5">Message Language Information</h1>
+        <Page title="Message Language Information">
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -75,7 +75,7 @@ const EditMessageLanguage = ({ messageLanguage }) => {
             <div className="button-container">
                 <button className="button" onClick={() => updateSpecificMessageLanguage()}>Update Message Language</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

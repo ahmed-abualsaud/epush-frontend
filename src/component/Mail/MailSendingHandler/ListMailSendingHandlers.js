@@ -97,15 +97,14 @@ const ListMailSendingHandlers = () =>
         navigate("mail-management", "add-mail-sending-handler")
     }
 
-    const deleteMailSendingHandlerHandler = (mailSendingHandler, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-mail-sending-handler", mailSendingHandler, deletedRows, setDeletedRows)
+    const deleteMailSendingHandlerHandler = (mailSendingHandler, onDelete) => {
+        navigate("modal-content", "delete-mail-sending-handler", mailSendingHandler, onDelete)
     }
 
     return (
         ! isEmpty(mailSendingHandlers) && 
         (
-        <div className="component-container">
-            <h1 className="content-header">All Mails</h1>
+        <div>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>

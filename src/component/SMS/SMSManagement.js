@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react"
 import NavBar from "../../layout/Navigation/NavBar"
 import { render } from "../../setup/navigator"
+import Page from "../../page/Page"
 
 const SMSManagement = () => {
 
@@ -21,7 +22,7 @@ const SMSManagement = () => {
     }
 
     return (
-        <div className="component-container">
+        <Page className="m-0">
             <NavBar>
                 <div onClick={renderSendingSMS}><i className="fas fa-sms"></i>Sending SMS</div>
                 <div onClick={renderFilterSMS}><i className="fas fa-filter"></i>Filter SMS</div>
@@ -29,7 +30,7 @@ const SMSManagement = () => {
 
             <div style={{marginTop: "25px"}} id="sms-management"></div>
 
-        </div>
+        </Page>
     )
 }
 

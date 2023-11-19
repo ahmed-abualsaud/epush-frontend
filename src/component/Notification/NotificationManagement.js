@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react"
 import NavBar from "../../layout/Navigation/NavBar"
 import { render } from "../../setup/navigator"
+import Page from "../../page/Page"
 
 const NotificationManagement = () => {
 
@@ -17,14 +18,14 @@ const NotificationManagement = () => {
     }
 
     return (
-        <div className="component-container">
+        <Page className="m-0">
             <NavBar>
                 <div onClick={renderSendingNotification}><i className="fas fa-bell"></i>Sending Notification</div>
             </NavBar>
 
             <div style={{marginTop: "25px"}} id="notification-management"></div>
 
-        </div>
+        </Page>
     )
 }
 

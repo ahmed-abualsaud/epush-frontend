@@ -1,21 +1,20 @@
 .hint-container {
     position: relative;
-    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 80%, #BFE85F 200%);
     padding: 20px;
-    border-radius: 20px;
     font-size: 20px;
-    width: 99%;
+    width: 100%;
+    background-image: var(--background-image), linear-gradient(43deg, var(--secondary-color) 0%, var(--primary-color) 80%, var(--support-color) 200%);
 }
 
 .hint-container .close-hint {
     position: absolute;
     text-align: center;
-    top: -15px;
-    right: -15px;
-    font-size: 25px;
-    background-color: #fff;
-    border-radius: 50%;
-    width: 37px;
+    top: 0;
+    right: 0;
+    font-size: 30px;
+    background-color: var(--boundry-color);
+    border-radius: 10%;
+    width: 44px;
     border: 1px solid #000;
     cursor: pointer;
 }

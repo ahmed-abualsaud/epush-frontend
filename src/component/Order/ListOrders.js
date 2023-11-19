@@ -3,7 +3,7 @@ import Paginator from "../../layout/Pagination/Paginator"
 import useAxiosApi from "../../api/Api"
 import Search from '../../layout/TableOperation/Search'
 import Export from '../../layout/TableOperation/Export'
-import { isEmpty } from "../../utils/helper"
+import { getDatetimeString, isEmpty } from "../../utils/helper"
 import PerPageDropList from "../../layout/Pagination/PerPageDropList"
 import { useEffect, useRef, useState } from "react"
 import ShowAll from "../../layout/TableOperation/ShowAll"
@@ -24,6 +24,10 @@ import useExpenseApi from "../../api/useExpenseApi"
 import UpdateRowCell from "../../layout/TableOperation/UpdateRowCell"
 import OperationRowCell from "../../layout/TableOperation/OperationRowCell"
 import { showAlert } from "../../utils/validator"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import { encodeString } from "../../utils/strUtils"
+import useSearchApi from "../../api/useSearchApi"
+import Page from "../../page/Page"
 
 const ListOrders = () =>
 {
@@ -32,15 +36,20 @@ const ListOrders = () =>
     const [currentOrder, setCurrentOrder] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
-    const { listOrders, updateOrder, searchOrder } = useExpenseApi()
+    const { search } = useSearchApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
+    const { listOrders, updateOrder, searchOrder } = useExpenseApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
         let ord = []
         if (isEmpty(searchParams)) {
             ord = await listOrders(perPage)
-        } else {
+        }
+        else if (searchParams.hasOwnProperty('criteria')) {
+            ord = await search(searchParams.enti, searchParams.crit, perPage)
+        }
+        else {
             ord = await searchOrder(perPage, searchParams.column, searchParams.value)
         }
         setOrders(ord)
@@ -70,10 +79,18 @@ const ListOrders = () =>
         setSearchParams({column: column, value: value})
     }
 
+    const onSearch = async (criteria) => {
+        const ord = await search("order", criteria, 10)
+        if (ord) setOrders(ord)
+        setSearchParams({entity: encodeString("order"), criteria: encodeString(criteria), enti: "order", crit: criteria})
+    }
+
     const onCheckShowAll = async () => {
         let ord = []
         if (isEmpty(searchParams)) {
             ord = await listOrders(1000000000000)
+        } else if (searchParams.hasOwnProperty('criteria')) {
+            ord = await search(searchParams.enti, searchParams.crit, 1000000000000)
         } else {
             ord = await searchOrder(1000000000000, searchParams.column, searchParams.value)
         }
@@ -98,14 +115,10 @@ const ListOrders = () =>
     }
 
     const collectOrderHandler = async (e) => {
-        const userDate = new Date(e.currentTarget.value)
-        const timezoneOffset = userDate.getTimezoneOffset() * 60000
-        const localDate = new Date(userDate.getTime() - timezoneOffset)
-        const selectedDateTime = localDate.toISOString().replace("T", " ").slice(0, 19)
-
         let newOrder = await updateOrder(currentOrder.id, {
-            collection_date: selectedDateTime
+            collection_date: getDatetimeString(e.currentTarget.value)
         })
+
         if (! isEmpty(newOrder)) {
             showAlert("Order Collected Successfully!")
         } else {
@@ -124,8 +137,8 @@ const ListOrders = () =>
     return (
         ! isEmpty(orders) && 
         (
-        <div className="component-container">
-            <h1 className="content-header">Orders</h1>
+        <Page title="Orders">
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
@@ -141,10 +154,10 @@ const ListOrders = () =>
                 </TableHead>
                 <TableBody>
                     <DataRows columns={columns} rows={orders.data.map(order => {
-                        order.company_name = order.client?.company_name ?? "NULL"
-                        order.sales_name = order.client?.sales?.name ?? "NULL"
-                        order.pricelist = order.pricelist?.name ?? "NULL"
-                        order.payment_method = order.payment_method?.name ?? "NULL"
+                        order.company_name = order.company_name ?? order.client?.company_name ?? "NULL"
+                        order.sales_name = order.sales_name ?? order.client?.sales?.name ?? "NULL"
+                        order.pricelist = order.pricelist_name ?? order.pricelist?.name ?? "NULL"
+                        order.payment_method = order.payment_method_name ?? order.payment_method?.name ?? "NULL"
                         return order
                     })}>
                         {withOperationCellParameters(ShowRowCell, "showFunction", showOrderHandler)}
@@ -170,7 +183,7 @@ const ListOrders = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={orders.total} perPage={orders.per_page}/>
             </PaginationContainer>
-        </div>
+        </Page>
         )
     )
 }

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import ItemsList from "../../../layout/List/ItemsList"
-import { randomString } from "../../../utils/helper"
+import { randomString } from "../../../utils/strUtils"
 
 const ExtendableFormAddition = ({ setGroupRecipients }) => {
 

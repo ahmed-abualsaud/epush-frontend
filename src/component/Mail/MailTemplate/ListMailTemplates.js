@@ -24,8 +24,8 @@ const ListMailTemplates = () => {
     }, [])
 
     return (
-        <div className="component-container">
-            <h1 className="content-header">
+        <div>
+            <h1 style={{marginTop: "-25px"}} className="content-header">
                 All Mail Templates
                 <button 
                     style={{
@@ -34,7 +34,7 @@ const ListMailTemplates = () => {
                         backgroundImage: "none"
                     }} 
                     className="button" 
-                    onClick={() => navigate("content", "add-mail-template", templatesList)}
+                    onClick={() => navigate("mail-management", "add-mail-template", templatesList)}
                 >
                     Add New Mail Template
                 </button>
@@ -44,8 +44,7 @@ const ListMailTemplates = () => {
                 ! deletedRows.includes(template.id) &&
                 <MailTemplate 
                     template={template} 
-                    deletedRows={deletedRows} 
-                    setDeletedRows={setDeletedRows} 
+                    onDelete={() => setDeletedRows([...deletedRows, template.id])}
                     templates={templatesList}
                 />
             ))}

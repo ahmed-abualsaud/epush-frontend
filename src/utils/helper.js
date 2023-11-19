@@ -28,18 +28,6 @@ export function arrayContains(needles, haystack) {
     return needles.every(Set.prototype.has, new Set(haystack))
 }
 
-export function randomString(length) {
-
-    let result  = "";
-    let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-
-    for (var i = 0; i < length; ++i) {
-        result += alphabet[Math.floor(alphabet.length * Math.random())];
-    }
-
-    return result;
-}
-
 export function arrayMergeUnique(array1, array2) {
 
     return Array.from(new Set(array1.concat(array2)))
@@ -63,7 +51,14 @@ export function snakeToBeautifulCase(str) {
     return str ? str
       .split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' '): "NULL";
+      .join(' '): "NULL"
+}
+
+export function beautifulToSnakeCase(str) {
+
+  return str ? str
+    .replace(/\s+/g, '_')
+    .toLowerCase() : "NULL"
 }
 
 export function beautifulToKebabCase(str) {
@@ -151,6 +146,23 @@ export const arrayCombine = (keys, values) => {
   }, {})
 }
 
+export const makeArrayUnique = (array, attribute) => {
+  const uniqueValues = {};
+
+  const uniqueArray = array.reduce((result, obj) => {
+    const value = obj[attribute];
+
+    if (!uniqueValues[value]) {
+      uniqueValues[value] = true;
+      result.push(obj);
+    }
+
+    return result;
+  }, []);
+
+  return uniqueArray;
+}
+
 export const castVariable = (variable, type) => {
   switch (type) {
     case 'int':
@@ -176,4 +188,20 @@ export const castVariable = (variable, type) => {
     default:
       return variable;
   }
+}
+
+export const startsWithAny = (string, prefixes) => {
+  for (let i = 0; i < prefixes.length; i++) {
+    if (string.startsWith(prefixes[i])) {
+      return true;
+    }
+  }
+  return false;
+}
+
+export const getDatetimeString = (timestamp = null) => {
+  const userDate = timestamp === null? new Date() : new Date(timestamp)
+  const timezoneOffset = userDate.getTimezoneOffset() * 60000
+  const localDate = new Date(userDate.getTime() - timezoneOffset)
+  return localDate.toISOString().replace("T", " ").slice(0, 19)
 }

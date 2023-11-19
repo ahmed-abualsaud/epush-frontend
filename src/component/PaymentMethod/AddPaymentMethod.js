@@ -4,6 +4,7 @@ import { navigate } from "../../setup/navigator"
 import { getFormInputData } from "../../utils/dom"
 import useExpenseApi from "../../api/useExpenseApi"
 import { showAlert, validate } from "../../utils/validator"
+import Page from "../../page/Page"
 
 const AddPaymentMethod = () => {
 
@@ -33,17 +34,13 @@ const AddPaymentMethod = () => {
     }
 
     return (
-        <div id="add-payment-method-form" className="component-container">
-            <h1 className="content-header mb-5">Add New Payment Method</h1>
-
-            <Input id="add-payment-method-name" type="text" placeholder="Name" validrules="required">
-                <i className="input-icon fas fa-pen"></i>
-            </Input>
+        <Page id="add-payment-method-form" title="Add New Payment Method">
+            <Input id="add-payment-method-name" type="text" icon="fas fa-pen" placeholder="Payment Method Name" validrules="required"/>
 
             <div className="button-container">
                 <button className="button" onClick={() => addNewPaymentMethod()}>Add Payment Method</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

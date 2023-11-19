@@ -6,7 +6,8 @@ import HeadCells from "../../layout/Table/HeadCells"
 import TableBody from "../../layout/Table/TableBody"
 import DataRows from "../../layout/Table/DataRows"
 import HeadRow from "../../layout/Table/HeadRow"
-import { isEmpty } from "../../utils/helper"
+import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
+import Page from "../../page/Page"
 
 const ShowSender = ({ sender }) => {
 
@@ -52,45 +53,40 @@ const ShowSender = ({ sender }) => {
 
 
     return (
-        <div>
-            <div className="component-container">
-                <h1 className="content-header">General Information</h1>
-                <table className="fl-table">
-                    <thead>
+        <Page title="General Information">
+            <table className="fl-table">
+                <thead>
+                    <tr>
+                        <th>Attribute Name</th>
+                        <th>Attribute Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {filteredColumns.map((col) => (
                         <tr>
-                            <th>Attribute Name</th>
-                            <th>Attribute Value</th>
+                            <td style={{fontSize: "22px", whiteSpace: "no-wrap"}}>{snakeToBeautifulCase(col)}</td>
+                            <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof sender[col] === "boolean"? sender[col] ? "Yes" : "No" : sender[col] ?? "NULL"}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {filteredColumns.map((col) => (
-                            <tr>
-                                <td style={{fontSize: "22px"}}>{col}</td>
-                                <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof sender[col] === "boolean"? sender[col] ? "Yes" : "No" : sender[col] ?? "NULL"}</td>
-                            </tr>
-                        ))}
-                        <tr key="last-row">
-                            <td className="last-row" colSpan={2}></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                    ))}
+                    <tr key="last-row">
+                        <td className="last-row" colSpan={2}></td>
+                    </tr>
+                </tbody>
+            </table>
 
-            <div className="component-container" style={{marginTop: "100px"}}>
-                <h1 className="content-header">Sender SMS Connections</h1>
-                { isEmpty(senderConnections) ? <div className="no-data"> Sender Has No SMS Connections! </div> :
-                <Table>
-                    <TableHead>
-                        <HeadRow>
-                            <HeadCells columns={SenderConnectionColumns}/>
-                        </HeadRow>
-                    </TableHead>
-                    <TableBody>
-                        <DataRows columns={SenderConnectionColumns} rows={senderConnections}/>
-                    </TableBody>
-                </Table>}
-            </div>
-        </div>
+            <h1 className="content-header">Sender SMS Connections</h1>
+            { isEmpty(senderConnections) ? <div className="no-data"> Sender Has No SMS Connections! </div> :
+            <Table>
+                <TableHead>
+                    <HeadRow>
+                        <HeadCells columns={SenderConnectionColumns}/>
+                    </HeadRow>
+                </TableHead>
+                <TableBody>
+                    <DataRows columns={SenderConnectionColumns} rows={senderConnections}/>
+                </TableBody>
+            </Table>}
+        </Page>
     )
 }
 

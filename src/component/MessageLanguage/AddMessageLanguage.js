@@ -4,6 +4,7 @@ import { isEmpty } from "../../utils/helper"
 import { navigate } from "../../setup/navigator"
 import { getFormInputData } from "../../utils/dom"
 import { showAlert, validate } from "../../utils/validator"
+import Page from "../../page/Page"
 
 
 const AddMessageLanguage = () => {
@@ -34,25 +35,15 @@ const AddMessageLanguage = () => {
     }
 
     return (
-        <div id="add-message-language-form" className="component-container">
-            <h1 className="content-header mb-5">Add New Message Language</h1>
-
-            <Input id="add-message-language-name" type="text" placeholder="Name" validrules="required">
-                <i className="input-icon fas fa-pen"></i>
-            </Input>
-
-            <Input id="add-message-language-max_characters_length" type="number" placeholder="Maximum Characters Length" validrules="required">
-                <i className="input-icon fas fa-arrow-up-9-1"></i>
-            </Input>
-
-            <Input id="add-message-language-split_characters_length" type="number" placeholder="Split Characters Length" validrules="required">
-                <i className="input-icon fas fa-arrow-up-9-1"></i>
-            </Input>
+        <Page id="add-message-language-form" title="Add New Message Language">
+            <Input id="add-message-language-name" type="text" icon="fas fa-pen" placeholder="Language Name" validrules="required"/>
+            <Input id="add-message-language-max_characters_length" type="number" icon="fas fa-arrow-up-9-1" placeholder="Maximum Characters Length" validrules="required"/>
+            <Input id="add-message-language-split_characters_length" type="number" icon="fas fa-arrow-up-9-1" placeholder="Split Characters Length" validrules="required"/>
 
             <div className="button-container">
-                <button className="button" onClick={() => addNewMessageLanguage()}>Add New Message Language</button>
+                <button className="button" onClick={() => addNewMessageLanguage()}>Add Message Language</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

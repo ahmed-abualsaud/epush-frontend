@@ -23,24 +23,19 @@ import PaginationContainer from "../../layout/Pagination/PaginationContainer"
 import HeadRow from "../../layout/Table/HeadRow"
 import TableHead from "../../layout/Table/TableHead"
 import Table from "../../layout/Table/Table"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import useSearchApi from "../../api/useSearchApi"
+import { encodeString } from "../../utils/strUtils"
+import Page from "../../page/Page"
 
 
 const ListSenders = () =>
 {
-    const excludedColumns = [
-
-        "id",
-        "updated_at", 
-        "deleted_at", 
-        "user_id",
-        "client"
-
-    ]
-
     const [senders, setSenders] = useState([])
     const [columns, setColumns] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
+    const { search } = useSearchApi()
     const { listSenders, searchSender } = useCoreApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
@@ -49,17 +44,16 @@ const ListSenders = () =>
         let snd = []
         if (isEmpty(searchParams)) {
             snd = await listSenders(perPage)
-        } else {
+        }
+        else if (searchParams.hasOwnProperty('criteria')) {
+            snd = await search(searchParams.enti, searchParams.crit, perPage)
+        }
+        else {
             snd = await searchSender(perPage, searchParams.column, searchParams.value)
         }
          
         setSenders(snd)
-
-        let filteredColumns = ["company_name"]
-        filteredColumns.push(...(snd?.data[0] ? Object.keys(snd?.data[0]).filter(
-            (column) => !excludedColumns.includes(column)
-        ) : []))
-        setColumns(filteredColumns)
+        setColumns(["company_name", "name", "approved", "created_at"])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup(10) }
@@ -85,10 +79,18 @@ const ListSenders = () =>
         setSearchParams({column: column, value: value})
     }
 
+    const onSearch = async (criteria) => {
+        const snd = await search("sender", criteria, 10)
+        if (snd) setSenders(snd)
+        setSearchParams({entity: encodeString("sender"), criteria: encodeString(criteria), enti: "sender", crit: criteria})
+    }
+
     const onCheckShowAll = async () => {
         let snd = []
         if (isEmpty(searchParams)) {
             snd = await listSenders(1000000000000)
+        } else if (searchParams.hasOwnProperty('criteria')) {
+            snd = await search(searchParams.enti, searchParams.crit, 1000000000000)
         } else {
             snd = await searchSender(1000000000000, searchParams.column, searchParams.value)
         }
@@ -107,15 +109,15 @@ const ListSenders = () =>
         navigate("content", "edit-sender", sender)
     }
 
-    const deleteSenderHandler = (sender, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-sender", sender, deletedRows, setDeletedRows)
+    const deleteSenderHandler = (sender, onDelete) => {
+        navigate("modal-content", "delete-sender", sender, onDelete)
     }
 
     return (
         ! isEmpty(senders) && 
         (
-        <div className="component-container">
-            <h1 className="content-header">All Senders</h1>
+        <Page title="Senders">
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
@@ -131,7 +133,7 @@ const ListSenders = () =>
                 </TableHead>
                 <TableBody>
                     <DataRows columns={columns} rows={senders.data.map(sender => {
-                        sender.company_name = sender.client?.company_name ?? "NULL"
+                        sender.company_name = sender.company_name ?? sender.client?.company_name ?? "NULL"
                         return sender
                     })}>
                         {withOperationCellParameters(ShowRowCell, "showFunction", showSenderHandler)}
@@ -147,7 +149,7 @@ const ListSenders = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={senders.total} perPage={senders.per_page}/>
             </PaginationContainer>
-        </div>
+        </Page>
         )
     )
 }

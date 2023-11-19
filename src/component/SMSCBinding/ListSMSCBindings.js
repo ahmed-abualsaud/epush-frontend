@@ -23,88 +23,78 @@ import PaginationContainer from "../../layout/Pagination/PaginationContainer"
 import HeadRow from "../../layout/Table/HeadRow"
 import TableHead from "../../layout/Table/TableHead"
 import Table from "../../layout/Table/Table"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import { encodeString } from "../../utils/strUtils"
+import useSearchApi from "../../api/useSearchApi"
+import Page from "../../page/Page"
 
 
 const ListSMSCBindings = () =>
 {
-    const excludedColumns = [
-
-        "id",
-        "updated_at", 
-        "deleted_at", 
-        "country_id",
-        "operator_id",
-        "smsc_id",
-        "country",
-        "operator",
-        "smsc"
-    ]
-
-    const includedColumns = [
-        "country_name", 
-        "country_code", 
-        "operator_name", 
-        "operator_code", 
-        "smsc_name", 
-        "smsc_value"
-    ]
-
     const [smscBindings, setSMSCBindings] = useState([])
     const [columns, setColumns] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
+    const { search } = useSearchApi()
     const { listSMSCBindings, searchSMSCBinding } = useCoreApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
-        let clt = []
+        let smcbdg = []
         if (isEmpty(searchParams)) {
-            clt = await listSMSCBindings(perPage)
-        } else {
-            clt = await searchSMSCBinding(perPage, searchParams.column, searchParams.value)
+            smcbdg = await listSMSCBindings(perPage)
+        }
+        else if (searchParams.hasOwnProperty('criteria')) {
+            smcbdg = await search(searchParams.enti, searchParams.crit, perPage)
+        }
+        else {
+            smcbdg = await searchSMSCBinding(perPage, searchParams.column, searchParams.value)
         }
          
-        setSMSCBindings(clt)
-
-        let filteredColumns = includedColumns
-        filteredColumns.push(...(clt?.data[0] ? Object.keys(clt?.data[0]).filter(
-            (column) => !excludedColumns.includes(column)
-        ) : []))
-        setColumns(filteredColumns)
+        setSMSCBindings(smcbdg)
+        setColumns(["country_name", "country_code", "operator_name", "operator_code", "smsc_name", "smsc_value", "default", "created_at"])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup(10) }
     }, [])
 
     const handleGetPage = async (pageUrl) => {
-        let clt = {}
+        let smcbdg = {}
         if (isEmpty(searchParams)) {
-            clt = await sendGetRequest(pageUrl)
+            smcbdg = await sendGetRequest(pageUrl)
         } else {
             if (! pageUrl.includes("search")) {
                 let url  = pageUrl.split("?")
                 pageUrl = url[0]+"/search?"+url[1]
             }
-            clt = await sendPostRequest(pageUrl, searchParams)
+            smcbdg = await sendPostRequest(pageUrl, searchParams)
         }
-        if (! isEmpty(clt)) setSMSCBindings(clt)
+        if (! isEmpty(smcbdg)) setSMSCBindings(smcbdg)
     }
 
     const searchEntityColumn = async (column, value) => {
-        const clt = await searchSMSCBinding(10, column, value)
-        if (clt) setSMSCBindings(clt)
+        const smcbdg = await searchSMSCBinding(10, column, value)
+        if (smcbdg) setSMSCBindings(smcbdg)
         setSearchParams({column: column, value: value})
     }
 
+    const onSearch = async (criteria) => {
+        const smcbdg = await search("smsc_binding", criteria, 10)
+        if (smcbdg) setSMSCBindings(smcbdg)
+        setSearchParams({entity: encodeString("smsc_binding"), criteria: encodeString(criteria), enti: "smsc_binding", crit: criteria})
+    }
+
     const onCheckShowAll = async () => {
-        let clt = []
+        let smcbdg = []
         if (isEmpty(searchParams)) {
-            clt = await listSMSCBindings(1000000000000)
+            smcbdg = await listSMSCBindings(1000000000000)
+        } else if (searchParams.hasOwnProperty('criteria')) {
+            smcbdg = await search(searchParams.enti, searchParams.crit, 1000000000000)
         } else {
-            clt = await searchSMSCBinding(1000000000000, searchParams.column, searchParams.value)
+            smcbdg = await searchSMSCBinding(1000000000000, searchParams.column, searchParams.value)
         }
-        setSMSCBindings(clt)
+        setSMSCBindings(smcbdg)
     }
 
     const addSMSCBindingHandler = () => {
@@ -119,15 +109,15 @@ const ListSMSCBindings = () =>
         navigate("content", "edit-smsc-binding", smscBinding)
     }
 
-    const deleteSMSCBindingHandler = (smscBinding, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-smsc-binding", smscBinding, deletedRows, setDeletedRows)
+    const deleteSMSCBindingHandler = (smscBinding, onDelete) => {
+        navigate("modal-content", "delete-smsc-binding", smscBinding, onDelete)
     }
 
     return (
         ! isEmpty(smscBindings) && 
         (
-        <div className="component-container">
-            <h1 className="content-header">All SMSC Bindings</h1>
+        <Page title="SMSC Bindings">
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
@@ -164,7 +154,7 @@ const ListSMSCBindings = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={smscBindings.total} perPage={smscBindings.per_page}/>
             </PaginationContainer>
-        </div>
+        </Page>
         )
     )
 }

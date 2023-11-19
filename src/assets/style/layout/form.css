@@ -19,8 +19,8 @@
 .form-card {
     width: 100%;
     height: 100%;
-    background-color: #063F30;
-    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 70%, #BFE85F 100%);
+    background-color: var(--primary-color);
+    background-image: var(--background-image), linear-gradient(43deg, var(--secondary-color) 0%, var(--primary-color) 70%, var(--support-color) 100%);
     background-position: bottom center;
     background-repeat: no-repeat;
     background-size: 300%;

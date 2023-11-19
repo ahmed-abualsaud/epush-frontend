@@ -5,11 +5,11 @@
     align-items: center;
     align-items: center;
     padding: 27px;
-    color: white;
+    color: var(--boundry-color);
     margin-bottom: 0.5rem;
     border-radius: 30px;
     transform: scale(0.8);
-    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 80%, #BFE85F 200%);   
+    background-image: var(--background-image), linear-gradient(43deg, var(--secondary-color) 0%, var(--primary-color) 80%, var(--support-color) 200%);   
 }
 
 .showall-container input{

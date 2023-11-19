@@ -7,6 +7,7 @@ import { render } from '../../setup/navigator'
 import { showAlert } from '../../utils/validator'
 import { useEffect, useRef, useState } from "react"
 import { getElement, updateElement } from "../../utils/dom"
+import Page from '../../page/Page'
 
 
 const ServiceContexts = ({ service }) => {
@@ -75,10 +76,7 @@ const ServiceContexts = ({ service }) => {
 
 
     return (
-        <div className="component-container">
-            <div className="content-header">
-                <h1>{service.name.charAt(0).toUpperCase() + service.name.slice(1)} Contexts</h1>
-            </div>
+        <Page title={service.name.charAt(0).toUpperCase() + service.name.slice(1) + " Contexts"}>
             { ! isEmpty(contexts) &&
             <div className="cards-list">
                 {contexts.map((context) => (
@@ -113,7 +111,7 @@ const ServiceContexts = ({ service }) => {
                     </div>                            
                 ))}
             </div>}
-        </div>
+        </Page>
     )
 }
 

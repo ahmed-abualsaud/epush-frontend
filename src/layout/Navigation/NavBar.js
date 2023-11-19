@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react"
 import "../../assets/style/layout/navbar.css"
 import { getFirstElementParent } from "../../utils/dom"
-import { randomString } from "../../utils/helper"
+import { randomString } from "../../utils/strUtils"
 
 const NavBar = ({ children }) => {
 

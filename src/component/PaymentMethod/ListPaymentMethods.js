@@ -13,25 +13,39 @@ import ShowRowCell from "../../layout/TableOperation/ShowRowCell"
 import UpdateRowCell from "../../layout/TableOperation/UpdateRowCell"
 import DeleteRowCell from "../../layout/TableOperation/DeleteRowCell"
 import Table from "../../layout/Table/Table"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import useSearchApi from "../../api/useSearchApi"
+import Page from "../../page/Page"
+import Export from "../../layout/TableOperation/Export"
 
 
 const ListPaymentMethods = () => {
 
+    const excludedColumns = [
+        "id",
+        "updated_at",
+    ]
 
     const [columns, setColumns] = useState([])
     const [paymentMethods, setPaymentMethods] = useState([])
-    const [deletedRows, setDeletedRows] = useState([])
+
+    const { search } = useSearchApi()
     const { listPaymentMethods } = useExpenseApi()
 
     const setupLock = useRef(true)
     const setup = async () => {
-        const prclst = await listPaymentMethods()
-        if (prclst) setPaymentMethods(prclst)
-        setColumns(prclst[0] ? Object.keys(prclst[0]) : [])
+        const pymtd = await listPaymentMethods()
+        if (pymtd) setPaymentMethods(pymtd)
+        setColumns((pymtd[0] ? Object.keys(pymtd[0]) : []).filter(column => ! excludedColumns.includes(column)))
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup() }
     }, [])
+
+    const onSearch = async (criteria) => {
+        const pymtd = await search("payment_method", criteria)
+        if (pymtd) setPaymentMethods(pymtd)
+    }
 
     const addPaymentMethodHandler = () => {
         navigate("content", "add-payment-method")
@@ -45,13 +59,16 @@ const ListPaymentMethods = () => {
         navigate("content", "edit-payment-method", paymentMethod)
     }
 
-    const deletePaymentMethodHandler = (paymentMethod, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-payment-method", paymentMethod, deletedRows, setDeletedRows)
+    const deletePaymentMethodHandler = (paymentMethod, onDelete) => {
+        navigate("modal-content", "delete-payment-method", paymentMethod, onDelete)
     }
 
     return (
-        <div className="component-container">
-            <h1 className="content-header">All Payment Method</h1>
+        <Page title="Payment Methods">
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
+            <div style={{display: "flex", justifyContent: "center"}}>
+                <Export columns={columns} rows={paymentMethods}/>
+            </div>
             <Table>
                 <TableHead>
                     <HeadRow>
@@ -69,7 +86,7 @@ const ListPaymentMethods = () => {
                     </DataRows>}
                 </TableBody>
             </Table>
-        </div>
+        </Page>
     )
 }
 

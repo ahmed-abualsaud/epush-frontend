@@ -17,30 +17,19 @@ import PaginationContainer from "../../layout/Pagination/PaginationContainer"
 import HeadRow from "../../layout/Table/HeadRow"
 import TableHead from "../../layout/Table/TableHead"
 import Table from "../../layout/Table/Table"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import { encodeString } from "../../utils/strUtils"
+import useSearchApi from "../../api/useSearchApi"
+import Page from "../../page/Page"
 
 
 const ListMessageRecipients = () =>
 {
-    const excludedColumns = [
-
-        "id",
-        "updated_at", 
-        "deleted_at", 
-        "avatar",
-        "message_id",
-        "message",
-        "message_group_id",
-        "message_group",
-        "message_group_recipient",
-        "message_group_recipient_id",
-        "email_verified_at",
-        "user_id"
-    ]
-
     const [columns, setColumns] = useState([])
     const [messageRecipients, setMessageRecipients] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
+    const { search } = useSearchApi()
     const { listMessageRecipients, searchMessageRecipient } = useCoreApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
@@ -49,13 +38,15 @@ const ListMessageRecipients = () =>
         let msgrcip = []
         if (isEmpty(searchParams)) {
             msgrcip = await listMessageRecipients(perPage)
-        } else {
+        }
+        else if (searchParams.hasOwnProperty('criteria')) {
+            msgrcip = await search(searchParams.enti, searchParams.crit, perPage)
+        }
+        else {
             msgrcip = await searchMessageRecipient(perPage, searchParams.column, searchParams.value)
         }
         setMessageRecipients(msgrcip)
-        setColumns(msgrcip?.data[0] ? ["group_name", "number", "attributes", "message", ...Object.keys(msgrcip?.data[0]).filter(
-            (column) => !excludedColumns.includes(column)
-        )] : [])
+        setColumns(["group_name", "number", "attributes", "message", "status", "created_at"])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup(10) }
@@ -81,11 +72,21 @@ const ListMessageRecipients = () =>
         setSearchParams({column: column, value: value})
     }
 
+    const onSearch = async (criteria) => {
+        const msgrcip = await search("message_recipient", criteria, 10)
+        if (msgrcip) setMessageRecipients(msgrcip)
+        setSearchParams({entity: encodeString("message_recipient"), criteria: encodeString(criteria), enti: "message_recipient", crit: criteria})
+    }
+
     const onCheckShowAll = async () => {
         let msgrcip = []
         if (isEmpty(searchParams)) {
             msgrcip = await listMessageRecipients(1000000000000)
-        } else {
+        }
+        else if (searchParams.hasOwnProperty('criteria')) {
+            msgrcip = await search(searchParams.enti, searchParams.crit, 1000000000000)
+        }
+        else {
             msgrcip = await searchMessageRecipient(1000000000000, searchParams.column, searchParams.value)
         }
         setMessageRecipients(msgrcip)
@@ -94,8 +95,8 @@ const ListMessageRecipients = () =>
     return (
         ! isEmpty(messageRecipients) && 
         (
-        <div className="component-container">
-            <h1 className="content-header">All MessageRecipients</h1>
+        <Page title="Message Recipients">
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
@@ -112,7 +113,7 @@ const ListMessageRecipients = () =>
                     <DataRows columns={columns} rows={messageRecipients.data.map(messageRecipient => {
                         messageRecipient.number = messageRecipient.message_group_recipient?.number ?? "NULL"
                         messageRecipient.attributes = messageRecipient.message_group_recipient?.attributes ?? "NULL"
-                        messageRecipient.group_name = messageRecipient.message_group_recipient?.message_group?.name ?? "NULL"
+                        messageRecipient.group_name = messageRecipient.message_group_recipient?.message_group?.name ?? messageRecipient.group_name ?? "NULL"
                         messageRecipient.message = messageRecipient.message?.content ?? "NULL"
                         return messageRecipient
                     })}/>
@@ -125,7 +126,7 @@ const ListMessageRecipients = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={messageRecipients.total} perPage={messageRecipients.per_page}/>
             </PaginationContainer>
-        </div>
+        </Page>
         )
     )
 }

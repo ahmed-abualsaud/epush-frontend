@@ -1,7 +1,7 @@
 .form-group { 
   position: relative;
   display: block;
-  margin: 0;
+  margin: 10px;
   padding: 0;
 }
 
@@ -16,13 +16,13 @@
   height: 51px;
   width: 100%;
   font-weight: 500;
+  border: 1px solid black;
   border-radius: 4px;
   font-size: 25px;
   letter-spacing: 0.5px;
   outline: none;
   color: black;
-  background-color: white;
-  border: none;
+  background-color: var(--boundry-color);
   -webkit-transition: all 200ms linear;
   transition: all 200ms linear;
   box-shadow: 0 4px 8px 0 rgba(21,21,21,.2);
@@ -30,8 +30,7 @@
 
 .form-style:focus,
 .form-style:active {
-  border: none;
-  outline: none;
+  border: 1px solid black;
   box-shadow: 0 4px 8px 0 rgba(21,21,21,.2);
 }
 
@@ -78,4 +77,29 @@
   opacity: 0;
   -webkit-transition: all 200ms linear;
   transition: all 200ms linear;
+}
+
+.show-password-icon {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+}
+
+.input-options {
+  position: absolute;
+  z-index: 10000000;
+  background-color: var(--boundry-color);
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+  border-bottom: 1px solid #000;
+  width: 100%;
+  max-height: 150px;
+  overflow: auto;
+}
+
+.input-option {
+  padding: 10px;
+  border-top: 1px solid #000;
+  cursor: pointer;
 }

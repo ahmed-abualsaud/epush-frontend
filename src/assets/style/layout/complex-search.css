@@ -1,0 +1,166 @@
+.complex-search-container {
+    width: 100%;
+    border: 1px solid var(--primary-color);
+    margin: 0 0 40px 0;
+    background-image: var(--background-image);
+}
+
+.complex-search-head {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid var(--primary-color);
+    padding: 30px 0;
+    font-size: 30px;
+    color: var(--boundry-color);
+    background-image: var(--background-image), linear-gradient(43deg, var(--secondary-color) 0%, var(--primary-color) 80%, var(--support-color) 200%);
+}
+
+.complex-search-column {
+    font-size: 25px;
+}
+
+.complex-search-row {
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid var(--primary-color);
+    padding: 10px 0;
+}
+
+.complex-search-cell {
+    width: 22%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.complex-search-value {
+    height: 65px;
+    padding: 2px 15px;
+    width: 98%;
+    border-radius: 8px;
+    border: none;
+    font-size: 20px;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    background-color: rgb(235, 235, 235);
+}
+
+.complex-search-button-container {
+    display: flex;
+    justify-content: space-around;
+    border-top: 2px solid var(--primary-color);
+    padding: 15px 0;
+    color: var(--boundry-color);
+    background-image: var(--background-image), linear-gradient(43deg, var(--secondary-color) 0%, var(--primary-color) 80%, var(--support-color) 200%);
+}
+
+.complex-search-button {
+    font-size: 30px;
+    border: 2px solid var(--primary-color);
+    border-radius: 30px;
+    padding: 5px 30px;
+    transition: all 0.3s ease-in-out;
+}
+
+.complex-search-switch-container {
+    display: flex;
+    justify-content: center;
+}
+
+.complex-search-switch {
+    color: var(--boundry-color);
+    width: 60%;
+    border-bottom-left-radius: 1000px;
+    border-bottom-right-radius: 1000px;
+    padding-top: 10px;
+    margin-top: 1px;
+    margin-bottom: 10px;
+    background-image: var(--background-image), linear-gradient(43deg, var(--secondary-color) -40%, var(--primary-color) 120%, var(--support-color) 400%);
+}
+
+.complex-search-button:hover {
+    transform: scale(1.2);
+    background-color: var(--support-color);
+}
+
+.search-modal-header {
+    padding: 20px 10px;
+    color: var(--boundry-color);
+    border-top-right-radius: 17px;
+    border-top-left-radius: 17px;
+    font-size: 40px;
+    text-align: center;
+    background-image: var(--background-image), linear-gradient(43deg, var(--secondary-color) 0%, var(--primary-color) 80%, var(--support-color) 200%);
+}
+
+.search-modal-content-wrapper {
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    margin: 50px 20px 15px 20px;
+    max-height: 255px;
+    overflow: auto!important;
+}
+
+.search-modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px 20px 30px 20px;
+}
+
+.search-modal-operator {
+    position: absolute;
+    left: 30px;
+    top: 120px;
+    color: var(--boundry-color);
+    padding: 10px 20px;
+    font-size: 25px;
+    border: 1px solid var(--primary-color);
+    background-image: var(--background-image), linear-gradient(43deg, var(--secondary-color) 0%, var(--primary-color) 80%, var(--support-color) 200%);
+}
+
+.range-search-input {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 90%;
+    margin: 20px 10px;
+}
+
+.range-search-input div {
+    font-size: 20px;
+}
+
+.list-search-input {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.list-search-input input,
+.range-search-input input {
+    font-size: 20px;
+    padding: 5px 10px;
+    border: 2px solid var(--primary-color);
+    background-color: #ddd;
+    color: var(--secondary-color);
+}
+
+.list-search-input input {
+    margin: 5px 0;
+}
+
+.search-modal-buttons {
+    position: absolute;
+    right: 20px;
+}
+
+.search-modal-button {
+    padding: 10px 20px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 5px;
+    margin: 5px;
+    color: var(--boundry-color);
+    font-size: 20px;
+    background-image: var(--background-image), linear-gradient(43deg, var(--secondary-color) 0%, var(--primary-color) 80%, var(--support-color) 200%);
+}

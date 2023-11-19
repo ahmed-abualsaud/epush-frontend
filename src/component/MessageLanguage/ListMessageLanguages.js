@@ -23,6 +23,7 @@ import PaginationContainer from "../../layout/Pagination/PaginationContainer"
 import HeadRow from "../../layout/Table/HeadRow"
 import TableHead from "../../layout/Table/TableHead"
 import Table from "../../layout/Table/Table"
+import Page from "../../page/Page"
 
 
 const ListMessageLanguages = () =>
@@ -103,15 +104,14 @@ const ListMessageLanguages = () =>
         navigate("content", "edit-message-language", messageLanguage)
     }
 
-    const deleteMessageLanguageHandler = (messageLanguage, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-message-language", messageLanguage, deletedRows, setDeletedRows)
+    const deleteMessageLanguageHandler = (messageLanguage, onDelete) => {
+        navigate("modal-content", "delete-message-language", messageLanguage, onDelete)
     }
 
     return (
         ! isEmpty(messageLanguages) && 
         (
-        <div className="component-container">
-            <h1 className="content-header">All MessageLanguages</h1>
+        <Page title="Message Languages">
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
@@ -140,7 +140,7 @@ const ListMessageLanguages = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={messageLanguages.total} perPage={messageLanguages.per_page}/>
             </PaginationContainer>
-        </div>
+        </Page>
         )
     )
 }

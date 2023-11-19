@@ -1,15 +1,15 @@
 import useCoreApi from "../../api/useCoreApi";
 import { showAlert } from "../../utils/validator";
 
-const DeleteMessageFilter = ({ messageFilter, deletedRows, setDeletedRows }) => {
+const DeleteMessageFilter = ({ messageFilter, onDelete }) => {
 
     const { deleteMessageFilter } = useCoreApi()
 
     const deleteEntity = async () => {
 
         if (await deleteMessageFilter(messageFilter.id)) {
+            onDelete()
             showAlert("Message Filter Deleted Successfully")
-            setDeletedRows([...deletedRows, messageFilter.id])
         } else {
             showAlert("Delete Message Filter Failed")
         }

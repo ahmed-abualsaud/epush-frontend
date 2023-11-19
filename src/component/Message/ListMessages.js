@@ -22,29 +22,19 @@ import PaginationContainer from "../../layout/Pagination/PaginationContainer"
 import HeadRow from "../../layout/Table/HeadRow"
 import TableHead from "../../layout/Table/TableHead"
 import Table from "../../layout/Table/Table"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import { encodeString } from "../../utils/strUtils"
+import useSearchApi from "../../api/useSearchApi"
+import Page from "../../page/Page"
 
 
 const ListMessages = () =>
 {
-    const excludedColumns = [
-
-        "id",
-        "user_id",
-        "updated_at", 
-        "deleted_at", 
-        "order_id",
-        "sender_id",
-        "order",
-        "sender",
-        "recipients",
-        "segments",
-        "message_language_id",
-    ]
-
     const [columns, setColumns] = useState([])
     const [messages, setMessages] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
+    const { search } = useSearchApi()
     const { listMessages, searchMessage } = useCoreApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
@@ -53,22 +43,15 @@ const ListMessages = () =>
         let msg = []
         if (isEmpty(searchParams)) {
             msg = await listMessages(perPage)
-        } else {
+        }
+        else if (searchParams.hasOwnProperty('criteria')) {
+            msg = await search(searchParams.enti, searchParams.crit, perPage)
+        }
+        else {
             msg = await searchMessage(perPage, searchParams.column, searchParams.value)
         }
-         
         setMessages(msg)
-
-        let filteredColumns = [
-            "company_name", 
-            "sender_name",
-        ]
-
-        filteredColumns.push(...(msg?.data[0] ? Object.keys(msg?.data[0]).filter(
-            (column) => !excludedColumns.includes(column)
-        ) : []))
-    
-        setColumns(filteredColumns)
+        setColumns(["company_name", "sender_name", "content", "notes", "approved", "single_message_cost", "total_cost", "number_of_segments", "number_of_recipients", "language", "sent_at", "scheduled_at", "created_at"])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup(10) }
@@ -94,10 +77,18 @@ const ListMessages = () =>
         setSearchParams({column: column, value: value})
     }
 
+    const onSearch = async (criteria) => {
+        const msg = await search("message", criteria, 10)
+        if (msg) setMessages(msg)
+        setSearchParams({entity: encodeString("message"), criteria: encodeString(criteria), enti: "message", crit: criteria})
+    }
+
     const onCheckShowAll = async () => {
         let msg = []
         if (isEmpty(searchParams)) {
             msg = await listMessages(1000000000000)
+        } else if (searchParams.hasOwnProperty('criteria')) {
+            msg = await search(searchParams.enti, searchParams.crit, 1000000000000)
         } else {
             msg = await searchMessage(1000000000000, searchParams.column, searchParams.value)
         }
@@ -112,15 +103,15 @@ const ListMessages = () =>
         navigate("content", "show-message", message)
     }
 
-    const deleteMessageHandler = (message, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-message", message, deletedRows, setDeletedRows)
+    const deleteMessageHandler = (message, onDelete) => {
+        navigate("modal-content", "delete-message", message, onDelete)
     }
 
     return (
         ! isEmpty(messages) && 
         (
-        <div className="component-container">
-            <h1 className="content-header">All Messages</h1>
+        <Page title="Messages">
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
@@ -136,9 +127,9 @@ const ListMessages = () =>
                 </TableHead>
                 <TableBody>
                     <DataRows columns={columns} rows={messages.data.map(message => {
-                        message.company_name = message.sender?.client?.company_name ?? "NULL"
-                        message.sender_name = message.sender?.name ?? "NULL"
-                        message.language = message.language?.name ?? "NULL"
+                        message.company_name = message.sender?.client?.company_name ?? message.company_name ?? "NULL"
+                        message.sender_name = message.sender?.name ?? message.sender_name ?? "NULL"
+                        message.language = message.language?.name ?? message.language ?? "NULL"
                         return message
                     })}>
                         {withOperationCellParameters(ShowRowCell, "showFunction", showMessageHandler)}
@@ -153,7 +144,7 @@ const ListMessages = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={messages.total} perPage={messages.per_page}/>
             </PaginationContainer>
-        </div>
+        </Page>
         )
     )
 }

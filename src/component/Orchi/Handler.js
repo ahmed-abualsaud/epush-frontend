@@ -6,6 +6,7 @@ import { isEmpty } from "../../utils/helper"
 import Switch from '../../layout/Shared/Switch'
 import { showAlert } from '../../utils/validator'
 import { getElement } from '../../utils/dom'
+import Page from '../../page/Page'
 
 const Handler = ({ handleGroup }) => {
 
@@ -30,8 +31,7 @@ const Handler = ({ handleGroup }) => {
     }
 
     return (
-        <div className="component-container">
-                <h1 className="content-header">{handleGroup.name.charAt(0).toUpperCase() + handleGroup.name.slice(1)} Handlers</h1>
+        <Page title={handleGroup.name.charAt(0).toUpperCase() + handleGroup.name.slice(1) + " Handlers"}>
             <table className="fl-table card-table">
                 <thead>
                     <tr>
@@ -69,7 +69,7 @@ const Handler = ({ handleGroup }) => {
                     </tr>
                 </tbody>
             </table>    
-        </div>
+        </Page>
     )
 }
 

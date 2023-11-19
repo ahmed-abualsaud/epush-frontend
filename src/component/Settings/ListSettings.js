@@ -23,6 +23,10 @@ import HeadRow from "../../layout/Table/HeadRow"
 import TableHead from "../../layout/Table/TableHead"
 import Table from "../../layout/Table/Table"
 import useSettingsApi from "../../api/useSettingsApi"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import useSearchApi from "../../api/useSearchApi"
+import { encodeString } from "../../utils/strUtils"
+import Page from "../../page/Page"
 
 
 const ListSettings = () =>
@@ -41,20 +45,25 @@ const ListSettings = () =>
     const [settings, setSettings] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
+    const { search } = useSearchApi()
     const { listSettings, searchSettings } = useSettingsApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
-        let clt = []
+        let stn = []
         if (isEmpty(searchParams)) {
-            clt = await listSettings(perPage)
-        } else {
-            clt = await searchSettings(perPage, searchParams.column, searchParams.value)
+            stn = await listSettings(perPage)
+        }
+        else if (searchParams.hasOwnProperty('criteria')) {
+            stn = await search(searchParams.enti, searchParams.crit, perPage)
+        }
+        else {
+            stn = await searchSettings(perPage, searchParams.column, searchParams.value)
         }
          
-        setSettings(clt)
-        setColumns(clt?.data[0] ? Object.keys(clt?.data[0]).filter(
+        setSettings(stn)
+        setColumns(stn?.data[0] ? Object.keys(stn?.data[0]).filter(
             (column) => !excludedColumns.includes(column)
         ) : [])
     }
@@ -63,33 +72,41 @@ const ListSettings = () =>
     }, [])
 
     const handleGetPage = async (pageUrl) => {
-        let clt = {}
+        let stn = {}
         if (isEmpty(searchParams)) {
-            clt = await sendGetRequest(pageUrl)
+            stn = await sendGetRequest(pageUrl)
         } else {
             if (! pageUrl.includes("search")) {
                 let url  = pageUrl.split("?")
                 pageUrl = url[0]+"/search?"+url[1]
             }
-            clt = await sendPostRequest(pageUrl, searchParams)
+            stn = await sendPostRequest(pageUrl, searchParams)
         }
-        if (! isEmpty(clt)) setSettings(clt)
+        if (! isEmpty(stn)) setSettings(stn)
     }
 
     const searchEntityColumn = async (column, value) => {
-        const clt = await searchSettings(10, column, value)
-        if (clt) setSettings(clt)
+        const stn = await searchSettings(10, column, value)
+        if (stn) setSettings(stn)
         setSearchParams({column: column, value: value})
     }
 
+    const onSearch = async (criteria) => {
+        const opr = await search("setting", criteria, 10)
+        if (opr) setSettings(opr)
+        setSearchParams({entity: encodeString("setting"), criteria: encodeString(criteria), enti: "setting", crit: criteria})
+    }
+
     const onCheckShowAll = async () => {
-        let clt = []
+        let opr = []
         if (isEmpty(searchParams)) {
-            clt = await listSettings(1000000000000)
+            opr = await listSettings(1000000000000)
+        } else if (searchParams.hasOwnProperty('criteria')) {
+            opr = await search(searchParams.enti, searchParams.crit, 1000000000000)
         } else {
-            clt = await searchSettings(1000000000000, searchParams.column, searchParams.value)
+            opr = await searchSettings(1000000000000, searchParams.column, searchParams.value)
         }
-        setSettings(clt)
+        setSettings(opr)
     }
 
     const addSettingsHandler = () => {
@@ -104,15 +121,15 @@ const ListSettings = () =>
         navigate("content", "edit-settings", settings)
     }
 
-    const deleteSettingsHandler = (settings, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-settings", settings, deletedRows, setDeletedRows)
+    const deleteSettingsHandler = (settings, onDelete) => {
+        navigate("modal-content", "delete-settings", settings, onDelete)
     }
 
     return (
         ! isEmpty(settings) && 
         (
-        <div className="component-container">
-            <h1 className="content-header">All Settings</h1>
+        <Page title="Settings">
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
@@ -141,7 +158,7 @@ const ListSettings = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={settings.total} perPage={settings.per_page}/>
             </PaginationContainer>
-        </div>
+        </Page>
         )
     )
 }

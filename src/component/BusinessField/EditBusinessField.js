@@ -2,6 +2,7 @@ import useCoreApi from "../../api/useCoreApi"
 import { useEffect, useRef, useState } from "react"
 import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
 import { showAlert } from "../../utils/validator"
+import Page from "../../page/Page"
 
 const EditBusinessField = ({ businessField }) => {
 
@@ -46,8 +47,7 @@ const EditBusinessField = ({ businessField }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header mb-5">Business Field Information</h1>
+        <Page title="Business Field Information">
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -75,7 +75,7 @@ const EditBusinessField = ({ businessField }) => {
             <div className="button-container">
                 <button className="button" onClick={() => updateSpecificBusinessField()}>Update Business Field</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

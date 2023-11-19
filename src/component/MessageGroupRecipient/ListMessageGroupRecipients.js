@@ -10,7 +10,6 @@ import { useEffect, useRef, useState } from "react"
 import ShowAll from "../../layout/TableOperation/ShowAll"
 import { navigate } from "../../setup/navigator"
 import OperationContainer from "../../layout/TableOperation/OperationContainer"
-import ShowRowCell from "../../layout/TableOperation/ShowRowCell"
 import UpdateRowCell from "../../layout/TableOperation/UpdateRowCell"
 import DeleteRowCell from "../../layout/TableOperation/DeleteRowCell"
 import DataRows from "../../layout/Table/DataRows"
@@ -23,27 +22,19 @@ import PaginationContainer from "../../layout/Pagination/PaginationContainer"
 import HeadRow from "../../layout/Table/HeadRow"
 import TableHead from "../../layout/Table/TableHead"
 import Table from "../../layout/Table/Table"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import { encodeString } from "../../utils/strUtils"
+import useSearchApi from "../../api/useSearchApi"
+import Page from "../../page/Page"
 
 
 const ListMessageGroupRecipients = ({messageGroup}) =>
 {
-    const excludedColumns = [
-
-        "id",
-        "updated_at", 
-        "deleted_at", 
-        "avatar",
-        "recipients",
-        'message_group',
-        'message_group_id',
-        "email_verified_at",
-        "user_id"
-    ]
-
     const [columns, setColumns] = useState([])
     const [messageGroupRecipients, setMessageGroupRecipients] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
+    const { search } = useSearchApi()
     const { listMessageGroupRecipients, searchMessageGroupRecipient } = useCoreApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
@@ -57,15 +48,16 @@ const ListMessageGroupRecipients = ({messageGroup}) =>
         let msgrp = []
         if (isEmpty(searchParams)) {
             msgrp = isEmpty(messageGroup) ? (await listMessageGroupRecipients(perPage)) : {data: messageGroup.recipients}
-        } else {
+        }
+        else if (searchParams.hasOwnProperty('criteria')) {
+            msgrp = await search(searchParams.enti, searchParams.crit, perPage)
+        }
+        else {
             msgrp = await searchMessageGroupRecipient(perPage, searchParams.column, searchParams.value)
         }
 
         setMessageGroupRecipients(msgrp)
-
-        setColumns(msgrp?.data[0] ? ["group_name", ...Object.keys(msgrp?.data[0]).filter(
-            (column) => !excludedColumns.includes(column)
-        )] : [])
+        setColumns(["group_name", "number", "attributes", "created_at"])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup(10) }
@@ -91,11 +83,21 @@ const ListMessageGroupRecipients = ({messageGroup}) =>
         setSearchParams({column: column, value: value})
     }
 
+    const onSearch = async (criteria) => {
+        const msgrp = await search("message_group_recipient", criteria, 10)
+        if (msgrp) setMessageGroupRecipients(msgrp)
+        setSearchParams({entity: encodeString("message_group_recipient"), criteria: encodeString(criteria), enti: "message_group_recipient", crit: criteria})
+    }
+
     const onCheckShowAll = async () => {
         let msgrp = []
         if (isEmpty(searchParams)) {
             msgrp = await listMessageGroupRecipients(1000000000000)
-        } else {
+        }
+        else if (searchParams.hasOwnProperty('criteria')) {
+            msgrp = await search(searchParams.enti, searchParams.crit, 1000000000000)
+        }
+        else {
             msgrp = await searchMessageGroupRecipient(1000000000000, searchParams.column, searchParams.value)
         }
         setMessageGroupRecipients(msgrp)
@@ -105,23 +107,19 @@ const ListMessageGroupRecipients = ({messageGroup}) =>
         navigate("content", "add-message-group-recipient")
     }
 
-    // const showMessageGroupRecipientHandler = (messageGroupRecipient) => {
-    //     navigate("content", "show-message-group-recipient", messageGroupRecipient)
-    // }
-
     const updateMessageGroupRecipientHandler = (messageGroupRecipient) => {
         navigate("content", "edit-message-group-recipient", messageGroupRecipient)
     }
 
-    const deleteMessageGroupRecipientHandler = (messageGroupRecipient, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-message-group-recipient", messageGroupRecipient, deletedRows, setDeletedRows)
+    const deleteMessageGroupRecipientHandler = (messageGroupRecipient, onDelete) => {
+        navigate("modal-content", "delete-message-group-recipient", messageGroupRecipient, onDelete)
     }
 
     return (
         ! isEmpty(messageGroupRecipients) && 
         (
-        <div className="component-container">
-            <h1 className="content-header">Message Group Recipients</h1>
+        <Page title="Message Group Recipients">
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
             {! isEmpty(messageGroup) ? 
                 <div className="mt-3 w-100 d-flex justify-content-center">
@@ -147,7 +145,6 @@ const ListMessageGroupRecipients = ({messageGroup}) =>
                         mgr.group_name = mgr.message_group?.name
                         return mgr
                     })}>
-                        {/* {withOperationCellParameters(ShowRowCell, "showFunction", showMessageGroupRecipientHandler)} */}
                         {withOperationCellParameters(UpdateRowCell, "updateFunction", updateMessageGroupRecipientHandler)}
                         {withOperationCellParameters(DeleteRowCell, "deleteFunction", deleteMessageGroupRecipientHandler)}
                     </DataRows>
@@ -162,7 +159,7 @@ const ListMessageGroupRecipients = ({messageGroup}) =>
                     <PaginationInfo total={messageGroupRecipients.total} perPage={messageGroupRecipients.per_page}/>
                 </PaginationContainer>
             }
-        </div>
+        </Page>
         )
     )
 }

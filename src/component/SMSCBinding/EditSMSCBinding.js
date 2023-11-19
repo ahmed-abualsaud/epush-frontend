@@ -5,6 +5,7 @@ import { showAlert } from "../../utils/validator"
 import DropList from "../../layout/Shared/DropList"
 import { useEffect, useRef, useState } from "react"
 import { getElement } from "../../utils/dom"
+import Page from "../../page/Page"
 
 
 const EditSMSCBinding = ({ smscBinding }) => {
@@ -63,35 +64,33 @@ const EditSMSCBinding = ({ smscBinding }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header mb-5">Update New SMSC Binding</h1>
-
-            <div>
+        <Page title="Update New SMSC Binding">
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "40px"}}>Country: </div>
-                <div className="d-inline-flex justify-content-center mt-5" style={{width: "60%"}}>
+                <div className="d-inline-flex justify-content-center mt-5" style={{width: "55%"}}>
                     <DropList selectName={countries.filter(ct => ct.id === smscBinding.country.id)[0]?.name} options={countries.map(item => item.name)} onSelect={onSelectCountry}/>
                 </div>
-                <div className="d-inline-flex align-items-center p-5" style={{width: "20%", fontSize: "25px"}}>
+                <div className="d-inline-flex align-items-center p-5" style={{width: "25%", fontSize: "25px"}}>
                     Code = {isEmpty(selectedCountryID) ? countries.filter(c => c.id === smscBinding.country.id)[0]?.code : countries.filter(c => c.id === selectedCountryID)[0]?.code}
                 </div>
             </div>
 
-            <div>
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "40px"}}>Operator: </div>
-                <div className="d-inline-flex justify-content-center mt-5" style={{width: "60%"}}>
+                <div className="d-inline-flex justify-content-center mt-5" style={{width: "55%"}}>
                     <DropList selectName={operators.filter(o => o.id === smscBinding.operator.id)[0]?.name} options={operators.map(item => item.name)} onSelect={onSelectOperator}/>
                 </div>
-                <div className="d-inline-flex align-items-center p-5" style={{width: "20%", fontSize: "25px"}}>
+                <div className="d-inline-flex align-items-center p-5" style={{width: "25%", fontSize: "25px"}}>
                     Code = {isEmpty(selectedOperatorID) ? operators.filter(o => o.id === smscBinding.operator.id)[0]?.code : operators.filter(o => o.id === selectedOperatorID)[0]?.code}
                 </div>
             </div>
 
-            <div>
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "40px"}}>SMSC: </div>
-                <div className="d-inline-flex justify-content-center mt-5" style={{width: "60%"}}>
+                <div className="d-inline-flex justify-content-center mt-5" style={{width: "55%"}}>
                     <DropList selectName={smscs.filter(s => s.id === smscBinding.smsc.id)[0]?.name} options={smscs.map(item => item.name)} onSelect={onSelectSMSC}/>
                 </div>
-                <div className="d-inline-flex align-items-center p-5" style={{width: "20%", fontSize: "25px"}}>
+                <div className="d-inline-flex align-items-center p-5" style={{width: "25%", fontSize: "25px"}}>
                     Value = {isEmpty(selectedSMSCID) ? smscs.filter(s => s.id === smscBinding.smsc.id)[0]?.value : smscs.filter(s => s.id === selectedSMSCID)[0]?.value}
                 </div>
             </div>
@@ -103,9 +102,9 @@ const EditSMSCBinding = ({ smscBinding }) => {
             </div>
 
             <div className="button-container">
-                <button className="button" onClick={() => updateNewSMSCBinding()}>Update New SMSC Binding</button>
+                <button className="button" onClick={() => updateNewSMSCBinding()}>Update SMSC Binding</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

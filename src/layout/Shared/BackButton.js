@@ -1,6 +1,6 @@
-import '../../assets/style/component/back-button.css';
-import Button from "../../layout/Shared/Button"
+import Button from "./Button"
 import { useNavigate } from "react-router-dom"
+import '../../assets/style/component/back-button.css';
 
 const BackButton = () => {
 

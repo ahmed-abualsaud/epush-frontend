@@ -2,6 +2,7 @@ import useCoreApi from "../../api/useCoreApi"
 import { useEffect, useRef, useState } from "react"
 import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
 import { showAlert } from "../../utils/validator"
+import Page from "../../page/Page"
 
 const EditCountry = ({ country }) => {
 
@@ -46,8 +47,7 @@ const EditCountry = ({ country }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header mb-5">Country Information</h1>
+        <Page title="Country Information">
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -75,7 +75,7 @@ const EditCountry = ({ country }) => {
             <div className="button-container">
                 <button className="button" onClick={() => updateSpecificCountry()}>Update Country</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

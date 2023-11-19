@@ -4,6 +4,7 @@ import { showAlert, validate } from "../../utils/validator"
 import { getFormInputData } from "../../utils/dom"
 import { navigate } from "../../setup/navigator"
 import { isEmpty } from "../../utils/helper"
+import Page from "../../page/Page"
 
 const AddPricelist = () => {
 
@@ -33,21 +34,14 @@ const AddPricelist = () => {
     }
 
     return (
-        <div id="add-pricelist-form" className="component-container">
-            <h1 className="content-header mb-5">Add New Price</h1>
-
-            <Input id="add-pricelist-name" type="text" placeholder="Name" validrules="required">
-                <i className="input-icon fas fa-pen"></i>
-            </Input>
-
-            <Input id="add-pricelist-price" type="text" placeholder="Price" validrules="required">
-                <i className="input-icon uil uil-dollar-sign"></i>
-            </Input>
+        <Page id="add-pricelist-form" title="Add New Price">
+            <Input id="add-pricelist-name" type="text" icon="fas fa-pen" placeholder="Name" validrules="required"/>
+            <Input id="add-pricelist-price" type="text" icon="uil uil-dollar-sign" placeholder="Price" validrules="required"/>
 
             <div className="button-container">
                 <button className="button" onClick={() => addNewPricelist()}>Add New Price</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

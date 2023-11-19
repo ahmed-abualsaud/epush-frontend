@@ -1,15 +1,15 @@
 import useCoreApi from "../../api/useCoreApi";
 import { showAlert } from "../../utils/validator";
 
-const DeleteSMSCBinding = ({ smscBinding, deletedRows, setDeletedRows }) => {
+const DeleteSMSCBinding = ({ smscBinding, onDelete }) => {
 
     const { deleteSMSCBinding } = useCoreApi()
 
     const deleteEntity = async () => {
 
         if (await deleteSMSCBinding(smscBinding.id)) {
+            onDelete()
             showAlert("SMSC Binding Deleted Successfully")
-            setDeletedRows([...deletedRows, smscBinding.id])
         } else {
             showAlert("Delete SMSC Binding Failed")
         }

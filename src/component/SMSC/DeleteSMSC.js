@@ -1,15 +1,15 @@
 import useCoreApi from "../../api/useCoreApi";
 import { showAlert } from "../../utils/validator";
 
-const DeleteSMSC = ({ smsc, deletedRows, setDeletedRows }) => {
+const DeleteSMSC = ({ smsc, onDelete }) => {
 
     const { deleteSMSC } = useCoreApi()
 
     const deleteEntity = async () => {
 
         if (await deleteSMSC(smsc.id)) {
+            onDelete()
             showAlert("SMSC Deleted Successfully")
-            setDeletedRows([...deletedRows, smsc.id])
         } else {
             showAlert("Delete SMSC Failed")
         }

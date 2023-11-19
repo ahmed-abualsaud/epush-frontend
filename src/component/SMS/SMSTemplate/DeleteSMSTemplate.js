@@ -1,15 +1,15 @@
 import useSMSApi from "../../../api/useSMSApi";
 import { showAlert } from "../../../utils/validator";
 
-const DeleteSMSTemplate = ({ template, deletedRows, setDeletedRows }) => {
+const DeleteSMSTemplate = ({ template, onDelete }) => {
 
     const { deleteTemplate } = useSMSApi()
 
     const deleteEntity = async () => {
 
         if (await deleteTemplate(template.id)) {
+            onDelete()
             showAlert("SMS Template Deleted Successfully")
-            setDeletedRows([...deletedRows, template.id])
         } else {
             showAlert("Delete SMS Template Failed")
         }

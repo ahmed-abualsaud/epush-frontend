@@ -7,5 +7,5 @@
 }
 
 .nav-items a:hover {
-    background-color: #070020;
+    background-color: var(--secondary-color);
 }

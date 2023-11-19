@@ -37,14 +37,12 @@ const AddSMSSendingName = ({ template, handler }) => {
     }
 
     return (
-        <div className="component-container">
-            <h1 className="content-header mb-5">Finally, Add The SMS Name</h1>
+        <div>
+            <h1 style={{marginTop: "-25px"}} className="content-header mb-5">Finally, Add The SMS Name</h1>
 
-            <Input id="add-sms-name" type="text" placeholder="SMS Name" validrules="required">
-                <i className="input-icon fas fa-pen"></i>
-            </Input>
+            <Input id="add-sms-name" type="text" icon="fas fa-pen" placeholder="SMS Name" validrules="required"/>
 
-            <div className="my-5">
+            <div className="my-5 mx-2">
                 <div className="d-flex align-items-center">
                     <i style={{fontSize: "25px"}} class="fa-brands fa-first-order-alt"></i>
                     <div style={{fontSize: "35px", display: "inline-block", marginLeft: "10px"}}> Choose how the phone is entered!</div>

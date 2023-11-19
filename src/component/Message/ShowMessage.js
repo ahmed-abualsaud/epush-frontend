@@ -1,3 +1,4 @@
+import Page from "../../page/Page"
 import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
 
 const ShowMessage = ({ message }) => {
@@ -33,96 +34,89 @@ const ShowMessage = ({ message }) => {
 
 
     return (
-        <div>
-            <div className="component-container">
-                <h1 className="content-header">General Information</h1>
-                <table className="fl-table">
-                    <thead>
+        <Page title="General Information">
+            <table className="fl-table">
+                <thead>
+                    <tr>
+                        <th>Attribute Name</th>
+                        <th>Attribute Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {filteredColumns?.map((col) => (
                         <tr>
-                            <th>Attribute Name</th>
-                            <th>Attribute Value</th>
+                            <td style={{fontSize: "22px", whiteSpace: "no-wrap"}}>{snakeToBeautifulCase(col)}</td>
+                            <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof message[col] === "boolean"? message[col] ? "Yes" : "No" : message[col] ?? "NULL"}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {filteredColumns?.map((col) => (
+                    ))}
+                    <tr key="last-row">
+                        <td className="last-row" colSpan={2}></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h1 className="content-header">Recipients Information</h1>
+            {isEmpty(message['recipients'])? <div className="no-data">Message has no recipients</div>:
+                <div>
+                    <div className="d-flex justify-content-center m-3" style={{fontSize: "20px"}}>Total Number of Recipients = {message['recipients'].length}</div>
+                    <table className="fl-table">
+                        <thead>
                             <tr>
-                                <td style={{fontSize: "22px"}}>{col}</td>
-                                <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof message[col] === "boolean"? message[col] ? "Yes" : "No" : message[col] ?? "NULL"}</td>
+                                {recipientsColumns.map(recipientColumn =>
+                                    <th>{snakeToBeautifulCase(recipientColumn)}</th>
+                                )}
                             </tr>
-                        ))}
-                        <tr key="last-row">
-                            <td className="last-row" colSpan={2}></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div className="component-container mt-5">
-                <h1 className="content-header">Recipients Information</h1>
-                {isEmpty(message['recipients'])? <div className="no-data">Message has no recipients</div>:
-                    <div>
-                        <div className="d-flex justify-content-center m-3" style={{fontSize: "20px"}}>Total Number of Recipients = {message['recipients'].length}</div>
-                        <table className="fl-table">
-                            <thead>
+                        </thead>
+                        <tbody>
+                            {message['recipients'].map(recipient =>
                                 <tr>
-                                    {recipientsColumns.map(recipientColumn =>
-                                        <th>{snakeToBeautifulCase(recipientColumn)}</th>
-                                    )}
+                                    {recipientsColumns?.map((col) => {
+                                        if (col === "number") {
+                                            return <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{recipient?.message_group_recipient?.number ?? "NULL"}</td>
+                                        } else if (col === "attributes") {
+                                            return <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{recipient?.message_group_recipient?.attributes ?? "NULL"}</td>
+                                        } else {
+                                            return <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof recipient[col] === "boolean"? recipient[col] ? "Yes" : "No" : recipient[col] ?? "NULL"}</td>
+                                        }
+                                    })}
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {message['recipients'].map(recipient =>
-                                    <tr>
-                                        {recipientsColumns?.map((col) => {
-                                            if (col === "number") {
-                                                return <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{recipient?.message_group_recipient?.number ?? "NULL"}</td>
-                                            } else if (col === "attributes") {
-                                                return <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{recipient?.message_group_recipient?.attributes ?? "NULL"}</td>
-                                            } else {
-                                                return <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof recipient[col] === "boolean"? recipient[col] ? "Yes" : "No" : recipient[col] ?? "NULL"}</td>
-                                            }
-                                        })}
-                                    </tr>
-                                )}
-                                <tr key="last-row">
-                                    <td className="last-row" colSpan={recipientsColumns.length}></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                }
-            </div>
+                            )}
+                            <tr key="last-row">
+                                <td className="last-row" colSpan={recipientsColumns.length}></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            }
 
-            <div className="component-container mt-5">
-                <h1 className="content-header">Segments Information</h1>
-                {isEmpty(message['segments'])? <div className="no-data">Message has no segments</div>:
-                    <div>
-                        <div className="d-flex justify-content-center m-3" style={{fontSize: "20px"}}>Total Number of Segments = {message['segments'].length}</div>
-                        <table className="fl-table">
-                            <thead>
-                                <tr>
-                                    {segmentsColumns.map(segmentColumn =>
-                                        <th>{snakeToBeautifulCase(segmentColumn)}</th>
-                                    )}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {message['segments'].map(segment =>
-                                    <tr>
-                                        {segmentsColumns?.map((col) => (
-                                            <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof segment[col] === "boolean"? segment[col] ? "Yes" : "No" : segment[col] ?? "NULL"}</td>
-                                        ))}
-                                    </tr>
+            <h1 className="content-header">Segments Information</h1>
+            {isEmpty(message['segments'])? <div className="no-data">Message has no segments</div>:
+                <div>
+                    <div className="d-flex justify-content-center m-3" style={{fontSize: "20px"}}>Total Number of Segments = {message['segments'].length}</div>
+                    <table className="fl-table">
+                        <thead>
+                            <tr>
+                                {segmentsColumns.map(segmentColumn =>
+                                    <th>{snakeToBeautifulCase(segmentColumn)}</th>
                                 )}
-                                <tr key="last-row">
-                                    <td className="last-row" colSpan={segmentsColumns.length}></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {message['segments'].map(segment =>
+                                <tr>
+                                    {segmentsColumns?.map((col) => (
+                                        <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof segment[col] === "boolean"? segment[col] ? "Yes" : "No" : segment[col] ?? "NULL"}</td>
+                                    ))}
                                 </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                }
-            </div>
-        </div>
+                            )}
+                            <tr key="last-row">
+                                <td className="last-row" colSpan={segmentsColumns.length}></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </Page>
     )
 }
 

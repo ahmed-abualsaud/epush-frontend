@@ -23,6 +23,10 @@ import PaginationContainer from "../../layout/Pagination/PaginationContainer"
 import HeadRow from "../../layout/Table/HeadRow"
 import TableHead from "../../layout/Table/TableHead"
 import Table from "../../layout/Table/Table"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import { encodeString } from "../../utils/strUtils"
+import useSearchApi from "../../api/useSearchApi"
+import Page from "../../page/Page"
 
 
 const ListOperators = () =>
@@ -41,20 +45,25 @@ const ListOperators = () =>
     const [operators, setOperators] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
+    const { search } = useSearchApi()
     const { listOperators, searchOperator } = useCoreApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
-        let clt = []
+        let opr = []
         if (isEmpty(searchParams)) {
-            clt = await listOperators(perPage)
-        } else {
-            clt = await searchOperator(perPage, searchParams.column, searchParams.value)
+            opr = await listOperators(perPage)
+        }
+        else if (searchParams.hasOwnProperty('criteria')) {
+            opr = await search(searchParams.enti, searchParams.crit, perPage)
+        }
+        else {
+            opr = await searchOperator(perPage, searchParams.column, searchParams.value)
         }
          
-        setOperators(clt)
-        setColumns(clt?.data[0] ? Object.keys(clt?.data[0]).filter(
+        setOperators(opr)
+        setColumns(opr?.data[0] ? Object.keys(opr?.data[0]).filter(
             (column) => !excludedColumns.includes(column)
         ) : [])
     }
@@ -63,33 +72,41 @@ const ListOperators = () =>
     }, [])
 
     const handleGetPage = async (pageUrl) => {
-        let clt = {}
+        let opr = {}
         if (isEmpty(searchParams)) {
-            clt = await sendGetRequest(pageUrl)
+            opr = await sendGetRequest(pageUrl)
         } else {
             if (! pageUrl.includes("search")) {
                 let url  = pageUrl.split("?")
                 pageUrl = url[0]+"/search?"+url[1]
             }
-            clt = await sendPostRequest(pageUrl, searchParams)
+            opr = await sendPostRequest(pageUrl, searchParams)
         }
-        if (! isEmpty(clt)) setOperators(clt)
+        if (! isEmpty(opr)) setOperators(opr)
     }
 
     const searchEntityColumn = async (column, value) => {
-        const clt = await searchOperator(10, column, value)
-        if (clt) setOperators(clt)
+        const opr = await searchOperator(10, column, value)
+        if (opr) setOperators(opr)
         setSearchParams({column: column, value: value})
     }
 
+    const onSearch = async (criteria) => {
+        const opr = await search("operator", criteria, 10)
+        if (opr) setOperators(opr)
+        setSearchParams({entity: encodeString("operator"), criteria: encodeString(criteria), enti: "operator", crit: criteria})
+    }
+
     const onCheckShowAll = async () => {
-        let clt = []
+        let opr = []
         if (isEmpty(searchParams)) {
-            clt = await listOperators(1000000000000)
+            opr = await listOperators(1000000000000)
+        } else if (searchParams.hasOwnProperty('criteria')) {
+            opr = await search(searchParams.enti, searchParams.crit, 1000000000000)
         } else {
-            clt = await searchOperator(1000000000000, searchParams.column, searchParams.value)
+            opr = await searchOperator(1000000000000, searchParams.column, searchParams.value)
         }
-        setOperators(clt)
+        setOperators(opr)
     }
 
     const addOperatorHandler = () => {
@@ -104,15 +121,15 @@ const ListOperators = () =>
         navigate("content", "edit-operator", operator)
     }
 
-    const deleteOperatorHandler = (operator, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-operator", operator, deletedRows, setDeletedRows)
+    const deleteOperatorHandler = (operator, onDelete) => {
+        navigate("modal-content", "delete-operator", operator, onDelete)
     }
 
     return (
         ! isEmpty(operators) && 
         (
-        <div className="component-container">
-            <h1 className="content-header">All Operators</h1>
+        <Page title="Operators">
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
@@ -141,7 +158,7 @@ const ListOperators = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={operators.total} perPage={operators.per_page}/>
             </PaginationContainer>
-        </div>
+        </Page>
         )
     )
 }

@@ -19,7 +19,7 @@ const ListUnreadNotifications = ({ userID, expanded, countUnreadNotifications })
         const fetchData = async () => {
             if (expanded) {
                 const unrdnotfs = await getUserUnreadNotifications(userID);      
-                countUnreadNotifications(unrdnotfs.length);
+                countUnreadNotifications(unrdnotfs?.length);
                 if (unrdnotfs) setUnreadNotifications(unrdnotfs);
             } else {
                 updateUserNotifications(userID, { read: true })

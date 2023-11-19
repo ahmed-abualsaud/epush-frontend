@@ -23,6 +23,9 @@ import PaginationContainer from "../../layout/Pagination/PaginationContainer"
 import PaginationInfo from "../../layout/Pagination/PaginationInfo"
 import { navigate } from "../../setup/navigator"
 import TableHead from "../../layout/Table/TableHead"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import useSearchApi from "../../api/useSearchApi"
+import { encodeString } from "../../utils/strUtils"
 
 const ListUsers = () =>
 {
@@ -68,6 +71,7 @@ const ListUsers = () =>
     const [columns, setColumns] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
+    const { search } = useSearchApi()
     const { listUsers, searchUser } = useAuthApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
@@ -76,7 +80,11 @@ const ListUsers = () =>
         let usr= []
         if (isEmpty(searchParams)) {
             usr = await listUsers(perPage)
-        } else {
+        }
+        else if (searchParams.hasOwnProperty('criteria')) {
+            usr = await search(searchParams.enti, searchParams.crit, perPage)
+        }
+        else {
             usr = await searchUser(perPage, searchParams.column, searchParams.value)
         }
 
@@ -109,10 +117,18 @@ const ListUsers = () =>
         setSearchParams({column: column, value: value})
     }
 
+    const onSearch = async (criteria) => {
+        const usr = await search("user", criteria, 10)
+        if (usr) setUsers(usr)
+        setSearchParams({entity: encodeString("user"), criteria: encodeString(criteria), enti: "user", crit: criteria})
+    }
+
     const onCheckShowAll = async () => {
         let usr = []
         if (isEmpty(searchParams)) {
             usr = await listUsers(1000000000000)
+        } else if (searchParams.hasOwnProperty('criteria')) {
+            usr = await search(searchParams.enti, searchParams.crit, 1000000000000)
         } else {
             usr = await searchUser(1000000000000, searchParams.column, searchParams.value)
         }
@@ -133,14 +149,15 @@ const ListUsers = () =>
         navigate("content", "edit-user", user)
     }
 
-    const deleteUserHandler = (user, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-user", user, deletedRows, setDeletedRows)
+    const deleteUserHandler = (user, onDelete) => {
+        navigate("modal-content", "delete-user", user, onDelete)
     }
 
     return (
         ! isEmpty(users) && 
         (
         <>
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>

@@ -4,6 +4,7 @@ import { showAlert, validate } from "../../utils/validator"
 import { getFormInputData } from "../../utils/dom"
 import { navigate } from "../../setup/navigator"
 import { isEmpty } from "../../utils/helper"
+import Page from "../../page/Page"
 
 const AddOperator = () => {
 
@@ -33,21 +34,14 @@ const AddOperator = () => {
     }
 
     return (
-        <div id="add-operator-form" className="component-container">
-            <h1 className="content-header mb-5">Add New Operator</h1>
-
-            <Input id="add-operator-name" type="text" placeholder="Name" validrules="required">
-                <i className="input-icon fas fa-pen"></i>
-            </Input>
-
-            <Input id="add-operator-code" type="text" placeholder="Code" validrules="required">
-                <i className="input-icon fas fa-hashtag"></i>
-            </Input>
+        <Page id="add-operator-form" title="Add New Operator">
+            <Input id="add-operator-name" type="text" icon="fas fa-pen" placeholder="Operator Name" validrules="required"/>
+            <Input id="add-operator-code" type="text" icon="fas fa-hashtag" placeholder="Operator Code" validrules="required"/>
 
             <div className="button-container">
                 <button className="button" onClick={() => addNewOperator()}>Add New Operator</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

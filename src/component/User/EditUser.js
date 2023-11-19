@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getElement, updateElement } from '../../utils/dom'
 import { isEmpty, snakeToBeautifulCase } from '../../utils/helper'
 import { updateAuthUser } from '../../container/redux/slice/authSlice'
+import Avatar from '../../layout/Shared/Avatar'
+import Page from '../../page/Page'
 
 
 const EditUser = ({ user }) => {
@@ -16,16 +18,16 @@ const EditUser = ({ user }) => {
       (column) => !excludedColumns.includes(column)
     )
 
-    const authUser = useSelector((state) => state.auth.user)?.user
+    const authUser = useSelector(state => state.auth.user)?.user
 
     const dispatch = useDispatch()
+    const [avatar, setAvatar] = useState({})
     const [userRoles, setUserRoles] = useState([])
     const [currentUser, setCurrentUser] = useState([])
     const [userPermissions, setUserPermissions] = useState([])
     const [rolesPermissions, setRolesPermissions] = useState([])
     const [unassignedRolesID, setUnassignedRolesID] = useState([])
     const [unassignedPermissionsID, setUnassignedPermissionsID] = useState([])
-    const [imagePreview, setImagePreview] = useState(user["avatar"] ?? "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg");
     const { updateUser, getUserRoles, unassignUserRoles, unassignUserPermissions, getUserPermissions, getRolePermissions } =  useAuthApi()
 
     const setupLock = useRef(true)
@@ -180,7 +182,7 @@ const EditUser = ({ user }) => {
             let elements = document.querySelectorAll(removedCards.join(", "))
             for (let i = 0; i < elements.length; i++) {
                 if (elements[i].parentNode && elements[i].parentNode.contains(elements[i])) {
-                    elements[i].parentNode.removeChild(elements[i])
+                    elements[i].parentNode?.removeChild(elements[i])
                 }
             }
             setUnassignedRolesID([])
@@ -201,7 +203,7 @@ const EditUser = ({ user }) => {
             let elements = document.querySelectorAll(removedCards.join(", "))
             for (let i = 0; i < elements.length; i++) {
                 if (elements[i].parentNode && elements[i].parentNode.contains(elements[i])) {
-                    elements[i].parentNode.removeChild(elements[i])
+                    elements[i].parentNode?.removeChild(elements[i])
                 }
             }
             setUnassignedPermissionsID([])
@@ -209,7 +211,6 @@ const EditUser = ({ user }) => {
     }
 
     const updateUserAvatar = async () => {
-        let avatar = getElement("edit-avatar-input").files[0]
         if (! isEmpty(avatar)) {
             let data = new FormData()
             data.append("avatar", avatar)
@@ -224,13 +225,8 @@ const EditUser = ({ user }) => {
         }
     }
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            setImagePreview(e.target.result);
-        };
-        reader.readAsDataURL(file);
+    const onSelectAvatar = (avatar) => {
+        setAvatar(avatar)
     }
 
 
@@ -238,19 +234,16 @@ const EditUser = ({ user }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header">User Information</h1>
+        <Page title="User Information">
             <div className="user-info">
                 <div className="user-avatar-password">
-                    <div className="user-image">
-                        <div className="avatar-hint">Click on your avatar if you want to change it!</div>
-                        <div className="image-wrapper">
-                            <img src={ imagePreview } alt="Avatar" />
-                            <input id="edit-avatar-input" type="file" accept="image/*" onChange={handleImageChange}/>
-                            <i className="uil uil-camera-plus"></i>
+                    <div>
+                        <Avatar imageUrl={user.avatar} onSelectAvatar={onSelectAvatar}/>
+                        <div className="w-100 d-flex justify-content-center">
+                                <button className="button" onClick={() => updateUserAvatar()}>Update Avatar</button>
                         </div>
-                        <button className="button" onClick={() => updateUserAvatar()}>Update Avatar</button>
                     </div>
+
                     <div className="user-generate-password">
                         <div className="password-hint">Click the button to create a new password for this user and update their old password with the new one.</div>
                         <a href="#popup">
@@ -394,7 +387,7 @@ const EditUser = ({ user }) => {
                     <button className="button" onClick={() => updateUserPermissions()}>Update User Permissions</button>
                 </div>
             </div>
-        </div>
+        </Page>
     )
 }
 

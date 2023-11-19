@@ -3,14 +3,11 @@ import { useEffect, useRef, useState } from "react"
 import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
 import { showAlert } from "../../utils/validator"
 import ListMessageGroupRecipients from "../MessageGroupRecipient/ListMessageGroupRecipients"
+import Page from "../../page/Page"
 
 const EditMessageGroup = ({ messageGroup }) => {
 
-    const excludedColumns = ["id", "created_at", "updated_at", "recipients", "client", "company_name", "user_id"]
-
-    const filteredColumns = Object.keys(messageGroup).filter(
-        (column) => !excludedColumns.includes(column)
-    )
+    const filteredColumns = ["name"]
 
     const { updateMessageGroup } = useCoreApi()
     const [currentMessageGroup, setCurrentMessageGroup] = useState([])
@@ -47,8 +44,7 @@ const EditMessageGroup = ({ messageGroup }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header mb-5">Message Group Information</h1>
+        <Page title="Message Group Information">
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -78,7 +74,7 @@ const EditMessageGroup = ({ messageGroup }) => {
             </div>
 
             <ListMessageGroupRecipients messageGroup={messageGroup}/>
-        </div>
+        </Page>
     )
 }
 

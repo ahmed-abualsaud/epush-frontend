@@ -13,25 +13,39 @@ import withOperationCellParameters from "../../HOC/withOperationCellParameters"
 import ShowRowCell from "../../layout/TableOperation/ShowRowCell"
 import UpdateRowCell from "../../layout/TableOperation/UpdateRowCell"
 import DeleteRowCell from "../../layout/TableOperation/DeleteRowCell"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import useSearchApi from "../../api/useSearchApi"
+import Page from "../../page/Page"
+import Export from "../../layout/TableOperation/Export"
 
 
 const ListBusinessFields = () => {
 
+    const excludedColumns = [
+        "id",
+        "updated_at",
+    ]
 
     const [columns, setColumns] = useState([])
     const [businessFields, setBusinessFields] = useState([])
-    const [deletedRows, setDeletedRows] = useState([])
+
+    const { search } = useSearchApi()
     const { listBusinessFields } = useCoreApi()
 
     const setupLock = useRef(true)
     const setup = async () => {
-        const prclst = await listBusinessFields()
-        if (prclst) setBusinessFields(prclst)
-        setColumns(prclst[0] ? Object.keys(prclst[0]) : [])
+        const bsnfld = await listBusinessFields()
+        if (bsnfld) setBusinessFields(bsnfld)
+        setColumns((bsnfld[0] ? Object.keys(bsnfld[0]) : []).filter(column => ! excludedColumns.includes(column)))
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup() }
     }, [])
+
+    const onSearch = async (criteria) => {
+        const bsnfld = await search("business_field", criteria)
+        setBusinessFields(bsnfld)
+    }
 
     const addBusinessFieldHandler = () => {
       navigate("content", "add-business-field")
@@ -45,13 +59,16 @@ const ListBusinessFields = () => {
         navigate("content", "edit-business-field", businessField)
     }
 
-    const deleteBusinessFieldHandler = (businessField, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-business-field", businessField, deletedRows, setDeletedRows)
+    const deleteBusinessFieldHandler = (businessField, onDelete) => {
+        navigate("modal-content", "delete-business-field", businessField, onDelete)
     }
 
     return (
-        <div className="component-container">
-            <h1 className="content-header">All Business Field</h1>
+        <Page title="Business Field">
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
+            <div style={{display: "flex", justifyContent: "center"}}>
+                <Export columns={columns} rows={businessFields}/>
+            </div>
             <Table>
                 <TableHead>
                     <HeadRow>
@@ -69,7 +86,7 @@ const ListBusinessFields = () => {
                     </DataRows>}
                 </TableBody>
             </Table>
-        </div>
+        </Page>
     )
 }
 

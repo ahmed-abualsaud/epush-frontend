@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     font-family: 'lexend';
-    border-bottom: 1px solid #fff;
+    border-bottom: 1px solid var(--boundry-color);
 }
 
 .nav-item > a {

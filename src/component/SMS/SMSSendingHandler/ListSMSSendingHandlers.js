@@ -97,15 +97,14 @@ const ListSMSSendingHandlers = () =>
         navigate("sms-management", "add-sms-sending-handler")
     }
 
-    const deleteSMSSendingHandlerHandler = (smsSendingHandler, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-sms-sending-handler", smsSendingHandler, deletedRows, setDeletedRows)
+    const deleteSMSSendingHandlerHandler = (smsSendingHandler, onDelete) => {
+        navigate("modal-content", "delete-sms-sending-handler", smsSendingHandler, onDelete)
     }
 
     return (
         ! isEmpty(smsSendingHandlers) && 
         (
-        <div className="component-container">
-            <h1 className="content-header">All SMSs</h1>
+        <div>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>

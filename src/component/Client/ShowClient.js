@@ -1,13 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import useCoreApi from "../../api/useCoreApi";
-import { isEmpty } from "../../utils/helper";
+import { isEmpty, snakeToBeautifulCase } from "../../utils/helper";
+import Avatar from "../../layout/Shared/Avatar";
+import useSearchApi from "../../api/useSearchApi";
+import Table from "../../layout/Table/Table";
+import TableHead from "../../layout/Table/TableHead";
+import HeadRow from "../../layout/Table/HeadRow";
+import HeadCells from "../../layout/Table/HeadCells";
+import TableBody from "../../layout/Table/TableBody";
+import DataRows from "../../layout/Table/DataRows";
+import Page from "../../page/Page";
 
 const ShowClient = ({ client }) => {
 
     const [currentClient, setCurrentClient] = useState([])
     const [currentClientOrders, setCurrentClientOrders] = useState([])
-    const [currentClientOrdersColumns, setCurrentClientOrdersColumns] = useState([])
-    const { getClient, getClientOrders } = useCoreApi()
+    const currentClientOrdersColumns = ["credit", "sales_name", "pricelist", "payment_method", "collection_date", "created_at"]
+
+    const { search } = useSearchApi()
+    const { getClient } = useCoreApi()
 
     const filteredColumns = client ? Object.keys(client) : []
 
@@ -16,10 +27,9 @@ const ShowClient = ({ client }) => {
         const clt = await getClient(client.user_id)
         if (clt) setCurrentClient(clt)
 
-        const cltord = await getClientOrders(client.user_id)
+        const cltord = await search("order", "user_id = " + client.user_id)
         if (! isEmpty(cltord)) {
             setCurrentClientOrders(cltord)
-            setCurrentClientOrdersColumns(Object.keys(cltord[0]).filter(ord => ! ["updated_at"].includes(ord)))
         }
     }
     useEffect(() => {
@@ -29,13 +39,9 @@ const ShowClient = ({ client }) => {
 
     return (<>
 
-        <div className="component-container mb-5">
-            <h1 className="content-header">General Information</h1>
-            <div className="user-image">
-                <div className="image-wrapper">
-                    <img src={currentClient.avatar ?? "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg"} alt="Avatar" />
-                </div>
-            </div>
+        <Page title="General Information">
+            <Avatar imageUrl={currentClient.avatar}/>
+
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -48,7 +54,7 @@ const ShowClient = ({ client }) => {
                         col === "websites" ?
                         currentClient.websites?.map((website) => (
                             <tr>
-                                <td style={{fontSize: "22px"}}>{col}</td>
+                                <td style={{fontSize: "22px", whiteSpace: "no-wrap"}}>{snakeToBeautifulCase(col)}</td>
                                 <td style={{fontSize: "22px"}}>{ website.url }</td>
                             </tr>
                         )) :
@@ -63,7 +69,7 @@ const ShowClient = ({ client }) => {
                             <td style={{fontSize: "22px"}}>{ currentClient.businessfield?.name ?? "NULL" }</td>
                         </tr>:
                         <tr>
-                            <td style={{fontSize: "22px"}}>{col}</td>
+                            <td style={{fontSize: "22px", whiteSpace: "no-wrap"}}>{snakeToBeautifulCase(col)}</td>
                             <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof currentClient[col] === "boolean"? currentClient[col] ? "Yes" : "No" : currentClient[col] ?? "NULL"}</td>
                         </tr>
                     ))}
@@ -72,33 +78,26 @@ const ShowClient = ({ client }) => {
                     </tr>
                 </tbody>
             </table>
-        </div>
 
-        <div className="component-container my-5">
-            <h1 className="content-header">Client Orders</h1>
-            {isEmpty(currentClientOrders) ? <div className="no-data"> Client has no Orders! </div> :
-            <table className="fl-table">
-                <thead>
-                    <tr>
-                        {currentClientOrdersColumns.map((column) => (
-                            <th style={{fontSize: "22px"}}>{column}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {currentClientOrders.map(currentClientOrder => (
-                        <tr>
-                            {currentClientOrdersColumns.map((column) => (
-                                <td style={{fontSize: "22px"}} key={ column + "-show-user-info" }>{ typeof currentClientOrder[column] === "boolean"? currentClientOrder[column] ? "Yes" : "No" : currentClientOrder[column] ?? "NULL"}</td>
-                            ))}
-                        </tr>
-                    ))}
-                    <tr key="last-row">
-                        <td className="last-row" colSpan={currentClientOrdersColumns.length}></td>
-                    </tr>
-                </tbody>
-            </table>}
-        </div>
+            <div className="my-5">
+                <h1 className="content-header">Client Orders</h1>
+                {isEmpty(currentClientOrders) ? <div className="no-data"> Client has no Orders! </div> :
+                <Table>
+                    <TableHead>
+                        <HeadRow>
+                            <HeadCells columns={currentClientOrdersColumns}/>
+                        </HeadRow>
+                    </TableHead>
+                    <TableBody>
+                        <DataRows columns={currentClientOrdersColumns} rows={currentClientOrders.map(order => {
+                            order.pricelist = order.pricelist_name
+                            order.payment_method = order.payment_method_name
+                            return order
+                        })}/>
+                    </TableBody>
+                </Table>}
+            </div>
+        </Page>
     </>)
 }
 

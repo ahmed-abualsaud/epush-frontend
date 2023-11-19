@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import useSettingsApi from "../../api/useSettingsApi";
+import { snakeToBeautifulCase } from "../../utils/helper";
+import Page from "../../page/Page";
 
 const ShowSettings = ({ settings }) => {
 
@@ -19,8 +21,7 @@ const ShowSettings = ({ settings }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header">General Information</h1>
+        <Page title="General Information">
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -31,7 +32,7 @@ const ShowSettings = ({ settings }) => {
                 <tbody>
                     {filteredColumns.map((col) => (
                         <tr>
-                            <td style={{fontSize: "22px"}}>{col}</td>
+                            <td style={{fontSize: "22px", whiteSpace: "no-wrap"}}>{snakeToBeautifulCase(col)}</td>
                             <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof currentSettings[col] === "boolean"? currentSettings[col] ? "Yes" : "No" : currentSettings[col] ?? "NULL"}</td>
                         </tr>
                     ))}
@@ -40,7 +41,7 @@ const ShowSettings = ({ settings }) => {
                     </tr>
                 </tbody>
             </table>
-        </div>
+        </Page>
     )
 }
 

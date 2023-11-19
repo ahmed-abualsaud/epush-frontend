@@ -1,7 +1,7 @@
 import '../../../assets/style/component/mail-template.css';
 import { navigate } from '../../../setup/navigator';
 
-const MailTemplate = ({ template, handler, deletedRows, setDeletedRows}) => {
+const MailTemplate = ({ template, handler, onDelete}) => {
 
     return (
         <div className="mail-template-container">
@@ -16,7 +16,7 @@ const MailTemplate = ({ template, handler, deletedRows, setDeletedRows}) => {
                 <a 
                     className="mail-template-delete" 
                     href="#popup" 
-                    onClick={() => navigate("modal-content", "delete-mail-template", template, deletedRows, setDeletedRows)}
+                    onClick={() => navigate("modal-content", "delete-mail-template", template, onDelete)}
                 ><i className="fas fa-xmark"></i></a>
             </div>
             <div className="mail-template-subject">Subject: <span style={{display: "inline-block", marginLeft: "10px", color: "#063F30"}}>{template.subject}</span></div>

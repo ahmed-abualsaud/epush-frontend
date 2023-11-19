@@ -6,15 +6,19 @@ import { showAlert } from "../../utils/validator"
 import { useEffect, useRef, useState } from "react"
 import ItemsList from "../../layout/List/ItemsList"
 import useSettingsApi from "../../api/useSettingsApi"
-import { findSimilarWords } from "../../utils/strUtils"
+import { findSimilarWords, randomString } from "../../utils/strUtils"
 import { navigate, render } from "../../setup/navigator"
 import DateTimeButton from "../../layout/Shared/DateTimeButton"
-import { generateMessagesFromRecipients } from "../../utils/message"
+import { generateMessagesFromRecipients, messageLanguageFilter } from "../../utils/message"
 import ParametrizedTextArea from "../../layout/Shared/ParametrizedTextArea"
-import { isEmpty, randomString, splitStringByLength, stippize } from "../../utils/helper"
+import { getDatetimeString, isEmpty, makeArrayUnique, splitStringByLength, startsWithAny, stippize } from "../../utils/helper"
+import { useSelector } from "react-redux"
+import Page from "../../page/Page"
 
 
-const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
+const AddMessageSegments = ({ sender,senderConnections, order, language, groupRecipients }) => {
+
+    const user = useSelector(state => state.auth.user)
 
     const { addMessage, bulkAddMessages, listMessageGroups, listMessageFilters } = useCoreApi()
 
@@ -24,15 +28,25 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
     const [isOldGroups, setIsOldGroups] = useState([])
     const [messageLength, setMessageLength] = useState(0)
     const [parameterized, setParameterized] = useState(false)
+    const [validRecipients, setValidRecipients] = useState([])
     const [messageSegments, setMessageSegments] = useState([])
     const [blacklistedWords, setBlacklistedWords] = useState([])
+    const [invalidRecipients, setInvalidRecipients] = useState([])
     const [maxNumOfSegments, setMaxNumOfSegments] = useState(null)
     const [pushButtonEnabled, setPushButtonEnabled] = useState(true)
     const [wordFilterThreshold, setWordFilterThreshold] = useState(null)
     const [scheduleDate, setScheduleDate] = useState("----:--:-- 00:00:00")
     const [messageRecipients, setMessageRecipients] = useState(groupRecipients)
     const [messageApprovementLimit, setMessageApprovementLimit] = useState(null)
+    const [validGroupRecipients, setValidGroupRecipients] = useState(groupRecipients)
     const [parameterizedMessageSegments, setParameterizedMessageSegments] = useState([])
+
+    const [prefixes, setPrefixes] = useState(makeArrayUnique(senderConnections.map(sc => ({
+        name: sc.smsc.country.name + ", " + sc.smsc.operator.name, 
+        code: sc.smsc.country.code + sc.smsc.operator.code,
+        recipients: []
+    })), "name"))
+
 
     const setupLock = useRef(true)
     const setup = async () => {
@@ -55,6 +69,39 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
             showAlert("Maximum number of segments exceeded")
         }
     }, [messageSegments, maxNumOfSegments])
+
+    useEffect(() => {
+        const valRecip = []
+        const invRecip = []
+        const allowedPrefixes = prefixes.map(px => px.code)
+        message.messages = message.messages?.filter(msg => startsWithAny(msg.title, allowedPrefixes))
+        const valRecipGrp = messageRecipients.map(msgRcip => ({name: msgRcip.name, recipients: msgRcip.recipients.filter(recip => startsWithAny(recip.number, allowedPrefixes))}))
+        setMessage(message)
+        setValidGroupRecipients(valRecipGrp)
+
+        messageRecipients.forEach(gr => {
+            const recipients = gr.recipients
+
+            recipients.forEach(recipient => {
+                if (startsWithAny(recipient.number, allowedPrefixes)) {
+                    valRecip.push(recipient)
+                } else {
+                    invRecip.push(recipient)
+                }
+            })
+
+            prefixes.forEach(prefix => {
+                const matchingRecipients = recipients.filter(
+                    recipient => startsWithAny(recipient.number, [prefix.code])
+                )
+                prefix.recipients.push(...matchingRecipients)
+            })
+        })
+
+        setPrefixes(prefixes)
+        setValidRecipients(valRecip)
+        setInvalidRecipients(invRecip)
+    }, [messageRecipients])
 
     const getNumberOfRecipients = () => {
         let numberOfRecipients = 0
@@ -125,8 +172,23 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
             return
         }
 
+        if (! isEmpty(invalidRecipients)) {
+            render("modal-content", "invalid-recipients-modal", invalidRecipients, push)
+            getElement("censored-words-popup").click()
+            return
+        }
+
+        push()
+    }
+
+    const push = async () => {
         let msg = []
-        
+
+        if (isEmpty(validRecipients)) {
+            showAlert("No valid recipients")
+            return
+        }
+
         if (parameterized) {
             msg = await bulkAddMessages({
                 sender_id: sender.id,
@@ -135,7 +197,7 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
                 message_language_id: language.id,
                 content: message,
                 scheduled_at: scheduleDate,
-                group_recipients: messageRecipients.map(messageRecipient => {messageRecipient.user_id = sender.user_id; return messageRecipient}),
+                group_recipients: validGroupRecipients.map(messageRecipient => {messageRecipient.user_id = sender.user_id; return messageRecipient}),
                 segments: parameterizedMessageSegments
             })
         } 
@@ -143,7 +205,7 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
 
             let segments = []
             let msgSegments = []
-            let messages = generateMessagesFromRecipients(message, getRecipientsFromGroupRecipients())
+            let messages = generateMessagesFromRecipients(message, validRecipients)
 
             for (let i = 0; i < messages.length; i++) {
                 msgSegments = getMessageSegments(messages[i].content).map((segment, index) => {return {number: index + 1, content: segment}})
@@ -158,7 +220,7 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
                 message_language_id: language.id,
                 content: {content: message, messages: messages},
                 scheduled_at: scheduleDate,
-                group_recipients: messageRecipients.map(messageRecipient => {messageRecipient.user_id = sender.user_id; return messageRecipient}),
+                group_recipients: validGroupRecipients.map(messageRecipient => {messageRecipient.user_id = sender.user_id; return messageRecipient}),
                 segments: segments
             })
         }
@@ -170,7 +232,7 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
                 message_language_id: language.id,
                 content: message,
                 scheduled_at: scheduleDate,
-                group_recipients: messageRecipients.map(messageRecipient => {messageRecipient.user_id = sender.user_id; return messageRecipient}),
+                group_recipients: validGroupRecipients.map(messageRecipient => {messageRecipient.user_id = sender.user_id; return messageRecipient}),
                 segments: messageSegments.map((messageSegment, index) => {return {number: index + 1, content: messageSegment}})
             })
         }
@@ -183,35 +245,30 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
         }
     }
 
-    const getRecipientsFromGroupRecipients = () => {
-        let grprcp = []
-        messageRecipients.forEach(msgrcp => {
-            grprcp.push(...msgrcp.recipients)
-        })
-        return grprcp
-    }
-
     const getScheduleDate = (scheduleDate) => {
         setScheduleDate(scheduleDate)
     }
 
     const getCurrentDate = () => {
-        const userDate = new Date()
-        const timezoneOffset = userDate.getTimezoneOffset() * 60000
-        const localDate = new Date(userDate.getTime() - timezoneOffset)
-        const selectedDateTime = localDate.toISOString().replace("T", " ").slice(0, 19)
-        setScheduleDate(selectedDateTime)
+        setScheduleDate(getDatetimeString())
     }
 
+    const showRecipients = (recipients) => {
+        render("modal-content", "items-list", recipients.map(recipient => recipient.number))
+        getElement("censored-words-popup").click()
+    }
+
+
     return (
-        <div className="component-container">
-            <h1 className="content-header mb-5">Add New Message</h1>
+        <Page title="Add New Message">
             <a id="censored-words-popup" className="d-none" href="#popup">popup</a>
 
-            <Hint>
-                <div>1- The maximum number of a message segments is : {maxNumOfSegments}</div>
-                <div>2- The maximum number of message recipients who can receive messages without admin approval is : {messageApprovementLimit}</div>
-            </Hint>
+            <div style={{borderTop: "1px solid #fff"}}>
+                <Hint>
+                    <div>1- The maximum number of a message segments is : {maxNumOfSegments}</div>
+                    <div>2- The maximum number of message recipients who can receive messages without admin approval is : {messageApprovementLimit}</div>
+                </Hint>
+            </div>
 
             <div className="mx-3 mt-5">
                 <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>Schedule Date</div>
@@ -219,13 +276,6 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
                     Schedule Now <i className="fas fa-table ms-3"></i>
                 </DateTimeButton>
                 <div className="d-inline-flex align-items-center ms-5" style={{fontSize: "25px"}}>Chosen Schedule Date: { scheduleDate }</div>
-            </div>
-
-            <div className="d-flex justify-content-between mx-3 mt-5">
-                <div>Current Number of Characters: {messageLength}</div>
-                <div>Remaining Number of Characters: {(language.max_characters_length > messageLength? language.max_characters_length : stippize(messageLength, language.split_characters_length)) - messageLength}</div>
-                <div>Maximum number of Characters: {language.max_characters_length > messageLength? language.max_characters_length : stippize(messageLength, language.split_characters_length)}</div>
-                <div>Message Segmentation Length: {language.split_characters_length}</div>
             </div>
 
             <div id="add-message-group-input" className="d-none" style={{fontSize: "25px", margin: "40px 10px"}}>
@@ -257,10 +307,52 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
                 </div>
             </div>
 
-            <ParametrizedTextArea placeholder={"Enter Your Message."} height={"400px"} onContentChange={onTextAreaContentChange} onUploadFile={onUploadFileHandler}/>
+            <div className="d-flex justify-content-between mx-3 mt-5">
+                <div>Current Number of Characters: {messageLength}</div>
+                <div>Remaining Number of Characters: {(language.max_characters_length > messageLength? language.max_characters_length : stippize(messageLength, language.split_characters_length)) - messageLength}</div>
+                <div>Maximum number of Characters: {language.max_characters_length > messageLength? language.max_characters_length : stippize(messageLength, language.split_characters_length)}</div>
+                <div>Message Segmentation Length: {language.split_characters_length}</div>
+            </div>
+
+            <ParametrizedTextArea 
+                height={"400px"} 
+                placeholder={"Enter Your Message."} 
+                onContentChange={onTextAreaContentChange} 
+                onUploadFile={onUploadFileHandler} 
+                textInputFilterFunction={(e) => messageLanguageFilter(e, language.characters, language.name)}
+            />
+
             <div className="d-flex justify-content-evenly mt-5">
                 <div>Single Message Cost: {order.pricelist.price}</div>
                 <div>Total Cost: {(order.pricelist.price * (parameterized ? parameterizedMessageSegments.length : (messageSegments.length * getNumberOfRecipients())) || 0).toFixed(2)}</div>
+            </div>
+
+            <div className="mt-5">
+                <Hint>
+                    <div style={{color: "#fff"}}>
+                        <div className="d-flex justify-content-evenly align-items-center">
+                            <div style={{width: "50%"}}>
+                                1- Number of <span style={{color: "red"}}>Invalid </span> 
+                                recipients : <span style={{color: "red"}}>{invalidRecipients.length}</span> 
+                            </div>
+                            <div><button className="button" onClick={() => showRecipients(invalidRecipients)}>Show</button></div>
+                        </div>
+                        <div className="d-flex justify-content-evenly align-items-center">
+                            <div style={{width: "50%"}}>
+                                1- Number of <span style={{color: "red"}}>Valid </span> 
+                                recipients : <span style={{color: "red"}}>{validRecipients.length}</span> 
+                            </div>
+                            <div><button className="button" onClick={() => showRecipients(validRecipients)}>Show</button></div>
+                        </div>
+                        {prefixes.map((prefix, index) => <div className="d-flex justify-content-evenly align-items-center">
+                            <div style={{width: "50%"}}>
+                                {index + 2}- Number of <span style={{color: "red"}}>{prefix.name} </span> 
+                                recipients : <span style={{color: "red"}}>{prefix.recipients.length}</span>
+                            </div>
+                            <div><button className="button" onClick={() => showRecipients(prefix.recipients)}>Show</button></div>
+                        </div>)}
+                    </div>
+                </Hint>
             </div>
 
             <h1 className="content-header my-5">Message Segments</h1>
@@ -268,7 +360,7 @@ const AddMessageSegments = ({ sender, order, language, groupRecipients }) => {
             <div className="button-container">
                 <button className="button" onClick={addNewSMSMessage}>Push</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

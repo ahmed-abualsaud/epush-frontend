@@ -49,14 +49,8 @@ const SigninForm = ({ className }) => {
     return (
         <Form id ="signin_form" className={ className }>
             <h4 className="mb-4 pb-3 text-white form-title">Sign In</h4>
-            <Input id="username" type="name" placeholder="Username" validrules="required" onKeyDown={onKeyDownHandler}>
-                <i className="input-icon uil uil-user-check"></i>
-            </Input>
-
-            <Input id="password" type="password" placeholder="Password" validrules="required" onKeyDown={onKeyDownHandler}>
-                <i className="input-icon uil uil-lock-alt"></i>
-            </Input>
-
+            <Input id="username" type="name" icon="uil uil-user-check" placeholder="Username" validrules="required" onKeyDown={onKeyDownHandler}/>
+            <Input id="password" type="password" icon="uil uil-lock-alt" placeholder="Password" validrules="required" onKeyDown={onKeyDownHandler}/>
             <SubmitSignin />
             
             <p className="mb-0 mt-4 text-center">

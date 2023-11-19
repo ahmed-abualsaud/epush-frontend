@@ -1,5 +1,5 @@
 import '../../assets/style/layout/dashboard.css'
-import ScrollButton from '../../component/Shared/ScrollButton'
+import ScrollButton from './ScrollButton'
 
 const Dashboard = ({ children }) => {
 

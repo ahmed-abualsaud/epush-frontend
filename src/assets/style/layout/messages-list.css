@@ -1,5 +1,5 @@
 .messages-list {
-    border: 2px solid #063F30;
+    border: 2px solid var(--primary-color);
     margin: 10px;
     border-radius: 10px;
     overflow: hidden;
@@ -17,15 +17,15 @@
     top: -15px;
     padding: 8px;
     width: 25%;
-    color: #fff;
-    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 80%, #BFE85F 200%);
+    color: var(--boundry-color);
+    background-image: var(--background-image), linear-gradient(43deg, var(--secondary-color) 0%, var(--primary-color) 80%, var(--support-color) 200%);
 }
 
 .messages-list-content {
     padding: 35px 10px 10px 10px;
     font-size: 20px;
     margin: 5px;
-    border: 2px solid #063F30;
+    border: 2px solid var(--primary-color);
     border-radius: 10px;
     background-color: rgb(240, 238, 238);
 }
@@ -36,6 +36,6 @@
     margin-top: -64px;
     padding: 20px;
     border-top-left-radius: 1000px;
-    background-color: #063F30;
-    color: #fff;
+    background-color: var(--primary-color);
+    color: var(--boundry-color);
 }

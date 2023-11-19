@@ -7,6 +7,7 @@ import { isEmpty } from "../../utils/helper"
 import { useEffect, useRef, useState } from "react"
 import NavBar from "../../layout/Navigation/NavBar"
 import DropList from "../../layout/Shared/DropList"
+import Page from "../../page/Page"
 
 const AddMessageGroup = () => {
 
@@ -93,14 +94,10 @@ const AddMessageGroup = () => {
     }
 
     return (
-        <div id="add-message-group-form" className="component-container">
-            <h1 className="content-header mb-5">Add New Message Group</h1>
+        <Page id="add-message-group-form" title="Add New Message Group">
+            <Input id="add-message-group-name" type="text" icon="fas fa-pen" placeholder="Name" validrules="required"/>
 
-            <Input id="add-message-group-name" type="text" placeholder="Name" validrules="required">
-                <i className="input-icon fas fa-pen"></i>
-            </Input>
-
-            <div className="mt-5">
+            <div className="mt-5 mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "15%", fontSize: "25px"}}>Company Name</div>
                 <div className="d-inline-flex justify-content-center" style={{width: "85%"}}>
                     <DropList selectName="Select Company Name" options={client.map(item => item.company_name)} onSelect={onSelectClient}/>
@@ -140,7 +137,7 @@ const AddMessageGroup = () => {
             <div className="button-container">
                 <button className="button" onClick={() => addNewMessageGroup()}>Add New Message Group</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

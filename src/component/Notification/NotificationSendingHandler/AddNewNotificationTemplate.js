@@ -31,15 +31,10 @@ const AddNewNotificationTemplate = ({ handler }) => {
     }
 
     return (
-        <div id="add-operator-form" className="component-container">
-            <h1 className="content-header mb-5">Add New Notification Template</h1>
-            <Input id="add-notification-template-name" type="text" placeholder="Template Name" validrules="required">
-                <i className="input-icon fas fa-pen"></i>
-            </Input>
-
-            <Input id="add-notification-template-subject" type="text" placeholder="Notification Subject" validrules="required">
-                <i class="input-icon fas fa-envelope-open-text"></i>
-            </Input>
+        <div id="add-operator-form">
+            <h1 style={{marginTop: "-25px"}} className="content-header mb-5">Add New Notification Template</h1>
+            <Input id="add-notification-template-name" type="text" icon="fas fa-pen" placeholder="Template Name" validrules="required"/>
+            <Input id="add-notification-template-subject" type="text" icon="fas fa-envelope-open-text" placeholder="Notification Subject" validrules="required"/>
 
             <div style={{margin: "70px 0",  fontWeight: "700"}}>
                 <div style={{fontSize: "30px", margin: "20px 10px"}}>Template Content</div>

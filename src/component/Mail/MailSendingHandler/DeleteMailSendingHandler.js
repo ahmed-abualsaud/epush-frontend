@@ -1,15 +1,15 @@
 import useMailApi from "../../../api/useMailApi"
 import { showAlert } from "../../../utils/validator"
 
-const DeleteMailSendingHandler = ({ mailSendingHandler, deletedRows, setDeletedRows }) => {
+const DeleteMailSendingHandler = ({ mailSendingHandler, onDelete }) => {
 
     const { deleteMailSendingHandler } = useMailApi()
 
     const deleteEntity = async () => {
 
         if (await deleteMailSendingHandler(mailSendingHandler.id)) {
+            onDelete()
             showAlert("Mail Sending Handler Deleted Successfully")
-            setDeletedRows([...deletedRows, mailSendingHandler.id])
         } else {
             showAlert("Delete Mail Sending Handler Failed")
         }

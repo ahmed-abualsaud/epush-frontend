@@ -2,15 +2,15 @@ import useAuthApi from '../../api/useAuthApi'
 import { showAlert } from '../../utils/validator'
 
 
-const DeleteUser = ({ user, deletedRows, setDeletedRows }) => {
+const DeleteUser = ({ user, onDelete }) => {
 
     const { deleteUser } = useAuthApi()
 
     const deleteEntity = async () => {
 
         if (await deleteUser(user.id)) {
+            onDelete()
             showAlert("User Deleted Successfully")
-            setDeletedRows([...deletedRows, user.id])
         } else {
             showAlert("Delete User Failed")
         }

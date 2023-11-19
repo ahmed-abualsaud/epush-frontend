@@ -1,5 +1,5 @@
 import '../../assets/style/layout/radio.css'
-import { randomString } from '../../utils/helper'
+import { randomString } from '../../utils/strUtils'
 
 const RadioButton = ({ value, checked, group, onCheck }) => {
 

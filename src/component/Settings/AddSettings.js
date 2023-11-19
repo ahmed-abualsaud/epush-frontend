@@ -7,6 +7,7 @@ import useSettingsApi from "../../api/useSettingsApi"
 import { useState } from "react"
 import DropList from "../../layout/Shared/DropList"
 import TextArea from "../../layout/Shared/TextArea"
+import Page from "../../page/Page"
 
 const AddSettings = () => {
 
@@ -44,31 +45,25 @@ const AddSettings = () => {
     }
 
     return (
-        <div id="add-settings-form" className="component-container">
-            <h1 className="content-header mb-5">Add New Settings</h1>
+        <Page id="add-settings-form" title="Add New Settings">
+            <Input id="add-settings-name" type="text" icon="fas fa-pen" placeholder="Settings Name" validrules="required"/>
+            <Input id="add-settings-value" type="text" icon="fas fa-sliders" placeholder="Settings Value" validrules="required"/>
 
-            <Input id="add-settings-name" type="text" placeholder="Name" validrules="required">
-                <i className="input-icon fas fa-pen"></i>
-            </Input>
-            <Input id="add-settings-value" type="text" placeholder="Value" validrules="required">
-                <i className="input-icon fas fa-sliders"></i>
-            </Input>
-
-            <div className="mt-5 mb-4">
+            <div className="m-4">
                 <div className="d-inline-flex align-items-center" style={{width: "15%", fontSize: "25px"}}>Settings Type</div>
                 <div className="d-inline-flex justify-content-center" style={{width: "85%"}}>
                     <DropList selectName="Select Settings Type" options={['string', 'integer', 'float', 'boolean', 'character', 'array', 'json', 'object', 'binary']} onSelect={onSelectSettingsType}/>
                 </div>
             </div>
 
-            <div className="mt-5">
+            <div className="m-3">
                 <TextArea height="300px" placeholder="Enter a Description" onContentChange={onEnteringDescription}/>
             </div>
 
             <div className="button-container">
                 <button className="button" onClick={() => addNewSettings()}>Add New Settings</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

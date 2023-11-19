@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import useCoreApi from "../../api/useCoreApi";
+import Avatar from "../../layout/Shared/Avatar";
+import { snakeToBeautifulCase } from "../../utils/helper";
+import Page from "../../page/Page";
 
 const ShowAdmin = ({ admin }) => {
 
@@ -19,13 +22,9 @@ const ShowAdmin = ({ admin }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header">General Information</h1>
-            <div className="user-image">
-                <div className="image-wrapper">
-                    <img src={currentAdmin.avatar ?? "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg"} alt="Avatar" />
-                </div>
-            </div>
+        <Page title="General Information">
+            <Avatar imageUrl={currentAdmin.avatar}/>
+
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -36,13 +35,13 @@ const ShowAdmin = ({ admin }) => {
                 <tbody>
                     {filteredColumns.map((col) => (
                         <tr>
-                            <td style={{fontSize: "22px"}}>{col}</td>
+                            <td style={{fontSize: "22px", whiteSpace: "no-wrap"}}>{snakeToBeautifulCase(col)}</td>
                             <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof currentAdmin[col] === "boolean"? currentAdmin[col] ? "Yes" : "No" : currentAdmin[col] ?? "NULL"}</td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-        </div>
+        </Page>
     )
 }
 

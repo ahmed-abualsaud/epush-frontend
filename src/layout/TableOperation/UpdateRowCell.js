@@ -1,4 +1,6 @@
-const UpdateRowCell = ({ updateFunction }) => {
+import { isEmpty } from "../../utils/helper"
+
+const UpdateRowCell = ({ updateFunction, ...props }) => {
 
     return (
         <td
@@ -7,7 +9,7 @@ const UpdateRowCell = ({ updateFunction }) => {
             onClick={updateFunction} 
             className="operation"
         >
-            <a className="modal-button" href="#"><i className="uil uil-edit-alt"></i></a>
+            <a className="modal-button" href={ ! isEmpty(props) && props[0]?.popup ? "#popup" : "#"}><i className="uil uil-edit-alt"></i></a>
         </td>
     )
 }

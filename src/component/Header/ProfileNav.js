@@ -6,7 +6,7 @@ import { isEmpty } from '../../utils/helper'
 
 const ProfileNav = () => {
 
-    const user = useSelector((state) => state.auth.user)
+    const user = useSelector(state => state.auth.user)
     
     const { signout } = useAuthApi()
 
@@ -24,14 +24,24 @@ const ProfileNav = () => {
         }
     }
 
+    const navigateToProfile = () => {
+        if (["admin", "super_admin"].includes(user?.roles[0]?.name)) {
+            navigate("content", "profile", user?.user, user?.roles[0]?.name)
+        } else {
+            navigate("content", "client-profile", user?.user)
+        }
+    }
+
     return (
         <div className="profile-nav">
-            <h5 className="d-inline-block m-3 text-white"><strong>{user?.user?.full_name ?? (user?.user?.first_name + " " + user?.user?.last_name)}</strong></h5>
-            <img src={user?.user?.avatar ?? "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg"} className="rounded-circle" style={{width: "70px", height: "70px"}} alt="Avatar" />
+            <div className="d-inline" onClick={navigateToProfile}>
+                <h5 className="d-inline-block m-3 text-white"><strong>{user?.user?.full_name ?? (user?.user?.first_name + " " + user?.user?.last_name)}</strong></h5>
+                <img src={user?.user?.avatar ?? "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg"} className="rounded-circle" style={{width: "70px", height: "70px"}} alt="Avatar" />
+            </div>
             <input className="dropdown d-none" type="checkbox" id="dropdown" name="dropdown"/>
             <label className="for-dropdown" for="dropdown"><i className="uil uil-angle-double-down"></i></label>
             <div className="section-dropdown"> 
-                <a href="#" onClick={() => navigate("content", "profile", user?.user)}>Profile <i className="uil uil-user-md"></i></a>
+                <a href="#" onClick={() => navigate("content", "profile", user?.user, user?.roles[0]?.name)}>Profile <i className="uil uil-user-md"></i></a>
                 <a href="#" onClick={goToSettings}>Settings <i className="uil uil-setting"></i></a>
                 <a href="#" onClick={ logout }>Logout <i className="uil uil-sign-out-alt"></i></a>
             </div>

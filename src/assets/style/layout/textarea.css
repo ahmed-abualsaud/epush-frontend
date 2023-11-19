@@ -1,23 +1,31 @@
 .textarea-wrapper {
     width: 100%;
+    position: relative;
 }
   
 .textarea {
     width: 100%;
-    background-color: #FFF;
+    background-color: var(--boundry-color);
     color: #222;
     font-family: Courier, monospace;
     font-weight: normal;
     font-size: 24px;
     resize: none;
     line-height: 59px;
-    padding-top: 10px;
-    padding-left: 14%;
-    padding-right: 10px;
+    padding: 10px;
     background: url(https://static.tumblr.com/maopbtg/E9Bmgtoht/lines.png), url(https://static.tumblr.com/maopbtg/nBUmgtogx/paper.png);
     background-size: 100% 59px, cover;
     background-repeat: repeat-y, repeat;
     border-radius: 12px;
     outline: none;
     height: 75px;
+}
+
+.textarea-lock {
+    position: absolute;
+    left: 46%;
+    top: 50%;
+    margin-top: -10%;
+    color: #bbb;
+    font-size: 250px;
 }

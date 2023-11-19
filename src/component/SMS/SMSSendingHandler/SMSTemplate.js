@@ -1,7 +1,7 @@
 import '../../../assets/style/component/sms-template.css';
 import { navigate } from '../../../setup/navigator';
 
-const SMSTemplate = ({ template, handler, deletedRows, setDeletedRows }) => {
+const SMSTemplate = ({ template, handler, onDelete }) => {
 
     return (
         <div className="sms-template-container">
@@ -15,7 +15,7 @@ const SMSTemplate = ({ template, handler, deletedRows, setDeletedRows }) => {
                 <a 
                     className="sms-template-delete" 
                     href="#popup" 
-                    onClick={() => navigate("modal-content", "delete-sms-template", template, deletedRows, setDeletedRows)}
+                    onClick={() => navigate("modal-content", "delete-sms-template", template, onDelete)}
                 ><i className="fas fa-xmark"></i></a>
             </div>
             <div className="sms-template-subject">Subject: <span style={{display: "inline-block", marginLeft: "10px", color: "#063F30"}}>{template.subject ?? "NULL"}</span></div>

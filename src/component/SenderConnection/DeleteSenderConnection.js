@@ -1,15 +1,15 @@
 import useCoreApi from "../../api/useCoreApi";
 import { showAlert } from "../../utils/validator";
 
-const DeleteSenderConnection = ({ senderConnection, deletedRows, setDeletedRows }) => {
+const DeleteSenderConnection = ({ senderConnection, onDelete }) => {
 
     const { deleteSenderConnection } = useCoreApi()
 
     const deleteEntity = async () => {
 
         if (await deleteSenderConnection(senderConnection.id)) {
+            onDelete()
             showAlert("SenderConnection Deleted Successfully")
-            setDeletedRows([...deletedRows, senderConnection.id])
         } else {
             showAlert("Delete SenderConnection Failed")
         }

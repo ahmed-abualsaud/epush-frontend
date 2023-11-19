@@ -9,8 +9,8 @@ const withOperationCellParameters = (Component, functionName, targetFunction, ..
     }
 
     if (functionName === "deleteFunction") {
-        return (row, deletedRows, setDeletedRows) => (
-            <Component {...{ [functionName]: () => targetFunction(row, deletedRows, setDeletedRows) }} {...props} />
+        return (row, onDelete) => (
+            <Component {...{ [functionName]: () => targetFunction(row, onDelete) }} {...props} />
         )
     }
 

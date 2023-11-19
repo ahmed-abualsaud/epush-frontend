@@ -1,11 +1,10 @@
 .parametrized-textarea-container {
-    margin: 20px 10px;
-    border: 2px solid #063F30!important;
-    border-radius: 12px;
+    margin: 20px 0;
+    border: 1px solid var(--primary-color)!important;
     box-shadow: 10px 14px 18px 4px rgba(0,0,0,0.75);
     -webkit-box-shadow: 10px 14px 18px 4px rgba(0,0,0,0.75);
     -moz-box-shadow: 10px 14px 18px 4px rgba(0,0,0,0.75);    border: none;
-    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 80%, #BFE85F 200%);
+    background-image: var(--background-image), linear-gradient(43deg, var(--secondary-color) 0%, var(--primary-color) 80%, var(--support-color) 200%);
     overflow: hidden;
 }
 
@@ -26,11 +25,20 @@
 .textarea-toolbox-item {
     display: inline-block;
     font-size: 20px;
-    border: 1px solid #063F30;
-    background-color: #fff;
+    border: 1px solid var(--primary-color);
+    background-color: var(--boundry-color);
     border-radius: 10px;
     cursor: pointer;
     max-width: 100%;
+}
+
+.reset-button {
+    font-size: 20px;
+    border: 1px solid var(--primary-color);
+    background-color: var(--boundry-color);
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 8px 20px;
 }
 
 .textarea-toolbox-item span {
@@ -43,7 +51,7 @@
 }
 
 .textarea-toolbox-item-droplist-container {
-    background-color: #fff;
+    background-color: var(--boundry-color);
     max-height: 0;
     opacity: 0;
     transition: all 0.4s ease;
@@ -51,7 +59,7 @@
     overflow: hidden;
     position: absolute;
     z-index: 100;
-    border: 1px solid #063F30;
+    border: 1px solid var(--primary-color);
     width: 100%;
 }
 
@@ -66,12 +74,12 @@
     width: 100%;
     z-index: 100;
     padding: 10px;
-    border-bottom: 1px solid #063F30;
+    border-bottom: 1px solid var(--primary-color);
 }
 
 .textarea-toolbox-item-droplist-option:hover {
-    background-color: var(--select-theme-hover);
-    color: #fff;
+    background-color: var(--secondary-color);
+    color: var(--boundry-color);
 }
 
 .textarea-toolbox-item-droplist-radio {
@@ -89,7 +97,7 @@
 }
 
 .parametrized-textarea-selected-parameters-file {
-    color: #fff;
+    color: var(--boundry-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -100,6 +108,6 @@
 }
 
 .parametrized-textarea-note {
-    color: #fff;
+    color: var(--boundry-color);
     padding: 5px 10px;
 }

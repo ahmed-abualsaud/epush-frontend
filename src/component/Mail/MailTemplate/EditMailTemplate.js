@@ -41,8 +41,8 @@ const EditMailTemplate = ({ template, templates }) => {
     }
 
     return (
-        <div className="component-container">
-            <h1 className="content-header mb-5">Mail Template Information</h1>
+        <div>
+            <h1 style={{marginTop: "-25px"}} className="content-header mb-5">Mail Template Information</h1>
             <table className="fl-table">
                 <thead>
                     <tr>

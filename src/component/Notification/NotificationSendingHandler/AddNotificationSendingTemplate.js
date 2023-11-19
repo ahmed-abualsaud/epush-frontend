@@ -22,8 +22,8 @@ const AddNotificationSendingTemplate = ({ handler }) => {
     }, [])
 
     return (
-        <div className="component-container">
-            <h1 className="content-header">
+        <div>
+            <h1 style={{marginTop: "-25px"}} className="content-header">
                 Select One of The System Notification Templates
                 <button 
                     style={{
@@ -43,8 +43,7 @@ const AddNotificationSendingTemplate = ({ handler }) => {
                 <NotificationTemplate 
                     template={template}
                     handler={handler}
-                    deletedRows={deletedRows} 
-                    setDeletedRows={setDeletedRows}
+                    onDelete={() => setDeletedRows([...deletedRows, template.id])}
                 />
             ))}
         </div>

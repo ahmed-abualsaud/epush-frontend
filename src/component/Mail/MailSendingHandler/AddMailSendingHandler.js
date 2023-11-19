@@ -96,8 +96,8 @@ const AddMailSendingHandler = () => {
     return (
         ! isEmpty(handlers) && 
         (
-        <div className="component-container">
-            <h1 className="content-header">Select One of The System Handlers</h1>
+        <div>
+            <h1 style={{marginTop: "-25px"}} className="content-header">Select One of The System Handlers</h1>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>

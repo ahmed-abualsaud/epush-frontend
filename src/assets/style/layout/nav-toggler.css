@@ -6,21 +6,21 @@
     width: 55px;
     height: 55px;
     border-top-right-radius: 10px;
-    border-top: 1px groove #fff;
-    border-right: 1px groove #fff;
+    border-top: 1px groove var(--boundry-color);
+    border-right: 1px groove var(--boundry-color);
     -webkit-transform: rotate(45deg);
     -moz-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     -o-transform: rotate(45deg);
     transform: rotate(45deg);
-    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), 
-    linear-gradient(225deg, #063F30 52%, transparent 50%);
+    background-image: var(--background-image), 
+    linear-gradient(225deg, var(--primary-color) 52%, transparent 50%);
 }
 
 .nav-toggler > button {
     background: transparent;
     border: none;
-    color: #fff;
+    color: var(--boundry-color);
     margin-left: 1em;
     margin-top: 0em;
     font-size: 20px;
@@ -33,11 +33,11 @@
 
 .nav-toggler > button:hover > i {
     font-size: 16px;
-    -webkit-transition: all 0.5s ease-in-out;
-    -moz-transition: all 0.5s ease-in-out;
-    -ms-transition: all 0.5s ease-in-out;
-    -o-transition: all 0.5s ease-in-out;
-    transition: all 0.5s ease-in-out;
+    -webkit-transition: all 0.5s linear;
+    -moz-transition: all 0.5s linear;
+    -ms-transition: all 0.5s linear;
+    -o-transition: all 0.5s linear;
+    transition: all 0.5s linear;
 }
 
 
@@ -50,10 +50,10 @@
 }
 
 .content-collapse {
-    width: 82vw;
-    -webkit-transform: translateX(17vw);
-    -moz-transform: translateX(17vw);
-    -ms-transform: translateX(17vw);
-    -o-transform: translateX(17vw);
-    transform: translateX(17vw);
+    width: 81.9%;
+    -webkit-transform: translateX(22%);
+    -moz-transform: translateX(22%);
+    -ms-transform: translateX(22%);
+    -o-transform: translateX(22%);
+    transform: translateX(22%);
 }

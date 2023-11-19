@@ -1,7 +1,7 @@
 import { useState } from "react"
 import TextArea from "../../../layout/Shared/TextArea"
 import ItemsList from "../../../layout/List/ItemsList"
-import { randomString } from "../../../utils/helper"
+import { randomString } from "../../../utils/strUtils"
 
 const TextAreaAddition = ({ setGroupRecipients }) => {
 
@@ -29,7 +29,6 @@ const TextAreaAddition = ({ setGroupRecipients }) => {
             (e.ctrlKey && keyCode === 88) || // Ctrl+X
             (e.ctrlKey && keyCode === 67); // Ctrl+C
 
-      
         if (!isValid) {
           e.preventDefault()
         }

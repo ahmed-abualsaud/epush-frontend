@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react"
 import { getElement } from "../../utils/dom"
 import { isEmpty } from "../../utils/helper"
 import { showAlert } from "../../utils/validator"
+import Page from "../../page/Page"
 
 const PermissionList = ({ entity, entityID }) => {
 
@@ -68,10 +69,7 @@ const PermissionList = ({ entity, entityID }) => {
     }
 
     return (
-        <div className="component-container">
-            <div className="assign-role-header">
-                <h1>Available Permissions</h1>
-            </div>
+        <Page title="Available Permissions">
             {<div id="assign-user-permissions-list" className="cards-list">
                 {permissions.map((permission) => (
                     <div className="card-item">
@@ -102,7 +100,7 @@ const PermissionList = ({ entity, entityID }) => {
             <div className="button-container">
                 <button style={{width: "505px"}} className="button" onClick={() => assignSelectedPermissions()}>Assign Selected Permissions</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

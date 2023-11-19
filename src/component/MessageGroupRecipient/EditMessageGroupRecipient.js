@@ -5,20 +5,31 @@ import { getElement } from "../../utils/dom"
 import { isEmpty } from "../../utils/helper"
 import { useEffect, useRef, useState } from "react"
 import DropList from "../../layout/Shared/DropList"
+import Page from "../../page/Page"
+import { useSelector } from "react-redux"
 
 const EditMessageGroupRecipient = ({ messageGroupRecipient }) => {
 
-    const { listMessageGroups, updateMessageGroupRecipient } = useCoreApi()
+    const { listMessageGroups, getClientMessageGroups, updateMessageGroupRecipient } = useCoreApi()
 
     const [attributes, setAttributes] = useState([])
     const [messageGroups, setMessageGroups] = useState([])
     const [selectedGroupID, setSelectedGroupID] = useState(messageGroupRecipient.message_group?.id)
     const [recipientAttributes, setRecipientAttributes] = useState(JSON.parse(messageGroupRecipient.attributes) ?? [])
 
+    const user = useSelector(state => state.auth.user)
+
     const setupLock = useRef(true)
     const setup = async () => {
-        const msgrp = await listMessageGroups(1000000000000)
-        if (msgrp?.data) setMessageGroups(msgrp.data)
+        let msgrp = []
+
+        if (user?.roles[0].name === "client") {
+            msgrp = await getClientMessageGroups(user?.user?.id)
+            if (msgrp) setMessageGroups(msgrp)
+        } else {
+            msgrp = await listMessageGroups(1000000000000)
+            if (msgrp?.data) setMessageGroups(msgrp.data)
+        }
 
         setAttributes(recipientAttributes)
         setRecipientAttributes([...recipientAttributes.map((attr, index) => ({id: index, name: attr.name, value: attr.value})), {id: recipientAttributes.length, name: '', value: ''}])
@@ -96,26 +107,22 @@ const EditMessageGroupRecipient = ({ messageGroupRecipient }) => {
     }
 
     return (
-        <div id="edit-message-group-recipient-form" className="component-container">
-            <h1 className="content-header mb-5">Edit New Message Group Recipient</h1>
-
-            <div className="mt-5 mb-5">
+        <Page id="edit-message-group-recipient-form" title="Edit Message Group Recipient">
+            <div className="my-5 mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "15%", fontSize: "25px"}}>Message Group</div>
                 <div className="d-inline-flex justify-content-center" style={{width: "85%"}}>
                     <DropList selectName={messageGroupRecipient.message_group?.name} options={messageGroups.map(item => item.name)} onSelect={onSelectGroup}/>
                 </div>
             </div>
 
-            <Input id="edit-message-group-recipient-number" type="number" placeholder={"Current Value = " + messageGroupRecipient.number} validrules="required">
-                <i className="input-icon fas fa-mobile-retro"></i>
-            </Input>
+            <Input id="edit-message-group-recipient-number" type="number" icon="fas fa-mobile-retro" placeholder={"Current Value = " + messageGroupRecipient.number} validrules="required"/>
 
-            <div style={{fontSize: "25px", margin: "60px 0 20px 0", color: "#063F30"}}>Do you want to edit more attributes related to that recipient like his name or email?</div>
+            <div style={{fontSize: "25px", margin: "60px 10px 20px 10px", color: "#063F30"}}>Do you want to edit more attributes related to that recipient like his name or email?</div>
 
             <div style={{marginTop: "10px"}}>
                 {recipientAttributes?.map(input => (
                     <div key={input.id} className="d-flex justify-content-between my-2">
-                        <div className="w-50 me-2">
+                        <div className="w-50 mx-2">
                             <i style={{position: "absolute", marginTop: "13px", fontSize: "25px", marginLeft: "20px"}} className="fas fa-pencil"></i>
                             <input 
                                 id={"edit-message-group-recipient-attribute-name"} 
@@ -129,7 +136,7 @@ const EditMessageGroupRecipient = ({ messageGroupRecipient }) => {
                                 value={input.name}
                             />
                         </div>
-                        <div className="w-50 me-2">
+                        <div className="w-50 mx-2">
                             <i style={{position: "absolute", marginTop: "13px", fontSize: "25px", marginLeft: "20px"}} className="fas fa-circle-info"></i>
                             <input 
                                 id={"edit-message-group-recipient-attribute-value"} 
@@ -151,7 +158,7 @@ const EditMessageGroupRecipient = ({ messageGroupRecipient }) => {
             <div className="button-container">
                 <button className="button" onClick={() => editNewMessageGroupRecipient()}>Update Message Group Recipient</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

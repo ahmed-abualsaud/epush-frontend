@@ -7,6 +7,7 @@ import { navigate } from '../../setup/navigator'
 import DropList from '../../layout/Shared/DropList'
 import useCoreApi from '../../api/useCoreApi'
 import useExpenseApi from '../../api/useExpenseApi'
+import Page from '../../page/Page'
 
 
 const AddOrder = () => {
@@ -84,9 +85,7 @@ const AddOrder = () => {
 
 
     return (
-        <div id="add-order-form" className="component-container">
-            <h1 className="content-header">Add New Order</h1>
-
+        <Page id="add-order-form" title="Add New Order">
             <div style={{fontSize: "30px"}} className="d-flex justify-content-around m-5">
                 <div>
                     <i className="uil uil-dollar-alt"></i>
@@ -98,32 +97,30 @@ const AddOrder = () => {
                 </div>
             </div>
 
-            <Input style={{height: "80px", fontSize: "25px"}} id="add-order-credit" type="number" placeholder="Credit" validrules="required">
-                <i style={{fontSize: "40px", marginTop: "15px", marginLeft: "-10px"}} className="input-icon uil uil-dollar-alt"></i>
-            </Input>
+            <Input id="add-order-credit" type="number" icon="uil uil-dollar-alt" placeholder="Credit" validrules="required"/>
 
-            <div>
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "15%", fontSize: "25px"}}>Company Name</div>
                 <div className="d-inline-flex justify-content-center mt-5" style={{width: "85%"}}>
                     <DropList selectName="Select Company Name" options={client.map(item => item.company_name)} onSelect={onSelectClient}/>
                 </div>
             </div>
 
-            <div>
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "15%", fontSize: "25px"}}>Pricelist</div>
                 <div className="d-inline-flex justify-content-center mt-5" style={{width: "85%"}}>
                     <DropList selectName="Select Pricelist" options={pricelist.map(item => item.name)} onSelect={onSelectPricelist}/>
                 </div>
             </div>
 
-            <div>
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "15%", fontSize: "25px"}}>Payment Method</div>
                 <div className="d-inline-flex justify-content-center mt-5" style={{width: "85%"}}>
                     <DropList selectName="Select Payment Method" options={paymentMethod.map(item => item.name)} onSelect={onSelectPaymentMethod}/>
                 </div>
             </div>
 
-            <div>
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "15%", fontSize: "25px"}}>Action</div>
                 <div className="d-inline-flex justify-content-center mt-5" style={{width: "85%"}}>
                     <DropList selectName="Select Action" options={["Add", "Refund", "Deduct"]} onSelect={onSelectAction}/>
@@ -134,7 +131,7 @@ const AddOrder = () => {
                 <button className="button" onClick={() => addNewOrder()}>Add New Order</button>
             </div>
 
-        </div>
+        </Page>
     )
 }
 

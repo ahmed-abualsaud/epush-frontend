@@ -24,7 +24,7 @@ const AddMailTemplate = ({ templates }) => {
         })
 
         if (! isEmpty(result)) {
-            navigate("content", "list-mail-templates")
+            navigate("mail-management", "list-mail-templates")
             showAlert("Mail Template Added Successfully!")
         } else {
             showAlert("Valid Mail Template Information Required")
@@ -32,15 +32,10 @@ const AddMailTemplate = ({ templates }) => {
     }
 
     return (
-        <div id="add-operator-form" className="component-container">
-            <h1 className="content-header mb-5">Add New Mail Template</h1>
-            <Input id="add-mail-template-name" type="text" placeholder="Template Name" validrules="required">
-                <i className="input-icon fas fa-pen"></i>
-            </Input>
-
-            <Input id="add-mail-template-subject" type="text" placeholder="Mail Subject" validrules="required">
-                <i class="input-icon fas fa-envelope-open-text"></i>
-            </Input>
+        <div id="add-operator-form">
+            <h1 style={{marginTop: "-25px"}} className="content-header mb-5">Add New Mail Template</h1>
+            <Input id="add-mail-template-name" type="text" icon="fas fa-pen" placeholder="Template Name" validrules="required"/>
+            <Input id="add-mail-template-subject" type="text" icon="fas fa-envelope-open-text" placeholder="Mail Subject" validrules="required"/>
 
             <div style={{margin: "70px 0",  fontWeight: "700"}}>
                 <div style={{fontSize: "30px", margin: "20px 10px"}}>Template Content</div>

@@ -4,8 +4,8 @@ import excelFileExample from "../../../assets/image/excel-file-example.png"
 const ExcelFileExample = () => {
 
     return (
-        <div className="component-container">
-            <h1 className="content-header">Example Message</h1>
+        <div>
+            <h1 style={{marginTop: "0"}} className="content-header">Example Message</h1>
             <div>
                 <img style={{width: "100%"}} src={messageExample} alt="Avatar" />
             </div>

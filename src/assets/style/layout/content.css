@@ -1,13 +1,12 @@
 .content {
-    -webkit-transition: all 0.5s ease-in-out;
-    -moz-transition: all 0.5s ease-in-out;
-    -ms-transition: all 0.5s ease-in-out;
-    -o-transition: all 0.5s ease-in-out;
-    transition: all 0.5s ease-in-out;
-    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg");
+    -webkit-transition: all 0.5s linear;
+    -moz-transition: all 0.5s linear;
+    -ms-transition: all 0.5s linear;
+    -o-transition: all 0.5s linear;
+    transition: all 0.5s linear;
+    background-image: var(--background-image);
     background-position: center;
     background-size: cover;
     height: 100%;
-    padding-left: 10px;
-    margin-bottom: 6rem;
+    border: 1px solid var(--boundry-color);
 }

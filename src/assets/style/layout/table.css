@@ -4,7 +4,8 @@
     font-size: 12px;
     font-weight: normal;
     width: 100%;
-    background-color: white;
+    background-color: var(--boundry-color);
+    margin: 10px 0;
 }
 
 .fl-table td, .fl-table th {
@@ -27,15 +28,15 @@
 }
 
 .fl-table thead th {
-    color: #ffffff;
-    background: #063F30;
+    color: var(--boundry-color);
+    background: var(--primary-color);
     font-size: 20px;
 }
 
 
 .fl-table thead th:nth-child(odd) {
-    color: #ffffff;
-    background: #070020;
+    color: var(--boundry-color);
+    background: var(--secondary-color);
 }
 
 .fl-table tr:nth-child(even) {
@@ -43,7 +44,7 @@
 }
 
 .fl-table tr:nth-child(even) td {
-    border-right: 1px solid #fff;
+    border-right: 1px solid var(--boundry-color);
 }
 
 .fl-table .operation {
@@ -51,9 +52,9 @@
 }
 
 .fl-table .operation:hover {
-    color: #BFE85F;
+    color: var(--support-color);
     cursor: pointer;
-    background-color: #063F30;
+    background-color: var(--primary-color);
 }
 
 .fl-table .page-head {
@@ -61,7 +62,7 @@
 }
 
 .fl-table .last-row {
-    border-top: 1px solid #063F30;
+    border-top: 1px solid var(--primary-color);
     padding: 0;
     margin: 0;
 }
@@ -81,7 +82,7 @@
 .fl-table .page-input {
     width: 0!important;
     border: transparent;
-    color: #063F30;
+    color: var(--primary-color);
 }
 
 .fl-table .pagination-info {
@@ -92,24 +93,24 @@
 }
 
 .fl-table .btn-del {
-    color: red;
+    color: rgb(177, 5, 5);
 }
 
 .fl-table .btn-del:hover {
-    color: #fff;
+    color: var(--boundry-color);
     background-color: red;
 }
 
 .add-button {
     margin: 0;
     height: 100%;
-    color: #fff;
+    color: var(--boundry-color);
     text-transform: uppercase;
     border-radius: 0;
     font-size: 20px;
     padding: 10px 15px;
     text-decoration: none;
-    border: 3px solid #fff;
+    border: 3px solid var(--boundry-color);
 }
 
 .add-button i {

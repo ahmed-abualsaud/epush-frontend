@@ -4,6 +4,7 @@ import { showAlert, validate } from "../../utils/validator"
 import { getFormInputData } from "../../utils/dom"
 import { navigate } from "../../setup/navigator"
 import { isEmpty } from "../../utils/helper"
+import Page from "../../page/Page"
 
 const AddSMSC = () => {
 
@@ -33,21 +34,14 @@ const AddSMSC = () => {
     }
 
     return (
-        <div id="add-smsc-form" className="component-container">
-            <h1 className="content-header mb-5">Add New SMSC</h1>
-
-            <Input id="add-smsc-name" type="text" placeholder="Name" validrules="required">
-                <i className="input-icon fas fa-pen"></i>
-            </Input>
-
-            <Input id="add-smsc-value" type="text" placeholder="Value" validrules="required">
-                <i className="input-icon fas fa-plug"></i>
-            </Input>
+        <Page id="add-smsc-form" title="Add New SMSC">
+            <Input id="add-smsc-name" type="text" icon="fas fa-pen" placeholder="SMS Connection Name" validrules="required"/>
+            <Input id="add-smsc-value" type="text" icon="fas fa-plug" placeholder="SMS Connection Value" validrules="required"/>
 
             <div className="button-container">
                 <button className="button" onClick={() => addNewSMSC()}>Add New SMSC</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

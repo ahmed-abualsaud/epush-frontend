@@ -17,82 +17,87 @@ import PaginationContainer from "../../layout/Pagination/PaginationContainer"
 import HeadRow from "../../layout/Table/HeadRow"
 import TableHead from "../../layout/Table/TableHead"
 import Table from "../../layout/Table/Table"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import { encodeString } from "../../utils/strUtils"
+import useSearchApi from "../../api/useSearchApi"
+import Page from "../../page/Page"
 
 
 const ListMessageSegments = () =>
 {
-    const excludedColumns = [
-
-        "id",
-        "updated_at", 
-        "deleted_at", 
-        "avatar", 
-        "message",
-        "message_id",
-        "email_verified_at",
-        "user_id"
-    ]
-
     const [columns, setColumns] = useState([])
     const [messageSegments, setMessageSegments] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
+    const { search } = useSearchApi()
     const { listMessageSegments, searchMessageSegment } = useCoreApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
-        let clt = []
+        let msgmnt = []
         if (isEmpty(searchParams)) {
-            clt = await listMessageSegments(perPage)
-        } else {
-            clt = await searchMessageSegment(perPage, searchParams.column, searchParams.value)
+            msgmnt = await listMessageSegments(perPage)
+        }
+        else if (searchParams.hasOwnProperty('criteria')) {
+            msgmnt = await search(searchParams.enti, searchParams.crit, perPage)
+        }
+        else {
+            msgmnt = await searchMessageSegment(perPage, searchParams.column, searchParams.value)
         }
          
-        setMessageSegments(clt)
-        setColumns(clt?.data[0] ? ["message", ...Object.keys(clt?.data[0]).filter(
-            (column) => !excludedColumns.includes(column)
-        )] : [])
+        setMessageSegments(msgmnt)
+        setColumns(["message", "segment_number", "segment_content", "created_at"])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup(10) }
     }, [])
 
     const handleGetPage = async (pageUrl) => {
-        let clt = {}
+        let msgmnt = {}
         if (isEmpty(searchParams)) {
-            clt = await sendGetRequest(pageUrl)
+            msgmnt = await sendGetRequest(pageUrl)
         } else {
             if (! pageUrl.includes("search")) {
                 let url  = pageUrl.split("?")
                 pageUrl = url[0]+"/search?"+url[1]
             }
-            clt = await sendPostRequest(pageUrl, searchParams)
+            msgmnt = await sendPostRequest(pageUrl, searchParams)
         }
-        if (! isEmpty(clt)) setMessageSegments(clt)
+        if (! isEmpty(msgmnt)) setMessageSegments(msgmnt)
     }
 
     const searchEntityColumn = async (column, value) => {
-        const clt = await searchMessageSegment(10, column, value)
-        if (clt) setMessageSegments(clt)
+        const msgmnt = await searchMessageSegment(10, column, value)
+        if (msgmnt) setMessageSegments(msgmnt)
         setSearchParams({column: column, value: value})
     }
 
+    const onSearch = async (criteria) => {
+        const msgmnt = await search("message_segment", criteria, 10)
+        if (msgmnt) setMessageSegments(msgmnt)
+        setSearchParams({entity: encodeString("message_segment"), criteria: encodeString(criteria), enti: "message_segment", crit: criteria})
+    }
+
     const onCheckShowAll = async () => {
-        let clt = []
+        let msgmnt = []
         if (isEmpty(searchParams)) {
-            clt = await listMessageSegments(1000000000000)
-        } else {
-            clt = await searchMessageSegment(1000000000000, searchParams.column, searchParams.value)
+            msgmnt = await listMessageSegments(1000000000000)
         }
-        setMessageSegments(clt)
+        else if (searchParams.hasOwnProperty('criteria')) {
+            msgmnt = await search(searchParams.enti, searchParams.crit, 1000000000000)
+        }
+        else {
+            msgmnt = await searchMessageSegment(1000000000000, searchParams.column, searchParams.value)
+        }
+        setMessageSegments(msgmnt)
     }
 
     return (
         ! isEmpty(messageSegments) && 
         (
-        <div className="component-container">
-            <h1 className="content-header">All MessageSegments</h1>
+        <Page title="MessageSegments">
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
@@ -119,7 +124,7 @@ const ListMessageSegments = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={messageSegments.total} perPage={messageSegments.per_page}/>
             </PaginationContainer>
-        </div>
+        </Page>
         )
     )
 }

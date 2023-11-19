@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react"
-import "../../assets/style/component/add-message-recipients.css"
 import NavBar from "../../layout/Navigation/NavBar"
 import { render } from "../../setup/navigator"
 
@@ -56,7 +55,7 @@ const AddMessageRecipients = ({ userID, setGroupRecipients, addMessageSegmentsRe
                 <div onClick={importedFromParametersFile}><i className="fas fa-file-import"></i>Imported From Parameters File</div>
             </NavBar>
 
-            <div style={{marginTop: "25px"}} id="add-recipients"></div>
+            <div style={{marginTop: "25px", padding: "0 10px"}} id="add-recipients"></div>
         </div>
     )
 }

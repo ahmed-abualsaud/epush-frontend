@@ -97,15 +97,14 @@ const ListNotificationSendingHandlers = () =>
         navigate("notification-management", "add-notification-sending-handler")
     }
 
-    const deleteNotificationSendingHandlerHandler = (notificationSendingHandler, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-notification-sending-handler", notificationSendingHandler, deletedRows, setDeletedRows)
+    const deleteNotificationSendingHandlerHandler = (notificationSendingHandler, onDelete) => {
+        navigate("modal-content", "delete-notification-sending-handler", notificationSendingHandler, onDelete)
     }
 
     return (
         ! isEmpty(notificationSendingHandlers) && 
         (
-        <div className="component-container">
-            <h1 className="content-header">All Notifications</h1>
+        <div>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>

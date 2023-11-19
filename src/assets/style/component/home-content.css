@@ -1,5 +1,5 @@
 .home-content {
-    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg");
+    background-image: var(--background-image);
     z-index: -10!important;
 }
 

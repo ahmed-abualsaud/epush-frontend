@@ -23,58 +23,36 @@ import TableHead from "../../layout/Table/TableHead"
 import Table from "../../layout/Table/Table"
 import OperationRowCell from "../../layout/TableOperation/OperationRowCell"
 import { showAlert } from "../../utils/validator"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import { encodeString } from "../../utils/strUtils"
+import useSearchApi from "../../api/useSearchApi"
+import Page from "../../page/Page"
 
 
-const ListApprovedMessages = () =>
+const ListUnapprovedMessages = () =>
 {
-    const excludedColumns = [
-
-        "id",
-        "user_id",
-        "updated_at", 
-        "deleted_at", 
-        "order_id",
-        "sender_id",
-        "order",
-        "sender",
-        "client",
-        "recipients",
-        "segments",
-        "message_language_id",
-    ]
-
     const [columns, setColumns] = useState([])
     const [messages, setMessages] = useState([])
     const [searchParams, setSearchParams] = useState({})
     const [approvedMessages, setApprovedMessages] = useState([])
 
-    const { updateMessage, searchMessage } = useCoreApi()
+    const { search } = useSearchApi()
+    const { updateMessage } = useCoreApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
-
-        setSearchParams({column: 'approved', value: false})
-
         let msg = []
         if (isEmpty(searchParams)) {
-            msg = await searchMessage(perPage, 'approved', false)
+            let criteria = "approved = false"
+            setSearchParams({entity: encodeString("message"), criteria: encodeString(criteria), enti: "message", crit: criteria})
+            msg = await search("message", criteria, perPage)
         } else {
-            msg = await searchMessage(perPage, searchParams.column, searchParams.value)
+            msg = await search(searchParams.enti, searchParams.crit, perPage)
         }
          
         setMessages(msg)
-
-        let filteredColumns = [
-            "company_name", 
-            "sender_name",
-        ]
-
-        filteredColumns.push(...(msg?.data[0] ? Object.keys(msg?.data[0]).filter(
-            (column) => !excludedColumns.includes(column)
-        ) : []))
-    
-        setColumns(filteredColumns)
+        setColumns(["company_name", "sender_name", "content", "notes", "approved", "single_message_cost", "total_cost", "number_of_segments", "number_of_recipients", "language", "scheduled_at", "created_at"])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup(10) }
@@ -95,17 +73,25 @@ const ListApprovedMessages = () =>
     }
 
     const searchEntityColumn = async (column, value) => {
-        const msg = await searchMessage(10, column, value)
+        let criteria = "approved = false And " + column + " LIKE '%" + value + "%'"
+        const msg = await search("message", criteria, 10)
         if (msg) setMessages(msg)
-        setSearchParams({column: column, value: value})
+        setSearchParams({entity: encodeString("message"), criteria: encodeString(criteria), enti: "message", crit: criteria})
+    }
+
+    const onSearch = async (criteria) => {
+        criteria = "approved = false And " + criteria
+        const msg = await search("message", criteria, 10)
+        if (msg) setMessages(msg)
+        setSearchParams({entity: encodeString("message"), criteria: encodeString(criteria), enti: "message", crit: criteria})
     }
 
     const onCheckShowAll = async () => {
         let msg = []
         if (isEmpty(searchParams)) {
-            msg = await searchMessage(1000000000000, 'approved', false)
+            msg = await search("message", "approved = false", 1000000000000)
         } else {
-            msg = await searchMessage(1000000000000, searchParams.column, searchParams.value)
+            msg = await search(searchParams.enti, searchParams.crit, 1000000000000)
         }
         setMessages(msg)
     }
@@ -126,15 +112,15 @@ const ListApprovedMessages = () =>
         showAlert("Message Approved Successfully")
     }
 
-    const deleteMessageHandler = (message, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-message", message, deletedRows, setDeletedRows)
+    const deleteMessageHandler = (message, onDelete) => {
+        navigate("modal-content", "delete-message", message, onDelete)
     }
 
     return (
         ! isEmpty(messages) && 
         (
-        <div className="component-container">
-            <h1 className="content-header">Unapproved Messages</h1>
+        <Page title="Unapproved Messages">
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
@@ -149,16 +135,16 @@ const ListApprovedMessages = () =>
                 </TableHead>
                 <TableBody>
                     <DataRows columns={columns} rows={messages.data.filter(message => ! approvedMessages.includes(message.id)).map(message => {
-                        message.company_name = message.sender?.client?.company_name ?? "NULL"
-                        message.sender_name = message.sender?.name ?? "NULL"
+                        message.company_name = message.sender?.client?.company_name ?? message.company_name ?? "NULL"
+                        message.sender_name = message.sender?.name ?? message.sender_name ?? "NULL"
                         message.language = message.language?.name ?? "NULL"
                         return message
                     })}>
                         {withOperationCellParameters(ShowRowCell, "showFunction", showMessageHandler)}
-                        {withOperationCellParameters(DeleteRowCell, "deleteFunction", deleteMessageHandler)}
                         {withOperationCellParameters(OperationRowCell, "operationFunction", updateMessageHandler, {
                             children: <i style={{color: "#FFBB00"}} class="fas fa-check-double"></i>
                         })}
+                        {withOperationCellParameters(DeleteRowCell, "deleteFunction", deleteMessageHandler)}
                     </DataRows>
                 </TableBody>
             </Table>
@@ -169,9 +155,9 @@ const ListApprovedMessages = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={messages.total} perPage={messages.per_page}/>
             </PaginationContainer>
-        </div>
+        </Page>
         )
     )
 }
 
-export default ListApprovedMessages
+export default ListUnapprovedMessages

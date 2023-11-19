@@ -1,3 +1,6 @@
+import Page from "../../page/Page"
+import { snakeToBeautifulCase } from "../../utils/helper"
+
 const ShowSMSCBinding = ({ smscBinding }) => {
 
     const excludedColumns = [
@@ -13,8 +16,7 @@ const ShowSMSCBinding = ({ smscBinding }) => {
     const filteredColumns = smscBinding ? Object.keys(smscBinding).filter(column => ! excludedColumns.includes(column)) : []
 
     return (
-        <div className="component-container">
-            <h1 className="content-header">General Information</h1>
+        <Page title="General Information">
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -25,7 +27,7 @@ const ShowSMSCBinding = ({ smscBinding }) => {
                 <tbody>
                     {filteredColumns.map((col) => (
                         <tr>
-                            <td style={{fontSize: "22px"}}>{col}</td>
+                            <td style={{fontSize: "22px", whiteSpace: "no-wrap"}}>{snakeToBeautifulCase(col)}</td>
                             <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof smscBinding[col] === "boolean"? smscBinding[col] ? "Yes" : "No" : smscBinding[col] ?? "NULL"}</td>
                         </tr>
                     ))}
@@ -34,7 +36,7 @@ const ShowSMSCBinding = ({ smscBinding }) => {
                     </tr>
                 </tbody>
             </table>
-        </div>
+        </Page>
     )
 }
 

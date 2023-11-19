@@ -4,6 +4,13 @@ import { render } from "../../setup/navigator"
 import { showAlert } from "../../utils/validator"
 import { useEffect, useRef, useState } from "react"
 import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
+import Avatar from "../../layout/Shared/Avatar"
+import Page from "../../page/Page"
+import Section from "../../layout/Shared/Section"
+import MutedInput from "../../layout/Shared/MutedInput"
+import { generateApiKey, isIPAddress } from "../../utils/strUtils"
+import Switch from "../../layout/Shared/Switch"
+import ExtendedInput from "../../layout/Shared/ExtendedInput"
 
 const EditClient = ({ client }) => {
 
@@ -32,25 +39,31 @@ const EditClient = ({ client }) => {
     )
 
     const { updateClient } = useCoreApi()
+    const [apiKey, setApiKey] = useState("")
+    const [avatar, setAvatar] = useState({})
+    const [ipAddresses, setIPAddresses] = useState([])
     const [currentClient, setCurrentClient] = useState([])
-    const [imagePreview, setImagePreview] = useState(client["avatar"] ?? "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg")
 
     const setupLock = useRef(true)
     const setup = async () => {
         setCurrentClient(client)
-        document.querySelector('.uil-camera-plus').addEventListener("click", () => getElement("edit-client-avatar-input").click())
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup() }
     }, [])
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0]
-        const reader = new FileReader()
-        reader.onload = function (e) {
-            setImagePreview(e.target.result)
+    useEffect(() => {
+        if (! currentClient?.use_api_key) {
+            setApiKey("The selected client is not allowed to use any API key")
+        } else if (isEmpty(currentClient?.api_key)) {
+            setApiKey("The selected client doesn't have API key, you can get a new one by clicking the button below")
+        } else {
+            setApiKey(currentClient?.api_key)
         }
-        reader.readAsDataURL(file)
+    }, [currentClient])
+
+    const onSelectAvatar = (avatar) => {
+        setAvatar(avatar)
     }
 
     const enableDisableClient = async (checkboxId) => {
@@ -65,7 +78,6 @@ const EditClient = ({ client }) => {
     }
 
     const updateClientAvatar = async () => {
-        let avatar = getElement("edit-client-avatar-input").files[0]
         if (! isEmpty(avatar)) {
             let data = new FormData()
             data.append("avatar", avatar)
@@ -93,7 +105,6 @@ const EditClient = ({ client }) => {
         isEmpty(data) && showAlert("You need to insert new client information")
         if (! isEmpty(data)) {
             let newClient = await updateClient(client["user_id"], data)
-            console.log(newClient)
             if (! isEmpty(newClient)) {
                 setCurrentClient(newClient)
                 showAlert("Client information updated successfully")
@@ -157,21 +168,64 @@ const EditClient = ({ client }) => {
         }
     }
 
+    const generateApiToken = async () => {
+        if (currentClient?.use_api_key) {
+            let data = new FormData()
+            data.append("api_key", await generateApiKey(client["user_id"]))
+            let newClient = await updateClient(client["user_id"], data)
+            if (! isEmpty(newClient)) {
+                setCurrentClient(newClient)
+                showAlert("Client API Key Generated Successfully")
+            }
+        } else {
+            showAlert("The selected client is not allowed to use any API key")
+        }
+    }
+
+    const updateAccessIPAddress = async () => {
+        let invalidIPs = ipAddresses.filter(ip => ! isIPAddress(ip))
+
+        if (! isEmpty(invalidIPs)) {
+            showAlert("Invalid IP addresses: " + invalidIPs[0]);
+            return
+        }
+
+        if (currentClient?.use_api_key) {
+            let data = new FormData()
+            data.append("ip_address", [...new Set(ipAddresses)].join("-"))
+            let newClient = await updateClient(client["user_id"], data)
+            if (! isEmpty(newClient)) {
+                setCurrentClient(newClient)
+                showAlert("Restriction IPs Updated Successfully")
+            }
+        } else {
+            showAlert("You are not allowed to use IP restriction")
+        }
+    }
+
+    const enableDisableClientApiKey = async (value) => {
+        let data = new FormData()
+        data.append("use_api_key", value)
+        let newClient = await updateClient(client["user_id"], data)
+
+        if (! isEmpty(newClient)) {
+            setCurrentClient(newClient)
+            value ? showAlert("Client API Key has been enabled"): showAlert("Client API Key has been disabled");
+        }
+    }
+
 
     return (
-        <div className="component-container">
-            <h1 className="content-header">Client Information</h1>
+        <Page title="Client Information">
             <div className="user-info">
-                <div className="user-avatar-password">
-                    <div className="user-image">
-                        <div className="avatar-hint">Click on your avatar if you want to change it!</div>
-                        <div className="image-wrapper">
-                            <img src={ imagePreview } alt="Avatar" />
-                            <input id="edit-client-avatar-input" type="file" accept="image/*" onChange={handleImageChange}/>
-                            <i className="uil uil-camera-plus"></i>
+                <div className="user-avatar-password mb-5">
+                    <div>
+                        <Avatar imageUrl={client.avatar} onSelectAvatar={onSelectAvatar}/>
+                        <div className="w-100 d-flex justify-content-center">
+                                <button className="button" onClick={() => updateClientAvatar()}>Update Avatar</button>
                         </div>
-                        <button className="button" onClick={() => updateClientAvatar()}>Update Avatar</button>
                     </div>
+
                     <div className="user-generate-password">
                         <div className="password-hint">Click the button to create a new password for this client and update their old password with the new one.</div>
                         <a href="#popup">
@@ -199,6 +253,37 @@ const EditClient = ({ client }) => {
                         </div>
                     </div>
                 </div>
+
+                <Section title="API Token">
+                    <Section>
+                        <div style={{fontSize: "30px", margin: "20px"}}>API Token Generation</div>
+                        <Switch 
+                            id={"api-key-switch"} 
+                            labelLeft="Disabled API Key" 
+                            labelRight="Enabled API Key" 
+                            defaultChecked={client?.use_api_key}
+                            onLeft={() => enableDisableClientApiKey(false)}
+                            onRight={() => enableDisableClientApiKey(true)}
+                        />
+                        <MutedInput id="api-key" value={apiKey}/>
+                        <div className="w-100 d-flex justify-content-center">
+                            <button className="button" onClick={() => generateApiToken()}>Generate API Token</button>
+                        </div>
+                    </Section>
+                    {currentClient?.use_api_key && <Section contentPadding="0 0 20px 0">
+                        <div style={{fontSize: "30px", margin: "20px"}}>API Token Restriction</div>
+                        <ExtendedInput 
+                            type="text" 
+                            icon="fas fa-laptop" 
+                            placeholder="Access IP Address" 
+                            setUpdatedValues={(IPs) => setIPAddresses(IPs)} 
+                            values={client?.ip_address?.split("-")}
+                        />
+                        <div className="w-100 d-flex justify-content-center">
+                            <button className="button" onClick={() => updateAccessIPAddress()}>Apply IP Address Restriction</button>
+                        </div>
+                    </Section>}
+                </Section>
 
                 <table style={{marginTop: "100px"}} className="fl-table">
                     <thead>
@@ -263,7 +348,7 @@ const EditClient = ({ client }) => {
                         {filteredColumns?.map((column) => (
                             ! ["websites", "sales", "business_field", "businessfield"].includes(column)  &&
                             <tr>
-                                <td>{ column }</td>
+                                <td>{ snakeToBeautifulCase(column) }</td>
                                 <td>{ typeof currentClient[column] === "boolean"? currentClient[column] ? "Yes" : "No" : currentClient[column] ?? "NULL"}</td>
                                 <td className="info-input"> {
                                     column === "phone"? <input id="phone-input" placeholder={ "Type the new Phone here" } type="number"/> : 
@@ -281,7 +366,7 @@ const EditClient = ({ client }) => {
                     <button className="button" onClick={() => updateClientInfo()}>Update Client Info</button>
                 </div>
             </div>
-        </div>
+        </Page>
     )
 }
 

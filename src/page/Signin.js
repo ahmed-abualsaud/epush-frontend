@@ -1,8 +1,8 @@
 import '../assets/style/page/signin.css'
 import SigninForm from '../component/Auth/SigninForm';
 import SignupForm from '../component/Auth/SignupForm';
-import BackButton from '../component/Shared/BackButton';
 import SigninSignupSwitch from '../component/Auth/SigninSignupSwitch';
+import BackButton from '../layout/Shared/BackButton';
 
 const Signin = () => {  
     return (

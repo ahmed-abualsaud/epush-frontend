@@ -1,15 +1,15 @@
 import { showAlert } from '../../utils/validator'
 import useCoreApi from '../../api/useCoreApi'
 
-const DeleteClient = ({ client, deletedRows, setDeletedRows }) => {
+const DeleteClient = ({ client, onDelete }) => {
 
     const { deleteClient } = useCoreApi()
 
     const deleteEntity = async () => {
 
         if (await deleteClient(client.user_id)) {
+            onDelete()
             showAlert("Client Deleted Successfully")
-            setDeletedRows([...deletedRows, client.id])
         } else {
             showAlert("Delete Client Failed")
         }

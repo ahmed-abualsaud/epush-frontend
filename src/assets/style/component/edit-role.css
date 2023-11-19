@@ -16,13 +16,13 @@
 .edit-role-container .edit-role-header {
     display: flex;
     align-items: center;
-    color: white;
+    color: var(--boundry-color);
     height: 100px;
     padding: 0 1.5rem;
-    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 80%, #BFE85F 400%);
+    background-image: var(--background-image), linear-gradient(43deg, var(--secondary-color) 0%, var(--primary-color) 80%, var(--support-color) 400%);
 }
 
 .edit-role-header button {
     background-image: none;
-    background-color: #070020;
+    background-color: var(--secondary-color);
 }

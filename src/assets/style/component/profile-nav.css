@@ -5,10 +5,11 @@
     max-width: 100%;
     text-align: center;
     z-index: 200;
+    cursor: pointer;
 }
 
 .profile-nav img {
-    border: 1px solid #fff;
+    border: 1px solid var(--boundry-color);
 }
 
 .dropdown:checked + label,
@@ -38,7 +39,7 @@
   text-align: center;
   border: none;
   cursor: pointer;
-  color: #fff;
+  color: var(--boundry-color);
   box-shadow: 0 12px 35px 0 rgba(255,235,167,.15);
 }
 
@@ -75,7 +76,7 @@
 .section-dropdown {
   position: absolute;
   padding: 5px;
-  background-color: #063F30;
+  background-color: var(--primary-color);
   top: 80px;
   left: 0;
   width: 100%;
@@ -87,7 +88,7 @@
   pointer-events: none;
   transform: translateY(20px);
   transition: all 200ms linear;
-  background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 80%, #BFE85F 200%);
+  background-image: var(--background-image), linear-gradient(43deg, var(--secondary-color) 0%, var(--primary-color) 80%, var(--support-color) 200%);
 }
 
 .dropdown:checked ~ .section-dropdown{
@@ -115,7 +116,7 @@
   height: 0; 
   border-left: 8px solid transparent;
   border-right: 8px solid transparent; 
-  border-bottom: 8px solid #063F30;
+  border-bottom: 8px solid var(--primary-color);
   content: '';
   display: block;
   z-index: 2;
@@ -124,7 +125,7 @@
 
 .section-dropdown > a {
   position: relative;
-  color: #fff;
+  color: var(--boundry-color);
   transition: all 200ms linear;
   font-family: 'Roboto', sans-serif;
   font-weight: 500;
@@ -147,5 +148,5 @@
 }
 
 .section-dropdown > a:hover {
-  background-color: #070020;
+  background-color: var(--secondary-color);
 }

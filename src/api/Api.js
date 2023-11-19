@@ -10,7 +10,7 @@ const useAxiosApi = () =>
 {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    let authUser = useSelector((state) => state.auth.user)
+    let authUser = useSelector(state => state.auth.user)
 
     const getAuthenticatedUser = () => 
     {

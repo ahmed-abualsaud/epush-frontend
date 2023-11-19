@@ -1,3 +1,5 @@
+import { isEmpty } from "../../utils/helper"
+
 const OperationRowCell = ({ operationFunction, ...props }) => {
 
     return (
@@ -7,7 +9,7 @@ const OperationRowCell = ({ operationFunction, ...props }) => {
             onClick={operationFunction} 
             className="operation"
         >
-            <a className="modal-button" href="#">
+            <a className="modal-button" href={ ! isEmpty(props) && props[0]?.popup ? "#popup" : "#"}>
                 { props[0].children }
             </a>
         </td>

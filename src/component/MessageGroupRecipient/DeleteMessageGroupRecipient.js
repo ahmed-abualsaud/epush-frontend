@@ -1,15 +1,15 @@
 import useCoreApi from "../../api/useCoreApi"
 import { showAlert } from "../../utils/validator"
 
-const DeleteMessageGroupRecipient = ({ messageGroupRecipient, deletedRows, setDeletedRows }) => {
+const DeleteMessageGroupRecipient = ({ messageGroupRecipient, onDelete }) => {
 
     const { deleteMessageGroupRecipient } = useCoreApi()
 
     const deleteEntity = async () => {
 
         if (await deleteMessageGroupRecipient(messageGroupRecipient.id)) {
+            onDelete()
             showAlert("Message Group Recipient Deleted Successfully")
-            setDeletedRows([...deletedRows, messageGroupRecipient.id])
         } else {
             showAlert("Delete Message Group Recipient Failed")
         }

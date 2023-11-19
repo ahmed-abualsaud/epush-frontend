@@ -1,3 +1,6 @@
+import Page from "../../page/Page"
+import { snakeToBeautifulCase } from "../../utils/helper"
+
 const ShowSenderConnection = ({ senderconnection }) => {
 
     const excludedColumns = [
@@ -16,8 +19,7 @@ const ShowSenderConnection = ({ senderconnection }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header">General Information</h1>
+        <Page title="General Information">
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -28,7 +30,7 @@ const ShowSenderConnection = ({ senderconnection }) => {
                 <tbody>
                     {filteredColumns.map((col) => (
                         <tr>
-                            <td style={{fontSize: "22px"}}>{col}</td>
+                            <td style={{fontSize: "22px", whiteSpace: "no-wrap"}}>{snakeToBeautifulCase(col)}</td>
                             <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof senderconnection[col] === "boolean"? senderconnection[col] ? "Yes" : "No" : senderconnection[col] ?? "NULL"}</td>
                         </tr>
                     ))}
@@ -37,7 +39,7 @@ const ShowSenderConnection = ({ senderconnection }) => {
                     </tr>
                 </tbody>
             </table>
-        </div>
+        </Page>
     )
 }
 

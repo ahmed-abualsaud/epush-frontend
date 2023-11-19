@@ -1,15 +1,15 @@
 import useCoreApi from "../../api/useCoreApi";
 import { showAlert } from "../../utils/validator";
 
-const DeleteMessageLanguage = ({ messageLanguage, deletedRows, setDeletedRows }) => {
+const DeleteMessageLanguage = ({ messageLanguage, onDelete }) => {
 
     const { deleteMessageLanguage } = useCoreApi()
 
     const deleteEntity = async () => {
 
         if (await deleteMessageLanguage(messageLanguage.id)) {
+            onDelete()
             showAlert("Message Language Deleted Successfully")
-            setDeletedRows([...deletedRows, messageLanguage.id])
         } else {
             showAlert("Delete Message Language Failed")
         }

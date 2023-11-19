@@ -1,7 +1,6 @@
 import "../../assets/style/layout/textarea.css"
 
-const 
-TextArea = ({ content, height, placeholder, onContentChange , textInputFilterFunction, disabled, readonly }) => {
+const TextArea = ({ content, height, placeholder, onContentChange , textInputFilterFunction, disabled, readonly }) => {
 
     const handleKeyPress = (e) => {
         textInputFilterFunction && textInputFilterFunction(e)
@@ -22,7 +21,7 @@ TextArea = ({ content, height, placeholder, onContentChange , textInputFilterFun
 
         // Set the height
         e.target.style.height = calcHeight + "px";
-        onContentChange(e.target.value)
+        onContentChange && onContentChange(e.target.value)
     }
 
     return (
@@ -37,7 +36,10 @@ TextArea = ({ content, height, placeholder, onContentChange , textInputFilterFun
                 onInput={onInputHandler}
                 disabled={disabled}
                 readOnly={readonly}
-            ></textarea>  
+            ></textarea> 
+
+            <i className={`fas fa-lock textarea-lock ${ disabled || readonly ? 'd-block' : 'd-none'}`}></i>
+
         </div>
     )
 }

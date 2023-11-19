@@ -5,6 +5,7 @@ import { showAlert } from "../../utils/validator"
 import DropList from "../../layout/Shared/DropList"
 import { useEffect, useRef, useState } from "react"
 import { getElement } from "../../utils/dom"
+import Page from "../../page/Page"
 
 
 const AddSMSCBinding = () => {
@@ -69,35 +70,33 @@ const AddSMSCBinding = () => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header mb-5">Add New SMSC Binding</h1>
-
-            <div>
+        <Page title="Add New SMSC Binding">
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "40px"}}>Country: </div>
-                <div className="d-inline-flex justify-content-center mt-5" style={{width: "60%"}}>
+                <div className="d-inline-flex justify-content-center mt-5" style={{width: "55%"}}>
                     <DropList selectName="Select Country" options={countries.map(item => item.name)} onSelect={onSelectCountry}/>
                 </div>
-                <div className="d-inline-flex align-items-center p-5" style={{width: "20%", fontSize: "25px"}}>
+                <div className="d-inline-flex align-items-center p-5" style={{width: "25%", fontSize: "25px"}}>
                     Code = {countries.filter(c => c.id === selectedCountryID)[0]?.code ?? "Unknown"}
                 </div>
             </div>
 
-            <div>
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "40px"}}>Operator: </div>
-                <div className="d-inline-flex justify-content-center mt-5" style={{width: "60%"}}>
+                <div className="d-inline-flex justify-content-center mt-5" style={{width: "55%"}}>
                     <DropList selectName="Select Operator" options={operators.map(item => item.name)} onSelect={onSelectOperator}/>
                 </div>
-                <div className="d-inline-flex align-items-center p-5" style={{width: "20%", fontSize: "25px"}}>
+                <div className="d-inline-flex align-items-center p-5" style={{width: "25%", fontSize: "25px"}}>
                     Code = {operators.filter(o => o.id === selectedOperatorID)[0]?.code ?? "Unknown"}
                 </div>
             </div>
 
-            <div>
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "40px"}}>SMSC: </div>
-                <div className="d-inline-flex justify-content-center mt-5" style={{width: "60%"}}>
+                <div className="d-inline-flex justify-content-center mt-5" style={{width: "55%"}}>
                     <DropList selectName="Select SMSC" options={smscs.map(item => item.name)} onSelect={onSelectSMSC}/>
                 </div>
-                <div className="d-inline-flex align-items-center p-5" style={{width: "20%", fontSize: "25px"}}>
+                <div className="d-inline-flex align-items-center p-5" style={{width: "25%", fontSize: "25px"}}>
                     Value = {smscs.filter(s => s.id === selectedSMSCID)[0]?.value ?? "Unknown"}
                 </div>
             </div>
@@ -111,7 +110,7 @@ const AddSMSCBinding = () => {
             <div className="button-container">
                 <button className="button" onClick={() => addNewSMSCBinding()}>Add New SMSC Binding</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

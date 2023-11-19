@@ -1,5 +1,6 @@
-import { isEmpty, randomString, arrayMergeUnique, arrayIsEmpty } from "../utils/helper"
+import { isEmpty, arrayMergeUnique, arrayIsEmpty } from "../utils/helper"
 import { getElement, createElement, removeElement, fadeElementOut, getElementsWithAttribute } from "../utils/dom"
+import { randomString } from "./strUtils"
 
 function addErrorMessage(errorMessage, errorMessages) {
 

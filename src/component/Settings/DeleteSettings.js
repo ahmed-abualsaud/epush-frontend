@@ -1,15 +1,15 @@
 import { showAlert } from "../../utils/validator"
 import useSettingsApi from "../../api/useSettingsApi"
 
-const DeleteSettings = ({ settings, deletedRows, setDeletedRows }) => {
+const DeleteSettings = ({ settings, onDelete }) => {
 
     const { deleteSettings } = useSettingsApi()
 
     const deleteEntity = async () => {
 
         if (await deleteSettings(settings.id)) {
+            onDelete()
             showAlert("Settings Deleted Successfully")
-            setDeletedRows([...deletedRows, settings.id])
         } else {
             showAlert("Delete Settings Failed")
         }

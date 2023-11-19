@@ -4,13 +4,13 @@
     width: 100px;
     align-items: center;
     justify-content: center;
-    color: #063F30;
+    color: var(--primary-color);
     border-radius: 3px;
     letter-spacing: 1px;
     transition: all 0.2s linear;
     cursor: pointer;
     border: none;
-    background: #fff;
+    background: var(--boundry-color);
     font-weight: 600;
 }
    
@@ -22,12 +22,12 @@
    
 .back-button:hover > svg {
     transform: translateX(-10px);
-    fill: #fff;
+    fill: var(--boundry-color);
 }
    
 .back-button:hover {
-    box-shadow: 9px 9px 33px #d1d1d1, -9px -9px 33px #063F30;
+    box-shadow: 9px 9px 33px #d1d1d1, -9px -9px 33px var(--primary-color);
     transform: translateY(-2px);
-    color: #fff;
-    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 0%, #063F30 60%, #BFE85F 120%);
+    color: var(--boundry-color);
+    background-image: var(--background-image), linear-gradient(43deg, var(--secondary-color) 0%, var(--primary-color) 60%, var(--support-color) 120%);
 }

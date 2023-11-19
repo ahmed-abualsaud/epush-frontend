@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import useAuthApi from "../../api/useAuthApi";
+import Avatar from "../../layout/Shared/Avatar";
+import { snakeToBeautifulCase } from "../../utils/helper";
+import Page from "../../page/Page";
 
 const ShowUser = ({ user }) => {
 
@@ -19,13 +22,9 @@ const ShowUser = ({ user }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header">General Information</h1>
-            <div className="user-image">
-                <div className="image-wrapper">
-                    <img src={currentUser.avatar ?? "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg"} alt="Avatar" />
-                </div>
-            </div>
+        <Page title="General Information">
+            <Avatar imageUrl={currentUser.avatar}/>
+            
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -36,13 +35,13 @@ const ShowUser = ({ user }) => {
                 <tbody>
                     {filteredColumns.map((col) => (
                         <tr>
-                            <td style={{fontSize: "22px"}}>{col}</td>
+                            <td style={{fontSize: "22px", whiteSpace: "no-wrap"}}>{snakeToBeautifulCase(col)}</td>
                             <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof currentUser[col] === "boolean"? currentUser[col] ? "Yes" : "No" : currentUser[col] ?? "NULL"}</td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-        </div>
+        </Page>
     )
 }
 

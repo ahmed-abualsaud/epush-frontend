@@ -1,15 +1,15 @@
 import useAuthApi from "../../api/useAuthApi";
 import { showAlert } from "../../utils/validator";
 
-const DeletePermission = ({ permission, deletedRows, setDeletedRows }) => {
+const DeletePermission = ({ permission, onDelete }) => {
 
     const { deletePermission } = useAuthApi()
 
     const deleteEntity = async () => {
 
         if (await deletePermission(permission.id)) {
+            onDelete()
             showAlert("Permission Deleted Successfully")
-            setDeletedRows([...deletedRows, permission.id])
         } else {
             showAlert("Delete Permission Failed")
         }

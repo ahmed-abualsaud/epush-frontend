@@ -6,6 +6,7 @@ import { showAlert } from "../../utils/validator"
 import { getElement } from "../../utils/dom"
 import { useEffect, useRef, useState } from "react"
 import DropList from "../../layout/Shared/DropList"
+import Page from "../../page/Page"
 
 const AddSender = () => {
 
@@ -56,15 +57,11 @@ const AddSender = () => {
 
 
     return (
-        <div id="add-sender-form" className="component-container">
-            <h1 className="content-header mb-5">Add New Sender</h1>
+        <Page id="add-sender-form" title="Add New Sender">
+            <div className="m-3">Note: the maximum sender name length is 11 characters and it should be in english</div>
+            <Input id="add-sender-name" type="text" icon="fas fa-pen" placeholder="Name" validrules="required" maxLength={11} onInput={senderNameOnInputHandler}/>
 
-            <div className="mb-3">Note: the maximum sender name length is 11 characters and it should be in english</div>
-            <Input id="add-sender-name" type="text" placeholder="Name" validrules="required" maxLength={11} onInput={senderNameOnInputHandler}>
-                <i className="input-icon fas fa-pen"></i>
-            </Input>
-
-            <div>
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "15%", fontSize: "25px"}}>Company Name</div>
                 <div className="d-inline-flex justify-content-center mt-5" style={{width: "85%"}}>
                     <DropList selectName="Select Company Name" options={client.map(item => item.company_name)} onSelect={onSelectClient}/>
@@ -80,7 +77,7 @@ const AddSender = () => {
             <div className="button-container">
                 <button className="button" onClick={() => addNewSender()}>Add New Sender</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

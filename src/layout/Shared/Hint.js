@@ -1,6 +1,6 @@
 import "../../assets/style/layout/hint.css"
 import { getElement } from "../../utils/dom"
-import { randomString } from "../../utils/helper"
+import { randomString } from "../../utils/strUtils"
 
 const Hint = ({ children }) => {
     const hintKey = "hint-" + randomString(8)
@@ -8,7 +8,7 @@ const Hint = ({ children }) => {
 
     const removeHint = () => {
         let hint = getElement(hintKey)
-        hint.parentNode.removeChild(hint)
+        hint.parentNode?.removeChild(hint)
     }
 
     return (

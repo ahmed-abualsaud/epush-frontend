@@ -11,7 +11,7 @@
     height: 10px;
     outline: none;
     cursor: pointer;
-    background-image: linear-gradient(43deg, #BFE85F -100%, #063F30 50%, #070020 100%);
+    background-image: linear-gradient(43deg, var(--support-color) -100%, var(--primary-color) 50%, var(--secondary-color) 100%);
 }
   
 .slider-ten-scale {
@@ -22,7 +22,7 @@
     display: flex;
     justify-content: space-between;
     font-size: 12px;
-    color: #063F30;
+    color: var(--primary-color);
 }
 
 .slider-five-scale {
@@ -33,7 +33,7 @@
     display: flex;
     justify-content: space-between;
     font-size: 10px;
-    color: #070020;
+    color: var(--secondary-color);
 }
   
 .slider-scale-label {
@@ -69,12 +69,12 @@
     width: 20px;
     height: 20px;
     margin-top: 20px;
-    background: #070020;
+    background: var(--secondary-color);
     cursor: pointer;
     border-top-right-radius: 50%;
     border-bottom-right-radius: 1000%;
     border-bottom-left-radius: 50%;
-    border: 1px solid #fff;
+    border: 1px solid var(--boundry-color);
     transform: scaleY(2) rotate(45deg);
 }
   
@@ -83,12 +83,12 @@
     width: 20px;
     height: 20px;
     margin-top: 20px;
-    background: #070020;
+    background: var(--secondary-color);
     cursor: pointer;
     border-top-right-radius: 50%;
     border-bottom-right-radius: 1000%;
     border-bottom-left-radius: 50%;
-    border: 1px solid #fff;
+    border: 1px solid var(--boundry-color);
     transform: scaleY(2) rotate(45deg);
 }
   

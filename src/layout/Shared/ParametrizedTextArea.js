@@ -1,10 +1,11 @@
 import TextArea from "./TextArea"
 import "../../assets/style/layout/parametrized-textarea.css"
-import { beautifulToKebabCase, isEmpty, randomString } from "../../utils/helper"
+import { beautifulToKebabCase, isEmpty } from "../../utils/helper"
 import { getElement } from "../../utils/dom"
 import { useEffect, useState } from "react"
 import { generateMessagesUsingExcelFileParameters, generateMessagesUsingTextFileParameters, generateMessagesUsingWordFileParameters } from "../../utils/message"
 import { render } from "../../setup/navigator"
+import { randomString } from "../../utils/strUtils"
 
 
 const ParametrizedTextArea = ({ height, placeholder, onContentChange , textInputFilterFunction, onUploadFile, disabled, readonly }) => {
@@ -12,19 +13,19 @@ const ParametrizedTextArea = ({ height, placeholder, onContentChange , textInput
     const componentKey = randomString(8)
     const parameters = [
     
-        "{{name}}",
-        "{{username}}",
-        "{{email}}",
-        "{{phone}}",
-        "{{first_name}}",
-        "{{last_name}}",
-        "{{full_name}}",
-        "{{age}}",
-        "{{gender}}",
-        "{{address}}",
-        "{{balance}}",
-        "{{cost}}",
-        "{{price}}",
+        "name",
+        "username",
+        "email",
+        "phone",
+        "first_name",
+        "last_name",
+        "full_name",
+        "age",
+        "gender",
+        "address",
+        "balance",
+        "cost",
+        "price",
     
     ]
 
@@ -48,7 +49,7 @@ const ParametrizedTextArea = ({ height, placeholder, onContentChange , textInput
         selectbox.classList.remove('selectbox--active')
         
         if (selectName === "Select Parameters") {
-            setContent(content + option)
+            setContent(content + "{{" + option + "}}")
         }
 
         if (option === "Excel File Example") {
@@ -108,6 +109,12 @@ const ParametrizedTextArea = ({ height, placeholder, onContentChange , textInput
 
     const displayOptionsOnClickHandler = (e, selectName) => {
         getElement('select-option-' + beautifulToKebabCase(selectName))?.classList.toggle('selectbox--active')
+    }
+
+    const resetParameterizedTextArea = () => {
+        setContent("")
+        onUploadFile([])
+        setParameterized(false)
     }
 
 
@@ -196,9 +203,18 @@ const ParametrizedTextArea = ({ height, placeholder, onContentChange , textInput
                     </div>
                 </div>
             </div>
+
             <TextArea placeholder={placeholder} content={content} height={height} onContentChange={onTextAreaContentChange} textInputFilterFunction={textInputFilterFunction} disabled={parameterized || disabled} readonly={readonly}/>
-            <div className="parametrized-textarea-note">NOTE: The parameters file must contain a "Phone" parameter column.</div>
-            <div className="parametrized-textarea-note">NOTE: You should upload the parameters file after you finish writing the entire message because the text editor is disabled after uploading.</div>
+
+            <div className="d-flex justify-content-between align-items-center mx-3">
+                <div>
+                    <div className="parametrized-textarea-note">NOTE: The parameters file must contain a "Phone" parameter column.</div>
+                    <div className="parametrized-textarea-note">NOTE: You can rest the text editor from the reset button because the text editor is disabled after uploading the attributes file.</div>
+                </div>
+                <div>
+                    <button className="reset-button" onClick={resetParameterizedTextArea}>Reset</button>
+                </div>
+            </div>
         </div>
     )
 }

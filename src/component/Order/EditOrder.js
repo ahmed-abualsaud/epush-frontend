@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react"
 import useExpenseApi from "../../api/useExpenseApi"
-import { isEmpty } from "../../utils/helper"
+import { isEmpty, getDatetimeString } from "../../utils/helper"
 import { showAlert } from "../../utils/validator"
 import DropList from "../../layout/Shared/DropList"
 import DateTimeButton from "../../layout/Shared/DateTimeButton"
+import Page from "../../page/Page"
 
 const EditOrder = ({ order }) => {
 
@@ -34,10 +35,7 @@ const EditOrder = ({ order }) => {
     }
 
     const getCurrentDate = () => {
-        const userDate = new Date()
-        const timezoneOffset = userDate.getTimezoneOffset() * 60000
-        const localDate = new Date(userDate.getTime() - timezoneOffset)
-        const selectedDateTime = localDate.toISOString().replace("T", " ").slice(0, 19)
+        const selectedDateTime = getDatetimeString()
         setCollectionDate(selectedDateTime)
         updateOrderCollectionDate(selectedDateTime)
     }
@@ -71,10 +69,8 @@ const EditOrder = ({ order }) => {
 
 
     return (
-        <div id="add-order-form" className="component-container">
-            <h1 className="content-header">Edit Order</h1>
-
-            <div>
+        <Page id="add-order-form" title="Edit Order">
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "25%", fontSize: "25px"}}>Payment Method</div>
                 <div className="d-inline-flex justify-content-center mt-5" style={{width: "50%"}}>
                     <DropList selectName={order.payment_method} options={paymentMethod.map(item => item.name)} onSelect={onSelectPaymentMethod}/>
@@ -84,14 +80,14 @@ const EditOrder = ({ order }) => {
                 </div>
             </div>
 
-            <div className="mt-5">
+            <div className="mt-5 mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>Collection Date</div>
                 <DateTimeButton onClick={getCurrentDate} onSelectDate={getCollectionDate}>
                     Collect Now <i className="fas fa-coins ms-3"></i>
                 </DateTimeButton>
                 <div className="d-inline-flex align-items-center ms-5" style={{fontSize: "25px"}}>Chosen Collection Date: { collectionDate }</div>
             </div>
-        </div>
+        </Page>
     )
 }
 

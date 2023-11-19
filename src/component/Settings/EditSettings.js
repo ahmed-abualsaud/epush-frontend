@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
 import { showAlert } from "../../utils/validator"
 import useSettingsApi from "../../api/useSettingsApi"
+import Page from "../../page/Page"
 
 const EditSettings = ({ settings }) => {
 
@@ -46,8 +47,7 @@ const EditSettings = ({ settings }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header mb-5">Settings Information</h1>
+        <Page title="Settings Information">
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -75,7 +75,7 @@ const EditSettings = ({ settings }) => {
             <div className="button-container">
                 <button className="button" onClick={() => updateSpecificSettings()}>Update Settings</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

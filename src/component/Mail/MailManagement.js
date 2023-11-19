@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react"
 import NavBar from "../../layout/Navigation/NavBar"
 import { render } from "../../setup/navigator"
+import Page from "../../page/Page"
 
 const MailManagement = () => {
 
@@ -21,7 +22,7 @@ const MailManagement = () => {
     }
 
     return (
-        <div className="component-container">
+        <Page className="m-0">
             <NavBar>
                 <div onClick={renderSendingMail}><i class="fas fa-envelope"></i>Sending Mail</div>
                 <div onClick={renderMailTemplates}><i className="far fa-rectangle-list"></i>Mail Templates</div>
@@ -29,7 +30,7 @@ const MailManagement = () => {
 
             <div style={{marginTop: "25px"}} id="mail-management"></div>
 
-        </div>
+        </Page>
     )
 }
 

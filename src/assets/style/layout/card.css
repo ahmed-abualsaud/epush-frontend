@@ -1,8 +1,8 @@
 .card-layout {
     width: 550px;
     height: 650px;
-    background: #063F30;
-    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #070020 -50%, #063F30 60%, #BFE85F 200%);
+    background: var(--primary-color);
+    background-image: var(--background-image), linear-gradient(43deg, var(--secondary-color) -50%, var(--primary-color) 60%, var(--support-color) 200%);
     box-shadow: 7px 7px 10px 4px rgba(0,0,0,0.75);
     -webkit-box-shadow: 7px 7px 10px 4px rgba(0,0,0,0.75);
     -moz-box-shadow: 7px 7px 10px 4px rgba(0,0,0,0.75);
@@ -28,7 +28,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #BFE85F;
+    background-color: var(--support-color);
     transform: translateX(10px) translateY(10px);
     width: 100px;
     height: 100px;
@@ -37,13 +37,13 @@
 }
 
 .card-imge .card-title {
-    background-color: #fff;
+    background-color: var(--boundry-color);
     width: 250px;
     height: 40px;
     border-width: 10px;
     border-radius: 5px;
-    border-color: #070020;
-    color: #070020;
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
     font-size: 25px;
     font-weight: bold;
     transform: translateX(70px) translateY(-35px);
@@ -51,13 +51,13 @@
 }
 
 .card-imge .card-unique-id {
-    background-color: #fff;
+    background-color: var(--boundry-color);
     width: 350px;
     height: 40px;
     border-width: 10px;
     border-radius: 5px;
-    border-color: #070020;
-    color: #070020;
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
     font-size: 25px;
     font-weight: bold;
     transform: translateX(70px) translateY(-25px);
@@ -66,7 +66,7 @@
   
 .description {
     border-color: #141414;
-    background-color: #fff;
+    background-color: var(--boundry-color);
     transform: translate(5px, 6px);
     width: 530px;
     height: 360px;
@@ -82,7 +82,7 @@
     width: 100%;
     height: 5px;
     transform: translatey(10px);
-    background: #BFE85F;
+    background: var(--support-color);
 }
 
 .card-footer-inner {
@@ -90,7 +90,7 @@
     align-items: center;
     justify-content: space-around;
     text-decoration: none;
-    color: white;
+    color: var(--boundry-color);
 }
 
 .card-footer-inner a {
@@ -99,13 +99,13 @@
 }
 
 .card-show i {
-    color: #fff;
+    color: var(--boundry-color);
     transform: translatex(25px) translateY(20px);
     margin-right: 10px;
 }
 
 .card-show {
-    color: #fff;
+    color: var(--boundry-color);
     width: 120px;
     padding: 5px 0;
     display: inline-block;
@@ -113,6 +113,6 @@
 }
 
 .card-show:hover {
-    border-bottom: 1px solid #BFE85F;
-    color: #BFE85F;
+    border-bottom: 1px solid var(--support-color);
+    color: var(--support-color);
 }

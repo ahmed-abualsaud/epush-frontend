@@ -7,8 +7,8 @@
 }
 
 .file-input-label {
-  background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg"), linear-gradient(43deg, #BFE85F -200%, #063F30 20%, #070020 200%);
-  color: #fff;
+  background-image: var(--background-image), linear-gradient(43deg, var(--support-color) -200%, var(--primary-color) 20%, var(--secondary-color) 200%);
+  color: var(--boundry-color);
   font-weight: bold;
   padding: 20px 70px;
   border-radius: 5px;
@@ -18,9 +18,9 @@
 }
   
   .file-input-label:hover {
-    background: #070020;
+    background: var(--secondary-color);
   }
   
   .file-input-label:active {
-    background: #063F30;
+    background: var(--primary-color);
   }

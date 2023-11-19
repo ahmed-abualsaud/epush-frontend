@@ -22,8 +22,8 @@ const AddSMSSendingTemplate = ({ handler }) => {
     }, [])
 
     return (
-        <div className="component-container">
-            <h1 className="content-header">
+        <div>
+            <h1 style={{marginTop: "-25px"}} className="content-header">
                 Select One of The System SMS Templates
                 <button 
                     style={{
@@ -43,8 +43,7 @@ const AddSMSSendingTemplate = ({ handler }) => {
                 <SMSTemplate 
                     template={template}
                     handler={handler}
-                    deletedRows={deletedRows} 
-                    setDeletedRows={setDeletedRows}
+                    onDelete={() => setDeletedRows([...deletedRows, template.id])}
                 />
             ))}
         </div>

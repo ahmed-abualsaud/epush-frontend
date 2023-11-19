@@ -9,6 +9,7 @@ import List from "../../layout/List/List"
 import MasterListItem from "../../layout/List/MasterListItem"
 import SlavesList from "../../layout/List/SlavesList"
 import SlaveListItem from "../../layout/List/SlaveListItem"
+import Page from "../../page/Page"
 
 const AddSenderConnection = () => {
 
@@ -69,7 +70,10 @@ const AddSenderConnection = () => {
     }
 
     const onSelectClientSender = (option) => {
-        setSelectedSenderID(clientSenders.find(o => o.name === option).id)
+        let sender = clientSenders.find(o => o.name === option)
+        if (! isEmpty(sender?.id)) {
+            setSelectedSenderID(sender.id)
+        }
     }
 
     const onSelectCountry = async (option) => {
@@ -99,32 +103,33 @@ const AddSenderConnection = () => {
 
 
     return (
-        <div id="add-sender-connection-form" className="component-container">
-            <h1 className="content-header mb-5">
+        <Page id="add-sender-connection-form" renderTitle={() => (
+            <div className="d-flex justify-content-between">
                 Add New Sender Connection
                 <button style={{marginLeft: "auto", backgroundColor: "#070020", backgroundImage: "none"}} className="button" onClick={() => navigate("content", "add-sender")}>Add New Sender</button>
-            </h1>
+            </div>
+        )}>
 
-            <div>
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "15%", fontSize: "25px"}}>Company Name</div>
                 <div className="d-inline-flex justify-content-center mt-5" style={{width: "85%"}}>
                     <DropList selectName="Select Company Name" options={client.map(item => item.company_name)} onSelect={onSelectClient}/>
                 </div>
             </div>
 
-            <div id="client-sender-droplist" className="d-none">
+            <div id="client-sender-droplist" className="mx-4 d-none">
                 <div className="d-inline-flex align-items-center" style={{width: "15%", fontSize: "25px"}}>Sender Name</div>
                 <div className="d-inline-flex justify-content-center mt-5" style={{width: "85%"}}>
                     <DropList selectName="Select Sender Name" options={isEmpty(clientSenders)? ["The selected client doesn't has any senders"] : clientSenders.map(item => item.name)} onSelect={onSelectClientSender}/>
                 </div>
             </div>
 
-            <div>
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>Country</div>
-                <div className="d-inline-flex justify-content-center mt-5" style={{width: "60%"}}>
+                <div className="d-inline-flex justify-content-center mt-5" style={{width: "40%"}}>
                     <DropList selectName="Select Country" options={[...new Set(smscBindings.map(item => item.country.name))]} onSelect={onSelectCountry}/>
                 </div>
-                <div className="d-inline-flex align-items-center justify-content-center" style={{width: "20%", fontSize: "22px"}}>Country Code = {selectedCountryCode}</div>
+                <div className="d-inline-flex align-items-center justify-content-center" style={{width: "40%", fontSize: "22px"}}>Country Code = {selectedCountryCode}</div>
             </div>
 
             {[...new Set(countryOperators.map(item => item.operator.name))].map(countryOperator => (
@@ -160,7 +165,7 @@ const AddSenderConnection = () => {
             <div className="button-container">
                 <button className="button" onClick={() => addNewSenderConnection()}>Add New Sender Connection</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

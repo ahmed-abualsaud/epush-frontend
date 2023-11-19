@@ -4,6 +4,7 @@ import { showAlert, validate } from "../../utils/validator"
 import { getFormInputData } from "../../utils/dom"
 import { navigate } from "../../setup/navigator"
 import { isEmpty } from "../../utils/helper"
+import Page from "../../page/Page"
 
 const AddCountry = () => {
 
@@ -33,21 +34,14 @@ const AddCountry = () => {
     }
 
     return (
-        <div id="add-country-form" className="component-container">
-            <h1 className="content-header mb-5">Add New Country</h1>
-
-            <Input id="add-country-name" type="text" placeholder="Name" validrules="required">
-                <i className="input-icon fas fa-pen"></i>
-            </Input>
-
-            <Input id="add-country-code" type="text" placeholder="Code" validrules="required">
-                <i className="input-icon fas fa-hashtag"></i>
-            </Input>
+        <Page id="add-country-form" title="Add New Country">
+            <Input id="add-country-name" type="text" icon="fas fa-pen" placeholder="Country Name" validrules="required"/>
+            <Input id="add-country-code" type="text" icon="fas fa-hashtag" placeholder="Country Code" validrules="required"/>
 
             <div className="button-container">
                 <button className="button" onClick={() => addNewCountry()}>Add New Country</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import useCoreApi from "../../api/useCoreApi";
+import { snakeToBeautifulCase } from "../../utils/helper";
+import Page from "../../page/Page";
 
 const ShowOperator = ({ operator }) => {
 
@@ -19,8 +21,7 @@ const ShowOperator = ({ operator }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header">General Information</h1>
+        <Page title="General Information">
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -31,7 +32,7 @@ const ShowOperator = ({ operator }) => {
                 <tbody>
                     {filteredColumns.map((col) => (
                         <tr>
-                            <td style={{fontSize: "22px"}}>{col}</td>
+                            <td style={{fontSize: "22px", whiteSpace: "no-wrap"}}>{snakeToBeautifulCase(col)}</td>
                             <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof currentOperator[col] === "boolean"? currentOperator[col] ? "Yes" : "No" : currentOperator[col] ?? "NULL"}</td>
                         </tr>
                     ))}
@@ -40,7 +41,7 @@ const ShowOperator = ({ operator }) => {
                     </tr>
                 </tbody>
             </table>
-        </div>
+        </Page>
     )
 }
 

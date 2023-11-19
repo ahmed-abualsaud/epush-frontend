@@ -1,30 +1,30 @@
-import { snakeToBeautifulCase } from "../../utils/helper"
+import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
 import { showAlert } from "../../utils/validator"
 
 const DataCellDetails = ({ column, value }) => {
 
     function copyToClipboard() {
-        navigator.clipboard.writeText(value)
+        navigator.clipboard.writeText(typeof value === "function" ?  value() : value)
         .then(() => {
-            showAlert('Password copied to clipboard')
+            showAlert(column + 'copied to clipboard')
         })
         .catch(err => {
-            showAlert('Error copying Password to clipboard')
+            showAlert('Error copying ' + column + ' to clipboard')
         })
     }
 
     return (
         <div>
             <h1 className="popup-header">{snakeToBeautifulCase(column)}</h1>
-            <div className="popup-content m-0 p-4">{
+            <div className="popup-content m-0 p-4" style={{position: "relative"}}>{
                 typeof value === "boolean" ? (
-                    value ? <i className="fa-solid fa-check"></i> : <i className="fa-solid fa-xmark"></i>
-                ) : (
-                    value ?? <i className="fas fa-ban"></i>
-                    )
+                    value ? <i className="fas fa-check"></i> : <i className="fas fa-xmark"></i>
+                ) : ((typeof value === "function") ?  value() : 
+                    (isEmpty(value) || value === "NULL" ? <i className="fas fa-ban"></i> : value)
+                )
             }</div>
             <div className="popup-button-wrapper m-3">
-                <button className="button" onClick={() => copyToClipboard()}>Copy to Clipboard <i className="uil uil-copy"></i></button>
+                <button className="button" onClick={() => copyToClipboard()}>Copy to Clipboard<i className="uil uil-copy"></i></button>
             </div>
         </div>
     )

@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
 import { getElement } from '../../utils/dom'
 import { navigate } from '../../setup/navigator'
+import Page from '../../page/Page'
 
 const EditRole = ({ role }) => {
 
@@ -65,7 +66,7 @@ const EditRole = ({ role }) => {
             let elements = document.querySelectorAll(removedCards.join(", "))
             for (let i = 0; i < elements.length; i++) {
                 if (elements[i].parentNode && elements[i].parentNode.contains(elements[i])) {
-                    elements[i].parentNode.removeChild(elements[i])
+                    elements[i].parentNode?.removeChild(elements[i])
                 }
             }
             setUnassignedPermissionsID([])  
@@ -97,9 +98,8 @@ const EditRole = ({ role }) => {
 
 
     return (
-        <div className="edit-role-container">
+        <Page title="Role Information" className="edit-role-container">
             <div className="edit-role-info">
-                <h1 className="edit-role-header">Role Information</h1>
                 <table className="fl-table">
                     <thead>
                         <tr>
@@ -167,7 +167,7 @@ const EditRole = ({ role }) => {
                     <button className="button" onClick={() => updateRolePermissions()}>Update Role Permissions</button>
                 </div>
             </div>
-        </div>
+        </Page>
     )
 }
 

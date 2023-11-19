@@ -13,7 +13,7 @@ const Switch = ({ id, labelLeft, labelRight, defaultChecked, onLeft, onRight }) 
     }
 
     return (
-        <div className="switch d-flex flex-column align-items-center pt-5">
+        <div className="switch d-flex flex-column align-items-center">
             <h6><span>{labelLeft}</span><span>{labelRight}</span></h6>
             <input id={id} className="checkbox d-none" type="checkbox" defaultChecked={defaultChecked} onChange={handleSwitch}/>
             <label for={id}></label>

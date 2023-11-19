@@ -1,5 +1,5 @@
 .items-list {
-    border: 2px solid #063F30;
+    border: 2px solid var(--primary-color);
     margin: 10px;
     border-radius: 10px;
     overflow: hidden;
@@ -9,7 +9,7 @@
     padding: 10px;
     font-size: 20px;
     margin: 5px;
-    border: 2px solid #063F30;
+    border: 2px solid var(--primary-color);
     border-radius: 10px;
     background-color: rgb(240, 238, 238);
 }
@@ -19,6 +19,6 @@
     margin-top: -64px;
     padding: 20px;
     border-top-left-radius: 1000px;
-    background-color: #063F30;
-    color: #fff;
+    background-color: var(--primary-color);
+    color: var(--boundry-color);
 }

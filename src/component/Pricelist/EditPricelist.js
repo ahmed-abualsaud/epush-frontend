@@ -2,6 +2,7 @@ import useCoreApi from "../../api/useCoreApi"
 import { useEffect, useRef, useState } from "react"
 import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
 import { showAlert } from "../../utils/validator"
+import Page from "../../page/Page"
 
 const EditPricelist = ({ pricelist }) => {
 
@@ -46,8 +47,7 @@ const EditPricelist = ({ pricelist }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header mb-5">Pricelist Information</h1>
+        <Page title="Pricelist Information">
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -75,7 +75,7 @@ const EditPricelist = ({ pricelist }) => {
             <div className="button-container">
                 <button className="button" onClick={() => updateSpecificPricelist()}>Update Pricelist</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

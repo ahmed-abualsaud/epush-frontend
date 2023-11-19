@@ -1,6 +1,7 @@
-import { parseExcelFile, parseTextFile, parseWordFile } from "./file"
-import { arraysAreEqual, isEmpty } from "./helper"
+import { isEmpty } from "./helper"
 import { showAlert } from "./validator"
+import { parseExcelFile, parseTextFile, parseWordFile } from "./file"
+
 
 export const convertToMessageAttributes = (keys, values) => {
     return JSON.stringify(keys.map((key, i) => ({name: key, value: values[i]})))
@@ -42,7 +43,7 @@ export const generateMessagesFromFileData = (template, data) => {
     let keys = data[0].split(/,\s*/).map(key => key.toLowerCase())
     let msgKeys = getMessageTemplateKeys(template)
     
-    if (! arraysAreEqual(keys, msgKeys)) {
+    if (! [...msgKeys, "phone"].every(element => keys.includes(element))) {
         showAlert("Message parameter names and uploaded parameter names are not equal")
         return []
     }
@@ -98,4 +99,34 @@ export const generateMessagesUsingWordFileParameters = (template, wordContent) =
 
 export const generateMessagesUsingTextFileParameters = (template, textContent) => {
     return generateMessagesFromFileData(template, parseTextFile(textContent))
+}
+
+export const messageLanguageFilter = (e, characters, languageName) => {
+    const keyCode = e.keyCode || e.which
+    const keyValue = e.key
+
+    const isValid =
+        keyCode === 8 || // Backspace key
+        keyCode === 9 || // Tap key
+        keyCode === 13 || // Enter key
+        keyCode === 16 || // Shift key
+        keyCode === 17 || // Control key
+        keyCode === 18 || // Alt key
+        keyCode === 20 || // Caps Lock key
+        keyCode === 32 || // Space key
+        keyCode === 37 || // Arrow Left key
+        keyCode === 38 || // Arrow Up key
+        keyCode === 39 || // Arrow Right key
+        keyCode === 40 || // Arrow Down key
+        (e.ctrlKey && (keyCode === 97 || keyCode === 65)) || // Ctrl+A (97 for regular A, 65 for numpad A)
+        (e.ctrlKey && (keyCode === 118 || keyCode === 86)) || // Ctrl+V (118 for regular V, 86 for numpad V)
+        (e.ctrlKey && keyCode === 90) || // Ctrl+Z
+        (e.ctrlKey && keyCode === 88) || // Ctrl+X
+        (e.ctrlKey && keyCode === 67) || // Ctrl+C
+        characters.includes(keyValue)
+
+    if (!isValid) {
+      e.preventDefault()
+      showAlert("The selected language " + languageName + " does not have the entered character " + keyValue)
+    }
 }

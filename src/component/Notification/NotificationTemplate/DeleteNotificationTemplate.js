@@ -1,15 +1,15 @@
 import useNotificationApi from "../../../api/useNotificationApi";
 import { showAlert } from "../../../utils/validator";
 
-const DeleteNotificationTemplate = ({ template, deletedRows, setDeletedRows }) => {
+const DeleteNotificationTemplate = ({ template, onDelete }) => {
 
     const { deleteTemplate } = useNotificationApi()
 
     const deleteEntity = async () => {
 
         if (await deleteTemplate(template.id)) {
+            onDelete()
             showAlert("Notification Template Deleted Successfully")
-            setDeletedRows([...deletedRows, template.id])
         } else {
             showAlert("Delete Notification Template Failed")
         }

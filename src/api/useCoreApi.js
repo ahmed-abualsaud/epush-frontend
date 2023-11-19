@@ -119,6 +119,16 @@ const useCoreApi = () =>
         }
     }
 
+    const getClientMessages = async (userID) =>
+    {
+        try {
+            return (await api.get("/client/" + userID + "/messages")).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
     const getClientLatestOrder = async (userID) =>
     {
         try {
@@ -1062,6 +1072,8 @@ const useCoreApi = () =>
         searchClient,
 
         getClientOrders,
+
+        getClientMessages,
 
         getClientLatestOrder,
 

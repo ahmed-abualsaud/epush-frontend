@@ -4,6 +4,7 @@ import useAuthApi from "../../api/useAuthApi"
 import { useEffect, useRef, useState } from "react"
 import { showAlert } from "../../utils/validator"
 import Input from "../../layout/Shared/Input"
+import Page from "../../page/Page"
 
 const AddRole = () =>{
 
@@ -73,17 +74,13 @@ const AddRole = () =>{
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header">Role Information</h1>
-
+        <Page title="Role Information">
             <div id="add-role-form">
-                <li className="my-3"><h4 className="d-inline-block">Eneter Role Name</h4></li>
-                <Input className="mb-5" id="add-role-name" type="text" placeholder="Role Name" validrules="required">
-                    <i className="input-icon uil uil-user-md"></i>
-                </Input>
+                <li className="m-3"><h4 className="d-inline-block">Eneter Role Name</h4></li>
+                <Input className="mb-5" id="add-role-name" icon="uil uil-user-md" type="text" placeholder="Role Name" validrules="required"/>
             </div>
             <div className="user-permissons">
-                <div className="assign-role-header">
+                <div className="assign-role-header mx-3">
                     <h1>Available Permissions</h1>
                 </div>
                 {<div id="assign-card-item-subitems" className="cards-list">
@@ -117,7 +114,7 @@ const AddRole = () =>{
                     <button style={{width: "505px"}} className="button" onClick={() => addNewRole()}>Add New Role</button>
                 </div>
             </div>
-        </div>
+        </Page>
     )
 }
 

@@ -1,54 +1,41 @@
-import { useState } from 'react'
-import '../../assets/style/layout/top-nav.css'
-import { navigate } from '../../setup/navigator'
+import { useEffect, useRef } from 'react'
+import Page from '../../page/Page'
+import NavBar from '../Navigation/NavBar'
+import { render } from '../../setup/navigator'
 
-const TopNav = ({ tab }) => {
+const TopNav = () => {
 
-    const [previous, setPrevious] = useState(-1)
+    const setupLock = useRef(true)
+    const setup = async () => {
+        render("list-users", "list-clients")
+    }
+    useEffect(() => {
+        if (setupLock.current) { setupLock.current = false; setup() }
+    }, [])
 
-    const tabOnClickHandler = (e, table) => {
-        e.target.classList.add('initialised')
-        const index = e.target.getAttribute('data-index')
-        const navtab = e.target.closest('nav.tab')
-        navtab.classList.add('moving')
-        navtab.setAttribute('data-selected', index)
-        if (previous === -1) {
-            navtab.querySelector('.icon[data-index="2"]').classList.add('initialised')
-        }
-        if ((previous === 1 && index === 3) || (previous === 3 && index === 1)) {
-            navtab.querySelector('.icon[data-index="2"]').classList.remove('initialised')
-            setTimeout(function() {
-                navtab.querySelector('.icon[data-index="2"]').classList.add('initialised')
-            })
-        }
-        setPrevious(index)
-        setTimeout(function() {
-            navtab.classList.remove('moving')
-            navtab.classList.remove('hidemiddle')
-        }, 750)
+    const listClients = () => {
+        render("list-users", "list-clients")
+    }
 
-        navigate("content", table === "all" ? "list-users": table === "clients" ? "list-clients" : "list-admins")
+    const listAdmins = () => {
+        render("list-users", "list-admins")
+    }
+
+    const listUsers = () => {
+        render("list-users", "list-users")
     }
 
     return (
-        <div className="topnav-container">
-            <nav class="tab" data-selected={tab === "admins" ? "1" : tab === "all" ? "2" : "3"}>
-                <div class="icons">
-                    <div data-index="1" class="icon" onClick={(e) => tabOnClickHandler(e, "admins")}>Admins</div>
-                    <div data-index="2" class="icon" onClick={(e) => tabOnClickHandler(e, "all")}>All</div>
-                    <div data-index="3" class="icon" onClick={(e) => tabOnClickHandler(e, "clients")}>Clients</div>
-                </div>
-                <div class="bar">
-                    <div class="cap"></div>
-                    <div class="middle">
-                        <div class="side"></div>
-                        <div class="circle"></div>
-                        <div class="side"></div>
-                    </div>
-                    <div class="cap"></div>
-                </div>
-            </nav>
-        </div>
+        <Page className="m-0">
+            <NavBar>
+                <div onClick={listClients}><i className="fas fa-shield-halved"></i>Clients</div>
+                <div onClick={listAdmins}><i className="fas fa-shield"></i>Admins</div>
+                <div onClick={listUsers}><i className="fas fa-user-shield"></i>All</div>
+            </NavBar>
+
+            <div style={{marginTop: "-1px"}} id="list-users"></div>
+
+        </Page>
     )
 }
 

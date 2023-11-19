@@ -5,6 +5,7 @@ import useAuthApi from "../../api/useAuthApi"
 import { useEffect, useRef, useState } from "react"
 import { getElement, updateElement } from "../../utils/dom"
 import { showAlert } from '../../utils/validator'
+import Page from '../../page/Page'
 
 const RoleList = ({ userID }) => {
 
@@ -125,10 +126,7 @@ const RoleList = ({ userID }) => {
 
 
     return (
-        <div className="component-container">
-            <div className="assign-role-header">
-                <h1>Available Roles</h1>
-            </div>
+        <Page title="Available Roles">
             {<div id="assign-user-cards-list" className="cards-list">
                 {roles.map((role) => (
                     <div className="card-item">
@@ -164,7 +162,7 @@ const RoleList = ({ userID }) => {
                     <button className="button" onClick={() => assignRoles()}>Assign Selected Roles</button>
                 </div>
             }
-        </div>
+        </Page>
     )
 }
 

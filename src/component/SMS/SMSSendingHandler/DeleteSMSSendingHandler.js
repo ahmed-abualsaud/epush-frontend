@@ -1,15 +1,15 @@
 import useSMSApi from "../../../api/useSMSApi"
 import { showAlert } from "../../../utils/validator"
 
-const DeleteSMSSendingHandler = ({ smsSendingHandler, deletedRows, setDeletedRows }) => {
+const DeleteSMSSendingHandler = ({ smsSendingHandler, onDelete }) => {
 
     const { deleteSMSSendingHandler } = useSMSApi()
 
     const deleteEntity = async () => {
 
         if (await deleteSMSSendingHandler(smsSendingHandler.id)) {
+            onDelete()
             showAlert("SMS Sending Handler Deleted Successfully")
-            setDeletedRows([...deletedRows, smsSendingHandler.id])
         } else {
             showAlert("Delete SMS Sending Handler Failed")
         }

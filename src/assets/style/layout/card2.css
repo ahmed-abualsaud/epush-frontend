@@ -1,0 +1,38 @@
+.card2-container {
+    position: relative;
+    background-color: var(--primary-color);
+    font-size: 40px;
+    line-height: 90px;
+    z-index: 1;
+    overflow: hidden;
+    border-radius: 35px;
+}
+
+.card2 {
+    padding: 20px;
+    margin: 8px;
+    border-radius: 30px;
+    z-index: 3;
+    background-color: var(--boundry-color);
+}
+
+.card2-spinner {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    width: 70%;
+    height: 70%;
+    background-color: red;
+    transform-origin: left;
+    animation: rotateBorder 5s linear infinite;
+    z-index: -1;
+}
+
+@keyframes rotateBorder {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

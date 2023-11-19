@@ -2,6 +2,7 @@ import useCoreApi from "../../api/useCoreApi"
 import { useEffect, useRef, useState } from "react"
 import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
 import { showAlert } from "../../utils/validator"
+import Page from "../../page/Page"
 
 const EditMessageFilter = ({ messageFilter }) => {
 
@@ -46,8 +47,7 @@ const EditMessageFilter = ({ messageFilter }) => {
 
 
     return (
-        <div className="component-container">
-            <h1 className="content-header mb-5">Message Filter Information</h1>
+        <Page title="Message Filter Information">
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -75,7 +75,7 @@ const EditMessageFilter = ({ messageFilter }) => {
             <div className="button-container">
                 <button className="button" onClick={() => updateSpecificMessageFilter()}>Update Message Filter</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

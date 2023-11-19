@@ -112,8 +112,8 @@ const ListMessageFilters = () =>
         navigate("content", "edit-message-filter", messageFilter)
     }
 
-    const deleteMessageFilterHandler = (messageFilter, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-message-filter", messageFilter, deletedRows, setDeletedRows)
+    const deleteMessageFilterHandler = (messageFilter, onDelete) => {
+        navigate("modal-content", "delete-message-filter", messageFilter, onDelete)
     }
 
     const onSelectSliderValue = async (value) => {
@@ -128,8 +128,7 @@ const ListMessageFilters = () =>
     return (
         ! isEmpty(messageFilters) && 
         (
-        <div className="component-container">           
-
+        <div>           
             <div className="m-5">
                 <div style={{display: "inline-flex", alignContent: "center", width: "25%", fontSize: "25px"}}>Word Filter Threshold</div>
                 <div style={{display: "inline-flex", alignContent: "center", width: "50%"}}>

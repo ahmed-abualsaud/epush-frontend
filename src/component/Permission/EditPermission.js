@@ -2,6 +2,7 @@ import useAuthApi from "../../api/useAuthApi"
 import { showAlert } from "../../utils/validator"
 import { useEffect, useRef, useState } from "react"
 import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
+import Page from "../../page/Page"
 
 
 
@@ -46,8 +47,7 @@ const EditPermission = ({ permission }) => {
     }
 
     return (
-        <div className="edit-role-container">
-            <h1 className="edit-role-header">Permission Information</h1>
+        <Page title="Permission Information">
             <table className="fl-table">
                 <thead>
                     <tr>
@@ -74,7 +74,7 @@ const EditPermission = ({ permission }) => {
             <div className="button-container">
                 <button className="button" onClick={() => updateSpecificPermission()}>Update Permission</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

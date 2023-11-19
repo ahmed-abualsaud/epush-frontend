@@ -1,10 +1,10 @@
 .navbar-animmenu {
-    background: #063F30;
+    background: var(--primary-color);
 	overflow: hidden;
 	position: relative;
 	padding: 10px 0px;
     width: 100%;
-	border-bottom: 1px solid #fff;
+	border-bottom: 1px solid var(--boundry-color);
 	padding-left: 25px;
 }
 .navbar-animmenu ul {
@@ -22,7 +22,7 @@
 }
 
 .navbar-animmenu ul li a {
-	color: #fff;
+	color: var(--boundry-color);
     text-decoration: none;
     font-size: 20px;
     line-height: 45px;
@@ -57,7 +57,7 @@
 	height: 100%;
 	transition-duration:0.6s;
 	transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-	background-color: #fff;
+	background-color: var(--boundry-color);
 	border-top-left-radius: 15px;
 	border-top-right-radius: 15px;
 }
@@ -66,7 +66,7 @@
 	position: absolute;
 	width: 25px;
 	height: 25px;
-	background-color: #fff;
+	background-color: var(--boundry-color);
 	bottom: 10px;
 }
 .hori-selector .right {
@@ -82,7 +82,7 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #063F30;
+    background-color: var(--primary-color);
 }
 .hori-selector .right:before {
 	bottom: 0;

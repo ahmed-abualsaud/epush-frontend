@@ -4,6 +4,7 @@ import { showAlert, validate } from "../../utils/validator"
 import { getFormInputData } from "../../utils/dom"
 import { navigate } from "../../setup/navigator"
 import { isEmpty } from "../../utils/helper"
+import Page from "../../page/Page"
 
 const AddSales = () => {
 
@@ -33,17 +34,13 @@ const AddSales = () => {
     }
 
     return (
-        <div id="add-sales-form" className="component-container">
-            <h1 className="content-header mb-5">Add New Sales</h1>
-
-            <Input id="add-sales-name" type="text" placeholder="Name" validrules="required">
-                <i className="input-icon fas fa-pen"></i>
-            </Input>
+        <Page id="add-sales-form" title="Add New Sales">
+            <Input id="add-sales-name" type="text" icon="fas fa-pen" placeholder="Sales Name" validrules="required"/>
 
             <div className="button-container">
                 <button className="button" onClick={() => addNewSales()}>Add New Sales</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

@@ -23,46 +23,36 @@ import PaginationContainer from "../../layout/Pagination/PaginationContainer"
 import HeadRow from "../../layout/Table/HeadRow"
 import TableHead from "../../layout/Table/TableHead"
 import Table from "../../layout/Table/Table"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import useSearchApi from "../../api/useSearchApi"
+import { encodeString } from "../../utils/strUtils"
+import Page from "../../page/Page"
 
 
 const ListSendersConnections = () =>
 {
-    const excludedColumns = [
-
-        "id",
-        "updated_at", 
-        "deleted_at", 
-        "sender_id",
-        "smsc_id",
-        "sender",
-        "smsc"
-
-    ]
-
-    const [sendersConnections, setSendersConnections] = useState([])
     const [columns, setColumns] = useState([])
     const [searchParams, setSearchParams] = useState({})
+    const [sendersConnections, setSendersConnections] = useState([])
 
-    const { listSendersConnections, searchSenderConnection } = useCoreApi()
+    const { search } = useSearchApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
+    const { listSendersConnections, searchSenderConnection } = useCoreApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
         let sndcon = []
         if (isEmpty(searchParams)) {
             sndcon = await listSendersConnections(perPage)
-        } else {
+        }
+        else if (searchParams.hasOwnProperty('criteria')) {
+            sndcon = await search(searchParams.enti, searchParams.crit, perPage)
+        }
+        else {
             sndcon = await searchSenderConnection(perPage, searchParams.column, searchParams.value)
         }
-         
         setSendersConnections(sndcon)
-
-        let filteredColumns = ["company_name", "sender_name", "sender_approved", "country_name", "country_code", "operator_name", "operator_code", "smsc_name", "smsc_value"]
-        filteredColumns.push(...(sndcon?.data[0] ? Object.keys(sndcon?.data[0]).filter(
-            (column) => !excludedColumns.includes(column)
-        ) : []))
-
-        setColumns(filteredColumns)
+        setColumns(["company_name", "sender_name", "sender_approved", "country_name", "country_code", "operator_name", "operator_code", "smsc_name", "smsc_value", "approved", "default", "created_at"])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup(10) }
@@ -88,10 +78,18 @@ const ListSendersConnections = () =>
         setSearchParams({column: column, value: value})
     }
 
+    const onSearch = async (criteria) => {
+        const sndcon = await search("senders_connections", criteria, 10)
+        if (sndcon) setSendersConnections(sndcon)
+        setSearchParams({entity: encodeString("senders_connections"), criteria: encodeString(criteria), enti: "senders_connections", crit: criteria})
+    }
+
     const onCheckShowAll = async () => {
         let sndcon = []
         if (isEmpty(searchParams)) {
             sndcon = await listSendersConnections(1000000000000)
+        } else if (searchParams.hasOwnProperty('criteria')) {
+            sndcon = await search(searchParams.enti, searchParams.crit, 1000000000000)
         } else {
             sndcon = await searchSenderConnection(1000000000000, searchParams.column, searchParams.value)
         }
@@ -110,18 +108,17 @@ const ListSendersConnections = () =>
         navigate("content", "edit-sender-connection", senderConnection)
     }
 
-    const deleteSenderConnectionHandler = (senderConnection, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-sender-connection", senderConnection, deletedRows, setDeletedRows)
+    const deleteSenderConnectionHandler = (senderConnection, onDelete) => {
+        navigate("modal-content", "delete-sender-connection", senderConnection, onDelete)
     }
 
     return (
         ! isEmpty(sendersConnections) && 
-        (
-        <div className="component-container">
-            <h1 className="content-header">All Senders Connections</h1>
+        (<Page title="Senders Connections">
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
-                <Search columns={columns} searchColumn={searchEntityColumn}/>
+                <Search columns={columns.filter(column => column !== "default")} searchColumn={searchEntityColumn}/>
                 <Export columns={columns} rows={sendersConnections.data}/>
             </OperationContainer>
 
@@ -134,15 +131,16 @@ const ListSendersConnections = () =>
                 </TableHead>
                 <TableBody>
                     <DataRows columns={columns} rows={sendersConnections.data.map(senderConnection => {
-                        senderConnection.company_name = senderConnection.sender?.client?.company_name ?? "NULL"
-                        senderConnection.sender_name = senderConnection.sender?.name ?? "NULL"
-                        senderConnection.sender_approved = senderConnection.sender?.approved ?? "NULL"
-                        senderConnection.country_name = senderConnection.smsc?.country?.name ?? "NULL"
-                        senderConnection.country_code = senderConnection.smsc?.country?.code ?? "NULL"
-                        senderConnection.operator_name = senderConnection.smsc?.operator?.name ?? "NULL"
-                        senderConnection.operator_code = senderConnection.smsc?.operator?.code ?? "NULL"
-                        senderConnection.smsc_name = senderConnection.smsc?.smsc?.name ?? "NULL"
-                        senderConnection.smsc_value = senderConnection.smsc?.smsc?.value ?? "NULL"
+                        senderConnection.company_name = senderConnection.company_name ?? senderConnection.sender?.client?.company_name ?? "NULL"
+                        senderConnection.sender_name = senderConnection.sender_name ?? senderConnection.sender?.name ?? "NULL"
+                        senderConnection.sender_approved = senderConnection.sender_approved ?? senderConnection.sender?.approved ?? "NULL"
+                        senderConnection.country_name = senderConnection.country_name ?? senderConnection.smsc?.country?.name ?? "NULL"
+                        senderConnection.country_code = senderConnection.country_code ?? senderConnection.smsc?.country?.code ?? "NULL"
+                        senderConnection.operator_name = senderConnection.operator_name ?? senderConnection.smsc?.operator?.name ?? "NULL"
+                        senderConnection.operator_code = senderConnection.operator_code ?? senderConnection.smsc?.operator?.code ?? "NULL"
+                        senderConnection.smsc_name = senderConnection.smsc_name ?? senderConnection.smsc?.smsc?.name ?? "NULL"
+                        senderConnection.smsc_value = senderConnection.smsc_value ?? senderConnection.smsc?.smsc?.value ?? "NULL"
+                        senderConnection.default = senderConnection.default ?? senderConnection.smsc?.default ?? "NULL"
                         return senderConnection
                     })}>
                         {withOperationCellParameters(ShowRowCell, "showFunction", showSenderConnectionHandler)}
@@ -158,8 +156,7 @@ const ListSendersConnections = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={sendersConnections.total} perPage={sendersConnections.per_page}/>
             </PaginationContainer>
-        </div>
-        )
+        </Page>)
     )
 }
 

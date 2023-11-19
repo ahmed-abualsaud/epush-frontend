@@ -1,7 +1,7 @@
 import '../../../assets/style/component/notification-template.css';
 import { navigate } from '../../../setup/navigator';
 
-const NotificationTemplate = ({ template, handler, deletedRows, setDeletedRows }) => {
+const NotificationTemplate = ({ template, handler, onDelete }) => {
 
     return (
         <div className="notification-template-container">
@@ -16,7 +16,7 @@ const NotificationTemplate = ({ template, handler, deletedRows, setDeletedRows }
             <a 
                 className="notification-template-delete" 
                 href="#popup" 
-                onClick={() => navigate("modal-content", "delete-notification-template", template, deletedRows, setDeletedRows)}
+                onClick={() => navigate("modal-content", "delete-notification-template", template, onDelete)}
             ><i className="fas fa-xmark"></i></a>
             <div className="notification-template-subject">Subject: <span style={{display: "inline-block", marginLeft: "10px", color: "#063F30"}}>{template.subject ?? "NULL"}</span></div>
             <div dangerouslySetInnerHTML={{__html: template.template}} className="notification-template-content"></div>

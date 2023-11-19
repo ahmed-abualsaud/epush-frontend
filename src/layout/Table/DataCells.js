@@ -1,6 +1,7 @@
-import { render } from "../../setup/navigator";
-import { getElement } from "../../utils/dom";
-import { randomString } from "../../utils/helper";
+import { render } from "../../setup/navigator"
+import { getElement } from "../../utils/dom"
+import { isEmpty } from "../../utils/helper"
+import { randomString } from "../../utils/strUtils"
 
 const DataCells = ({ columns, row }) => {
 
@@ -43,17 +44,17 @@ const DataCell = ({ column, value, onHoverExpandIcon, onLeaveExpandIcon }) => {
             >
             {typeof value === "boolean" ? (
                 value ? <i className="fas fa-check"></i> : <i className="fas fa-xmark"></i>
-            ) : (
-                value ?? <i className="fas fa-ban"></i>
-            )}
+            ) : (typeof value === "function" ?  value() : (
+                isEmpty(value) || value === "NULL" ? <i className="fas fa-ban"></i> : value
+            ))}
             
             </div>
             <a 
                 href="#popup"
-                onClick={() => render("modal-content", "data-cell-details",column, value)}
+                onClick={() => render("modal-content", "data-cell-details", column, value)}
                 style={{
                     position: "absolute",
-                    right: "-2px",
+                    right: "-1px",
                     bottom: "-1px",
                     color: "#063F30"
                 }}

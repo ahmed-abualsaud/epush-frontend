@@ -1,4 +1,4 @@
-import { randomString } from "../../utils/helper"
+import { randomString } from "../../utils/strUtils"
 
 const HeadRow = ({ children }) => {
 

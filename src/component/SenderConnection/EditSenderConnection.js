@@ -3,6 +3,7 @@ import useCoreApi from "../../api/useCoreApi"
 import { showAlert } from "../../utils/validator"
 import { useEffect, useRef, useState } from "react"
 import DropList from "../../layout/Shared/DropList"
+import Page from "../../page/Page"
 
 const EditSenderConnection = ({ senderConnection }) => {
 
@@ -13,7 +14,7 @@ const EditSenderConnection = ({ senderConnection }) => {
     const [operatorSMSC, setOperatorSMSC] = useState([])
     const [clientSenders, setClientSenders] = useState([])
     const [countryOperators, setCountryOperators] = useState([])
-    const [selectedSenderID, setSelectedSenderID] = useState(senderConnection.sender.id)
+    const [selectedSenderID, setSelectedSenderID] = useState(senderConnection.sender_id ?? senderConnection.sender.id)
     const [selectedConnection, setSelectedConnection] = useState(senderConnection.smsc)
     const [selectedSMSCVAlue, setSelectedSMSCVAlue] = useState(senderConnection.smsc.smsc.value)
     const [selectedCountryCode, setSelectedCountryCode] = useState(senderConnection.smsc.country.code)
@@ -27,7 +28,7 @@ const EditSenderConnection = ({ senderConnection }) => {
         const smcbid = await listSMSCBindings(1000000000000)
         if (smcbid?.data) setSMSCBindings(smcbid.data)
 
-        setClientSenders(await getClientSenders(clt.data.find(o => o.company_name === senderConnection.sender.client.company_name).user_id))
+        setClientSenders(await getClientSenders(clt.data.find(o => o.company_name === (senderConnection.company_name ?? senderConnection.sender.client.company_name)).user_id))
         const selectedCountry = smcbid.data.filter(o => o.country.name === senderConnection.smsc.country.name)
         setCountryOperators(selectedCountry)
         const selectedOperator = selectedCountry.filter(o => o.operator.name === senderConnection.smsc.operator.name)
@@ -60,7 +61,10 @@ const EditSenderConnection = ({ senderConnection }) => {
     }
 
     const onSelectClientSender = (option) => {
-        setSelectedSenderID(clientSenders.find(o => o.name === option).id)
+        let sender = clientSenders.find(o => o.name === option)
+        if (! isEmpty(sender?.id)) {
+            setSelectedSenderID(sender.id)
+        }
     }
 
     const onSelectCountry = async (option) => {
@@ -76,7 +80,7 @@ const EditSenderConnection = ({ senderConnection }) => {
     }
 
     const onSelectSMSC = (option) => {
-        const selectedSMSC = operatorSMSC.find(o => o.smsc.name === option)
+        const selectedSMSC = operatorSMSC.find(o => option === o.smsc.name)
         setSelectedConnection(selectedSMSC)
         setSelectedSMSCVAlue(selectedSMSC.smsc.value)
     }
@@ -84,26 +88,22 @@ const EditSenderConnection = ({ senderConnection }) => {
 
 
     return (
-        <div id="edit-sender-connection-form" className="component-container">
-            <h1 className="content-header mb-5">
-                Edit Sender Connection
-            </h1>
-
-            <div>
+        <Page id="edit-sender-connection-form" title="Edit Sender Connection">
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "15%", fontSize: "25px"}}>Company Name</div>
                 <div className="d-inline-flex justify-content-center mt-5" style={{width: "85%"}}>
-                    <DropList selectName={senderConnection.sender.client.company_name} options={client.map(item => item.company_name)} onSelect={onSelectClient}/>
+                    <DropList selectName={senderConnection.company_name ?? senderConnection.sender.client.company_name} options={client.map(item => item.company_name)} onSelect={onSelectClient}/>
                 </div>
             </div>
 
-            <div>
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "15%", fontSize: "25px"}}>Sender Name</div>
                 <div className="d-inline-flex justify-content-center mt-5" style={{width: "85%"}}>
-                    <DropList selectName={senderConnection.sender.name} options={isEmpty(clientSenders)? ["The selected client doesn't has any senders"] : clientSenders.map(item => item.name)} onSelect={onSelectClientSender}/>
+                    <DropList selectName={senderConnection.sender_name ?? senderConnection.sender.name} options={isEmpty(clientSenders)? ["The selected client doesn't has any senders"] : clientSenders.map(item => item.name)} onSelect={onSelectClientSender}/>
                 </div>
             </div>
 
-            <div>
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>Country</div>
                 <div className="d-inline-flex justify-content-center mt-5" style={{width: "60%"}}>
                     <DropList selectName={senderConnection.smsc.country.name} options={[...new Set(smscBindings.map(item => item.country.name))]} onSelect={onSelectCountry}/>
@@ -111,7 +111,7 @@ const EditSenderConnection = ({ senderConnection }) => {
                 <div className="d-inline-flex align-items-center justify-content-center" style={{width: "20%", fontSize: "22px"}}>Country Code = {selectedCountryCode}</div>
             </div>
 
-            <div>
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>Operator</div>
                 <div className="d-inline-flex justify-content-center mt-5" style={{width: "60%"}}>
                     <DropList selectName={senderConnection.smsc.operator.name} options={[...new Set(countryOperators.map(item => item.operator.name))]} onSelect={onSelectOperator}/>
@@ -119,7 +119,7 @@ const EditSenderConnection = ({ senderConnection }) => {
                 <div className="d-inline-flex align-items-center justify-content-center" style={{width: "20%", fontSize: "22px"}}>Operator Code = {selectedOperatorCode}</div>
             </div>
 
-            <div>
+            <div className="mx-4">
                 <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>SMS Connection</div>
                 <div className="d-inline-flex justify-content-center mt-5" style={{width: "60%"}}>
                     <DropList selectName={senderConnection.smsc.smsc.name} options={[...new Set(operatorSMSC.map(item => item.smsc.name))]} onSelect={onSelectSMSC}/>
@@ -130,7 +130,7 @@ const EditSenderConnection = ({ senderConnection }) => {
             <div className="button-container">
                 <button className="button" onClick={() => editSenderConnection()}>Edit Sender Connection</button>
             </div>
-        </div>
+        </Page>
     )
 }
 

@@ -37,14 +37,12 @@ const AddNotificationSendingName = ({ template, handler }) => {
     }
 
     return (
-        <div className="component-container">
-            <h1 className="content-header mb-5">Finally, Add The Notification Name</h1>
+        <div>
+            <h1 style={{marginTop: "-25px"}} className="content-header mb-5">Finally, Add The Notification Name</h1>
 
-            <Input id="add-notification-name" type="text" placeholder="Notification Name" validrules="required">
-                <i className="input-icon fas fa-pen"></i>
-            </Input>
+            <Input id="add-notification-name" type="text" icon="fas fa-pen" placeholder="Notification Name" validrules="required"/>
 
-            <div className="my-5">
+            <div className="my-5 mx-2">
                 <div className="d-flex align-items-center">
                     <i style={{fontSize: "25px"}} class="fa-brands fa-first-order-alt"></i>
                     <div style={{fontSize: "35px", display: "inline-block", marginLeft: "10px"}}> Choose how the user id is entered!</div>

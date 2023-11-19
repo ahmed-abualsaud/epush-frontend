@@ -23,6 +23,10 @@ import PaginationContainer from "../../layout/Pagination/PaginationContainer"
 import HeadRow from "../../layout/Table/HeadRow"
 import TableHead from "../../layout/Table/TableHead"
 import Table from "../../layout/Table/Table"
+import useSearchApi from "../../api/useSearchApi"
+import { encodeString } from "../../utils/strUtils"
+import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
+import Page from "../../page/Page"
 
 
 const ListCountries = () =>
@@ -41,20 +45,25 @@ const ListCountries = () =>
     const [columns, setColumns] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
+    const { search } = useSearchApi()
     const { listCountries, searchCountry } = useCoreApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
-        let clt = []
+        let ctry = []
         if (isEmpty(searchParams)) {
-            clt = await listCountries(perPage)
-        } else {
-            clt = await searchCountry(perPage, searchParams.column, searchParams.value)
+            ctry = await listCountries(perPage)
+        }
+        else if (searchParams.hasOwnProperty('criteria')) {
+            ctry = await search(searchParams.enti, searchParams.crit, perPage)
+        }
+        else {
+            ctry = await searchCountry(perPage, searchParams.column, searchParams.value)
         }
          
-        setCountries(clt)
-        setColumns(clt?.data[0] ? Object.keys(clt?.data[0]).filter(
+        setCountries(ctry)
+        setColumns(ctry?.data[0] ? Object.keys(ctry?.data[0]).filter(
             (column) => !excludedColumns.includes(column)
         ) : [])
     }
@@ -63,33 +72,41 @@ const ListCountries = () =>
     }, [])
 
     const handleGetPage = async (pageUrl) => {
-        let clt = {}
+        let ctry = {}
         if (isEmpty(searchParams)) {
-            clt = await sendGetRequest(pageUrl)
+            ctry = await sendGetRequest(pageUrl)
         } else {
             if (! pageUrl.includes("search")) {
                 let url  = pageUrl.split("?")
                 pageUrl = url[0]+"/search?"+url[1]
             }
-            clt = await sendPostRequest(pageUrl, searchParams)
+            ctry = await sendPostRequest(pageUrl, searchParams)
         }
-        if (! isEmpty(clt)) setCountries(clt)
+        if (! isEmpty(ctry)) setCountries(ctry)
     }
 
     const searchEntityColumn = async (column, value) => {
-        const clt = await searchCountry(10, column, value)
-        if (clt) setCountries(clt)
+        const ctry = await searchCountry(10, column, value)
+        if (ctry) setCountries(ctry)
         setSearchParams({column: column, value: value})
     }
 
+    const onSearch = async (criteria) => {
+        const ctry = await search("country", criteria, 10)
+        if (ctry) setCountries(ctry)
+        setSearchParams({entity: encodeString("country"), criteria: encodeString(criteria), enti: "country", crit: criteria})
+    }
+
     const onCheckShowAll = async () => {
-        let clt = []
+        let ctry = []
         if (isEmpty(searchParams)) {
-            clt = await listCountries(1000000000000)
+            ctry = await listCountries(1000000000000)
+        } else if (searchParams.hasOwnProperty('criteria')) {
+            ctry = await search(searchParams.enti, searchParams.crit, 1000000000000)
         } else {
-            clt = await searchCountry(1000000000000, searchParams.column, searchParams.value)
+            ctry = await searchCountry(1000000000000, searchParams.column, searchParams.value)
         }
-        setCountries(clt)
+        setCountries(ctry)
     }
 
     const addCountryHandler = () => {
@@ -104,15 +121,15 @@ const ListCountries = () =>
         navigate("content", "edit-country", country)
     }
 
-    const deleteCountryHandler = (country, deletedRows, setDeletedRows) => {
-        navigate("modal-content", "delete-country", country, deletedRows, setDeletedRows)
+    const deleteCountryHandler = (country, onDelete) => {
+        navigate("modal-content", "delete-country", country, onDelete)
     }
 
     return (
         ! isEmpty(countries) && 
         (
-        <div className="component-container">
-            <h1 className="content-header">All Countries</h1>
+        <Page title="Countries">
+            <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
@@ -141,7 +158,7 @@ const ListCountries = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={countries.total} perPage={countries.per_page}/>
             </PaginationContainer>
-        </div>
+        </Page>
         )
     )
 }

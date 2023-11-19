@@ -1,15 +1,15 @@
 import useMailApi from "../../../api/useMailApi";
 import { showAlert } from "../../../utils/validator";
 
-const DeleteMailTemplate = ({ template, deletedRows, setDeletedRows }) => {
+const DeleteMailTemplate = ({ template, onDelete }) => {
 
     const { deleteTemplate } = useMailApi()
 
     const deleteEntity = async () => {
 
         if (await deleteTemplate(template.id)) {
+            onDelete()
             showAlert("Mail Template Deleted Successfully")
-            setDeletedRows([...deletedRows, template.id])
         } else {
             showAlert("Delete Mail Template Failed")
         }

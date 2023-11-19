@@ -1,4 +1,6 @@
-const MasterListItem = ({ children }) => {
+import { isEmpty } from "../../utils/helper"
+
+const MasterListItem = ({ children, expand }) => {
 
     const expandSlavesItems = (e) => {
         e.currentTarget.parentNode.classList.toggle("expand-slaves-items")
@@ -6,7 +8,7 @@ const MasterListItem = ({ children }) => {
     }
 
     return (
-        <div className="master-list-item-container collapse-slaves-items">
+        <div className={`master-list-item-container ${! isEmpty(expand, false)? '' : 'collapse-slaves-items'}`}>
             <div className="master-list-item">
                 { children }
             </div>

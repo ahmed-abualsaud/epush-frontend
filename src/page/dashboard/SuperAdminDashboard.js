@@ -8,15 +8,18 @@ import NavItems from "../../layout/Navigation/NavItems"
 import ProfileNav from "../../component/Header/ProfileNav"
 
 import { addRoute, navigate } from "../../setup/navigator"
-import TableContent from "../../layout/Shared/TableContent"
 import React, { useEffect, useRef, useState } from "react"
-import ListUsers from "../../component/User/ListUsers"
 import Notification from "../../layout/Shared/Notification"
+import useAuthApi from "../../api/useAuthApi"
+import { useSelector } from "react-redux"
+import TopNav from "../../layout/Shared/TopNav"
 
 const SuperAdminDashboard = () => {
 
+    const { signout } = useAuthApi()
     const { listServices } = useOrchiApi()
     const [services, setServices] = useState([])
+    const user = useSelector(state => state.auth.user)
 
 
     const setupLock = useRef(true)
@@ -52,6 +55,8 @@ const SuperAdminDashboard = () => {
             </Header>
 
             <Sidebar>
+                <NavItem text="Profile" icon="fas fa-id-card" onClick={ () => navigate("content", "profile", user?.user, user?.roles[0]?.name) }/>
+
                 <NavItem
                     text="Services"
                     icon="fas fa-box-open"
@@ -62,7 +67,7 @@ const SuperAdminDashboard = () => {
                         <NavItem 
                             key="all"
                             text="All"
-                            icon="uil uil-align-alt"
+                            icon="fas fa-table-list"
                             onClick={() => navigate("content", "all-services", services)}
                         />
                         {services.map((service) => (
@@ -77,7 +82,9 @@ const SuperAdminDashboard = () => {
                                     service.name === "sms" ? "fas fa-sms" : 
                                     service.name === "settings" ? "fas fa-gears" : 
                                     service.name === "expense" ? "fas fa-sack-dollar" : 
-                                    "fas fa-bell"
+                                    service.name === "notification" ? "fas fa-bell" :
+                                    service.name === "search" ? "fab fa-searchengin" :
+                                    "fas fa-ticket"
                                 }
                                 onClick={() => navigate("content", "service-contexts", service)}
                             />
@@ -92,9 +99,11 @@ const SuperAdminDashboard = () => {
                     onMouseLeave={handleLeave}
                 >
                     <NavItems className="nav-flyout">
+                        <NavItem text="Settings" icon="fas fa-gear" onClick={ () => navigate("content", "list-settings") }/>
                         <NavItem text="Mail" icon="fas fa-envelope" onClick={ () => navigate("content", "mail-management") }/>
                         <NavItem text="SMS" icon="fas fa-comment-sms" onClick={ () => navigate("content", "sms-management") }/>
                         <NavItem text="Notifications" icon="fas fa-bell" onClick={ () => navigate("content", "notification-management") }/>
+                        <NavItem text="Documents" icon="fas fa-folder-tree" onClick={ () => navigate("content", "list-folders") }/>
                     </NavItems>
                 </NavItem>
 
@@ -105,30 +114,29 @@ const SuperAdminDashboard = () => {
                     onMouseLeave={handleLeave}
                 >
                     <NavItems className="nav-flyout">
-                        <NavItem text="Users" icon="fas fa-users" onClick={ () => navigate("content", "list-users") }/>
+                        <NavItem text="Users" icon="fas fa-users" onClick={ () => navigate("content", "top-nav") }/>
                         <NavItem text="Roles" icon="fas fa-person-circle-check" onClick={ () => navigate("content", "list-roles") }/>
-                        <NavItem text="Permissions" icon="fas uil-shield-check" onClick={ () => navigate("content", "list-permissions") }/>
+                        <NavItem text="Permissions" icon="uil uil-shield-check" onClick={ () => navigate("content", "list-permissions") }/>
                     </NavItems>
                 </NavItem>
 
-                <NavItem text="Sales" icon="fas fa-hand-holding-dollar" onClick={ () => navigate("content", "list-sales") }/>
-                <NavItem text="Price List" icon="fas fa-receipt" onClick={ () => navigate("content", "list-pricelist") }/>
-                <NavItem text="Business Fields" icon="fas fa-industry" onClick={ () => navigate("content", "list-business-fields") }/>
-
-                <NavItem
-                    text="Expense"
-                    icon="fas fa-sack-dollar"
+                <NavItem 
+                    text="SMS Management" 
+                    icon="fas fa-comment-sms" 
                     onClick={handleClick}
                     onMouseLeave={handleLeave}
                 >
                     <NavItems className="nav-flyout">
-                        <NavItem text="Payment Methods" icon="fas fa-credit-card" onClick={ () => navigate("content", "list-payment-methods") }/>
-                        <NavItem text="Orders" icon="fas fa-money-bill-transfer" onClick={ () => navigate("content", "list-orders") }/>
+                        <NavItem text="Messages" icon="fas fa-envelope-open-text" onClick={ () => navigate("content", "list-messages") }/>
+                        <NavItem text="Scheduled Messages" icon="fas fa-calendar-days" onClick={ () => navigate("content", "list-scheduled-messages") }/>
+                        <NavItem text="Unapproved Messages" icon="fas fa-comment-slash" onClick={ () => navigate("content", "list-unapproved-messages") }/>
+                        <NavItem text="Message Groups" icon="fas fa-users-rectangle" onClick={ () => navigate("content", "list-message-groups") }/>
+                        <NavItem text="Group Recipients" icon="fas fa-arrows-down-to-people" onClick={ () => navigate("content", "list-message-group-recipients") }/>
+                        <NavItem text="Message Languages" icon="fas fa-language" onClick={ () => navigate("content", "list-message-languages") }/>
+                        <NavItem text="Message Segments" icon="fas fa-comments" onClick={ () => navigate("content", "list-message-segments") }/>
+                        <NavItem text="Message Recipients" icon="fas fa-mobile-retro" onClick={ () => navigate("content", "list-message-recipients") }/>
                     </NavItems>
                 </NavItem>
-
-                <NavItem text="Countries" icon="fas fa-earth-americas" onClick={ () => navigate("content", "list-countries") }/>
-                <NavItem text="Operators" icon="fas fa-tower-cell" onClick={ () => navigate("content", "list-operators") }/>
 
                 <NavItem
                     text="SMSCs Management"
@@ -154,29 +162,30 @@ const SuperAdminDashboard = () => {
                     </NavItems>
                 </NavItem>
 
-                <NavItem 
-                    text="SMS Management" 
-                    icon="fas fa-comment-sms" 
+                <NavItem
+                    text="Expense"
+                    icon="fas fa-sack-dollar"
                     onClick={handleClick}
                     onMouseLeave={handleLeave}
                 >
                     <NavItems className="nav-flyout">
-                        <NavItem text="Messages" icon="fas fa-envelope-open-text" onClick={ () => navigate("content", "list-messages") }/>
-                        <NavItem text="Unapproved Messages" icon="fas fa-comment-slash" onClick={ () => navigate("content", "list-approved-messages") }/>
-                        <NavItem text="Message Groups" icon="fas fa-users-rectangle" onClick={ () => navigate("content", "list-message-groups") }/>
-                        <NavItem text="Group Recipients" icon="fas fa-arrows-down-to-people" onClick={ () => navigate("content", "list-message-group-recipients") }/>
-                        <NavItem text="Message Languages" icon="fas fa-language" onClick={ () => navigate("content", "list-message-languages") }/>
-                        <NavItem text="Message Segments" icon="fas fa-comments" onClick={ () => navigate("content", "list-message-segments") }/>
-                        <NavItem text="Message Recipients" icon="fas fa-mobile-retro" onClick={ () => navigate("content", "list-message-recipients") }/>
+                        <NavItem text="Payment Methods" icon="fas fa-credit-card" onClick={ () => navigate("content", "list-payment-methods") }/>
+                        <NavItem text="Orders" icon="fas fa-money-bill-transfer" onClick={ () => navigate("content", "list-orders") }/>
                     </NavItems>
                 </NavItem>
+
+                <NavItem text="Sales" icon="fas fa-hand-holding-dollar" onClick={ () => navigate("content", "list-sales") }/>
+                <NavItem text="Price List" icon="fas fa-receipt" onClick={ () => navigate("content", "list-pricelist") }/>
+                <NavItem text="Business Fields" icon="fas fa-chart-column" onClick={ () => navigate("content", "list-business-fields") }/>
+                <NavItem text="Countries" icon="fas fa-earth-americas" onClick={ () => navigate("content", "list-countries") }/>
+                <NavItem text="Operators" icon="fas fa-tower-cell" onClick={ () => navigate("content", "list-operators") }/>
+                <NavItem text="Tickets" icon="fas fa-ticket" onClick={ () => navigate("content", "list-tickets") }/>
+                <NavItem text="Logout" icon="fas fa-right-from-bracket" onClick={ () => signout() }/>
 
             </Sidebar>
 
             <Content>
-                <TableContent tab="all">
-                    <ListUsers/>
-                </TableContent>
+                <TopNav/>
             </Content>
             <Notification/>
         </Dashboard>

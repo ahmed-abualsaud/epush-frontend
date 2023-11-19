@@ -1,0 +1,87 @@
+
+.simple-droplist-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.simple-droplist-container .selectbox {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-width: 400px;
+    border: 1px solid var(--primary-color);
+}
+
+.simple-droplist-container .option-container {
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.4s ease;
+    overflow: hidden;
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    z-index: 1000000000000000000000000;
+    border: 1px solid var(--primary-color);
+    background-color: var(--boundry-color);
+}
+  
+.simple-droplist-container .selectbox--active .option-container {
+    max-height: 210px;
+    opacity: 1;
+    overflow-y: auto;
+}
+  
+.simple-droplist-container .selectbox-displayWord,
+.simple-droplist-container .option-container-option {
+    padding: 12px;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+}
+
+.simple-droplist-container .option-container-option {
+    border-bottom: 1px solid var(--primary-color);
+}
+  
+.simple-droplist-container .selectbox-displayWord {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 4px;
+}
+
+.simple-droplist-container .selectbox-displayWord i {
+    transition: all 0.4s linear;
+}
+
+.simple-droplist-container .selectbox--unselect .selectbox-displayWord {
+    color: #000;
+}
+
+.simple-droplist-container .option-container-option:hover {
+    color: var(--boundry-color);
+    background-color: var(--secondary-color);
+}
+
+.simple-droplist-container .option-radio {
+    display: none;
+}
+
+.simple-droplist-container .option-label {
+    cursor: pointer;
+}
+
+.simple-droplist-container .search-columns i {
+    color: var(--primary-color);
+}
+
+.simple-droplist-container .rotate-180 {
+    transform: rotate(180deg);
+}
