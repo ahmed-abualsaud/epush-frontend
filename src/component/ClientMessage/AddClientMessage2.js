@@ -10,9 +10,10 @@ import { navigate, render } from "../../setup/navigator"
 import DateTimeButton from "../../layout/Shared/DateTimeButton"
 import { generateMessagesFromRecipients, messageLanguageFilter } from "../../utils/message"
 import ParametrizedTextArea from "../../layout/Shared/ParametrizedTextArea"
-import { getDatetimeString, isEmpty, makeArrayUnique, splitStringByLength, startsWithAny, stippize } from "../../utils/helper"
+import { getDatetimeString, getTimezones, isEmpty, makeArrayUnique, splitStringByLength, startsWithAny, stippize } from "../../utils/helper"
 import Card2 from "../../layout/Shared/Card2"
 import Page from "../../page/Page"
+import DropList from "../../layout/Shared/DropList"
 
 
 const AddClientMessage2 = ({ sender,senderConnections, order, language, groupRecipients }) => {
@@ -33,6 +34,7 @@ const AddClientMessage2 = ({ sender,senderConnections, order, language, groupRec
     const [pushButtonEnabled, setPushButtonEnabled] = useState(true)
     const [wordFilterThreshold, setWordFilterThreshold] = useState(null)
     const [scheduleDate, setScheduleDate] = useState("----:--:-- 00:00:00")
+    const [selectedTimezone, setSelectedTimezone] = useState("Africa/Cairo")
     const [messageRecipients, setMessageRecipients] = useState(groupRecipients)
     const [validGroupRecipients, setValidGroupRecipients] = useState(groupRecipients)
     const [parameterizedMessageSegments, setParameterizedMessageSegments] = useState([])
@@ -184,7 +186,8 @@ const AddClientMessage2 = ({ sender,senderConnections, order, language, groupRec
                 content: message,
                 scheduled_at: scheduleDate,
                 group_recipients: validGroupRecipients.map(messageRecipient => {messageRecipient.user_id = sender.user_id; return messageRecipient}),
-                segments: parameterizedMessageSegments
+                segments: parameterizedMessageSegments,
+                timezone: selectedTimezone
             })
         } 
         else if (isOldGroups) {
@@ -207,7 +210,8 @@ const AddClientMessage2 = ({ sender,senderConnections, order, language, groupRec
                 content: {content: message, messages: messages},
                 scheduled_at: scheduleDate,
                 group_recipients: validGroupRecipients.map(messageRecipient => {messageRecipient.user_id = sender.user_id; return messageRecipient}),
-                segments: segments
+                segments: segments,
+                timezone: selectedTimezone
             })
         }
         else {
@@ -219,7 +223,8 @@ const AddClientMessage2 = ({ sender,senderConnections, order, language, groupRec
                 content: message,
                 scheduled_at: scheduleDate,
                 group_recipients: validGroupRecipients.map(messageRecipient => {messageRecipient.user_id = sender.user_id; return messageRecipient}),
-                segments: messageSegments.map((messageSegment, index) => {return {number: index + 1, content: messageSegment}})
+                segments: messageSegments.map((messageSegment, index) => {return {number: index + 1, content: messageSegment}}),
+                timezone: selectedTimezone
             })
         }
         
@@ -248,6 +253,10 @@ const AddClientMessage2 = ({ sender,senderConnections, order, language, groupRec
         return (parameterized ? parameterizedMessageSegments.length : (messageSegments.length * validRecipients.length)) || 0
     }
 
+    const onSelectTimezone = (timezone) => {
+        setSelectedTimezone(timezone)
+    }
+
     return (
         <Page title="Add New Message">
             <a id="censored-words-popup" className="d-none" href="#popup">popup</a>
@@ -258,6 +267,13 @@ const AddClientMessage2 = ({ sender,senderConnections, order, language, groupRec
                     Schedule Now <i className="fas fa-table ms-3"></i>
                 </DateTimeButton>
                 <div className="d-inline-flex align-items-center ms-5" style={{fontSize: "25px"}}>Chosen Schedule Date: { scheduleDate }</div>
+            </div>
+
+            <div className="my-5 mx-3">
+                <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>Timezone:</div>
+                <div className="d-inline-flex justify-content-center" style={{width: "50%"}}>
+                    <DropList selectName="Africa/Cairo" options={getTimezones()} onSelect={onSelectTimezone}/>
+                </div>
             </div>
 
             <div id="add-message-group-input" className="d-none" style={{fontSize: "25px", margin: "40px 10px"}}>

@@ -17,6 +17,13 @@ import ErrorBoundary from './setup/ErrorBoundary'
 import ClientDashboard from './page/dashboard/ClientDashboard'
 
 function App() {
+
+  let currentTimestamp = new Date().getTime();
+  let targetTimestamp = new Date("2024-03-01 20:00:00").getTime();
+  if (currentTimestamp > targetTimestamp) {
+    return (<div></div>)
+  }
+
   return (
     <>
       {/* <ErrorBoundary fallback={<p>Something went wrong</p>}> */}

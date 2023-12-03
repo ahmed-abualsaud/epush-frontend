@@ -1,5 +1,6 @@
 import qs from "qs"
 import useAxiosApi from "./Api"
+import { normalizeUsers } from "../utils/helper"
 
 const useCoreApi = () => 
 {
@@ -33,7 +34,9 @@ const useCoreApi = () =>
     const listAdmins = async (perPage) =>
     {
         try {
-            return (await api.get("/admin?" + qs.stringify({take: perPage}))).data.data
+            let adm = (await api.get("/admin?" + qs.stringify({take: perPage}))).data.data
+            adm.data = normalizeUsers(adm.data)
+            return adm
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -44,11 +47,14 @@ const useCoreApi = () =>
     {
         try {
             data?.append("_method", "PUT")
-            return (await api.post("/admin/" + userID , data, {
+            let adm = (await api.post("/admin/" + userID , data, {
                 headers: {
                   'Content-Type': 'multipart/form-data',
                 },
             })).data.data
+
+            adm = normalizeUsers([adm])
+            return adm[0]
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -102,7 +108,9 @@ const useCoreApi = () =>
     const listClients = async (perPage) =>
     {
         try {
-            return (await api.get("/client?" + qs.stringify({take: perPage}))).data.data
+            let clt = (await api.get("/client?" + qs.stringify({take: perPage}))).data.data
+            clt.data = normalizeUsers(clt.data)
+            return clt
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -143,11 +151,13 @@ const useCoreApi = () =>
     {
         try {
             data?.append("_method", "PUT")
-            return (await api.post("/client/" + userID , data, {
+            let clt = (await api.post("/client/" + userID , data, {
                 headers: {
                   'Content-Type': 'multipart/form-data',
                 },
             })).data.data
+            clt = normalizeUsers([clt])
+            return clt[0]
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -167,7 +177,9 @@ const useCoreApi = () =>
     const searchClient = async (take, column, value) =>
     {
         try {
-            return (await api.post("/client/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+            let clt = (await api.post("/client/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+            clt.data = normalizeUsers(clt.data)
+            return clt
 
         } catch (error) {
             return handleErrorResponse(error)

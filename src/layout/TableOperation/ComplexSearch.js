@@ -172,7 +172,15 @@ const ComplexSearch = ({ columns, onSearch }) => {
         return queryParameters.filter(qp => ! isEmpty(qp.data)).map(qp => {
                 let castedvalues = castQueryParameters(qp.data.value)
                 let parsedQuery = parseQuery(qp.data.operator, ["IN (?)", "NOT IN (?)"].includes(qp.data.operator) ? [castedvalues.join(',')] : castedvalues)
-                return qp.column + " " + parsedQuery + " " + (isEmpty(qp.data.aggregator) ? "" : qp.data.aggregator)
+                let q = qp.column + " " + parsedQuery
+                if (["IS NULL"].includes(qp.data.operator)) {
+                    q += " OR " + qp.column + " = ''"
+                }
+                if (["IS NOT NULL"].includes(qp.data.operator)) {
+                    q += " AND " + qp.column + " != ''"
+                }
+                q += " " + (isEmpty(qp.data.aggregator) ? "" : qp.data.aggregator)
+                return q
             }).join(" ")
     }
 

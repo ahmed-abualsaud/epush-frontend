@@ -4,7 +4,7 @@ import Paginator from "../../layout/Pagination/Paginator"
 import useAxiosApi from "../../api/Api"
 import Search from '../../layout/TableOperation/Search'
 import Export from '../../layout/TableOperation/Export'
-import { isEmpty } from "../../utils/helper"
+import { isEmpty, normalizeUsers } from "../../utils/helper"
 import useCoreApi from "../../api/useCoreApi"
 import PerPageDropList from "../../layout/Pagination/PerPageDropList"
 import { useEffect, useRef, useState } from "react"
@@ -77,7 +77,7 @@ const ListClients = () =>
     const [searchParams, setSearchParams] = useState({})
 
     const { search } = useSearchApi()
-    const { listClients, searchClient } = useCoreApi()
+    const { listClients } = useCoreApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
     const setupLock = useRef(true)
@@ -85,12 +85,8 @@ const ListClients = () =>
         let clt = []
         if (isEmpty(searchParams)) {
             clt = await listClients(perPage)
-        }
-        else if (searchParams.hasOwnProperty('criteria')) {
+        } else {
             clt = await search(searchParams.enti, searchParams.crit, perPage)
-        }
-        else {
-            clt = await searchClient(perPage, searchParams.column, searchParams.value)
         }
          
         setClients(clt)
@@ -106,6 +102,7 @@ const ListClients = () =>
         let clt = {}
         if (isEmpty(searchParams)) {
             clt = await sendGetRequest(pageUrl)
+            clt.data = normalizeUsers(clt.data)
         } else {
             if (! pageUrl.includes("search")) {
                 let url  = pageUrl.split("?")
@@ -117,9 +114,10 @@ const ListClients = () =>
     }
 
     const searchEntityColumn = async (column, value) => {
-        const clt = await searchClient(10, column, value)
+        let criteria = column + " LIKE '%" + value + "%'"
+        const clt = await search("client", criteria, 10)
         if (clt) setClients(clt)
-        setSearchParams({column: column, value: value})
+        setSearchParams({entity: encodeString("client"), criteria: encodeString(criteria), enti: "client", crit: criteria})
     }
 
     const onSearch = async (criteria) => {
@@ -132,10 +130,8 @@ const ListClients = () =>
         let clt = []
         if (isEmpty(searchParams)) {
             clt = await listClients(1000000000000)
-        } else if (searchParams.hasOwnProperty('criteria')) {
-            clt = await search(searchParams.enti, searchParams.crit, 1000000000000)
         } else {
-            clt = await searchClient(1000000000000, searchParams.column, searchParams.value)
+            clt = await search(searchParams.enti, searchParams.crit, 1000000000000)
         }
         setClients(clt)
     }
@@ -178,6 +174,7 @@ const ListClients = () =>
                     <DataRows columns={columns} rows={clients.data.map(client => {
                         client.sales = client.sales?.name ?? "NULL"
                         client.business_field = client.business_field?.name ?? "NULL"
+                        client.full_name = client.full_name ?? client.first_name + " " + client.last_name
                         return client
                     })}>
                         {withOperationCellParameters(ShowRowCell, "showFunction", showClientHandler)}

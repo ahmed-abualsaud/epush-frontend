@@ -3,7 +3,7 @@ import Paginator from "../../layout/Pagination/Paginator"
 import useAxiosApi from "../../api/Api"
 import Search from '../../layout/TableOperation/Search'
 import Export from '../../layout/TableOperation/Export'
-import { isEmpty } from "../../utils/helper"
+import { isEmpty, normalizeUsers } from "../../utils/helper"
 import useCoreApi from "../../api/useCoreApi"
 import PerPageDropList from "../../layout/Pagination/PerPageDropList"
 import { useEffect, useRef, useState } from "react"
@@ -26,19 +26,50 @@ import Table from "../../layout/Table/Table"
 import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
 import useSearchApi from "../../api/useSearchApi"
 import { encodeString } from "../../utils/strUtils"
-import Page from "../../page/Page"
 
 
 const ListAdmins = () =>
 {
     const excludedColumns = [
 
+        "clientId", 
+        "isNotify", 
+        "ip_required", 
+        "ip", 
+        "deleteDate", 
+        "updateDate", 
+        "saveDate", 
+        "reg_date", 
+        "areaId",
+        "agree", 
+        "active", 
+        "userId", 
+        "adminId", 
+        "pricelist_Id", 
+        "pricelist_id", 
+        "show_msg_details", 
+        "birthDate", 
+        "FDelete", 
+        "access", 
+        "IsTestAccount", 
+        "governmentId", 
+        "first_name", 
+        "last_name", 
         "updated_at", 
         "deleted_at", 
         "avatar", 
         "email_verified_at",
+        "fullName",
+        "mobile",
+        "use_api",
+        "api_token",
+        "pricelistId",
         "id",
-        "user_id"
+        "religion",
+        "user_id",
+        "sales_id",
+        "business_field_id",
+        "websites",
     ]
 
     const [admins, setAdmins] = useState([])
@@ -46,7 +77,7 @@ const ListAdmins = () =>
     const [searchParams, setSearchParams] = useState({})
 
     const { search } = useSearchApi()
-    const { listAdmins, searchAdmin } = useCoreApi()
+    const { listAdmins } = useCoreApi()
     const { sendGetRequest, sendPostRequest } = useAxiosApi()
 
     const setupLock = useRef(true)
@@ -54,14 +85,10 @@ const ListAdmins = () =>
         let adm = []
         if (isEmpty(searchParams)) {
             adm = await listAdmins(perPage)
-        }
-        else if (searchParams.hasOwnProperty('criteria')) {
+        } else {
             adm = await search(searchParams.enti, searchParams.crit, perPage)
         }
-        else {
-            adm = await searchAdmin(perPage, searchParams.column, searchParams.value)
-        }
-         
+
         setAdmins(adm)
         setColumns(adm?.data[0] ? Object.keys(adm?.data[0]).filter(
             (column) => !excludedColumns.includes(column)
@@ -75,6 +102,7 @@ const ListAdmins = () =>
         let adm = {}
         if (isEmpty(searchParams)) {
             adm = await sendGetRequest(pageUrl)
+            adm.data = normalizeUsers(adm.data)
         } else {
             if (! pageUrl.includes("search")) {
                 let url  = pageUrl.split("?")
@@ -86,9 +114,10 @@ const ListAdmins = () =>
     }
 
     const searchEntityColumn = async (column, value) => {
-        const adm = await searchAdmin(10, column, value)
+        let criteria = column + " LIKE '%" + value + "%'"
+        const adm = await search("admin", criteria, 10)
         if (adm) setAdmins(adm)
-        setSearchParams({column: column, value: value})
+        setSearchParams({entity: encodeString("admin"), criteria: encodeString(criteria), enti: "admin", crit: criteria})
     }
 
     const onSearch = async (criteria) => {
@@ -101,10 +130,8 @@ const ListAdmins = () =>
         let adm = []
         if (isEmpty(searchParams)) {
             adm = await listAdmins(1000000000000)
-        } else if (searchParams.hasOwnProperty('criteria')) {
-            adm = await search(searchParams.enti, searchParams.crit, 1000000000000)
         } else {
-            adm = await searchAdmin(1000000000000, searchParams.column, searchParams.value)
+            adm = await search(searchParams.enti, searchParams.crit, 1000000000000)
         }
         setAdmins(adm)
     }
