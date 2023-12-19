@@ -95,6 +95,8 @@
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
+  border: 1px solid var(--boundry-color);
+  z-index: 1000000000000!important;
 }
 
 .section-dropdown:before {

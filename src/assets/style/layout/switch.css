@@ -15,7 +15,7 @@
   border-radius: 8px;
   border: 1px solid black;
   padding: 0;
-  margin: 10px auto;
+  margin: 1px auto 10px auto;
   cursor: pointer;
   background-color: var(--support-color);
 }

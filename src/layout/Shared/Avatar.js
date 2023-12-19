@@ -7,7 +7,7 @@ const Avatar = ({ imageUrl, onSelectAvatar }) => {
 
     const componentKey = "avatar-" + randomString(8)
     const placeholderImageUrl = "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg";
-    
+
     const [imagePreview, setImagePreview] = useState(imageUrl)
 
     useEffect(() => {

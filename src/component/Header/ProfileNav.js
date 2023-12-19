@@ -3,12 +3,20 @@ import '../../assets/style/component/profile-nav.css'
 import useAuthApi from '../../api/useAuthApi'
 import { navigate } from '../../setup/navigator'
 import { isEmpty } from '../../utils/helper'
+import { useEffect, useState } from 'react'
 
 const ProfileNav = () => {
 
+    const placeholderImageUrl = "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg";
+
     const user = useSelector(state => state.auth.user)
-    
+    const [imagePreview, setImagePreview] = useState(user?.user?.avatar)
+
     const { signout } = useAuthApi()
+
+    useEffect(() => {
+        setImagePreview(user?.user?.avatar || placeholderImageUrl);
+    }, []);
 
     const logout = async (e) => {
         e.stopPropagation()
@@ -36,7 +44,7 @@ const ProfileNav = () => {
         <div className="profile-nav">
             <div className="d-inline" onClick={navigateToProfile}>
                 <h5 className="d-inline-block m-3 text-white"><strong>{user?.user?.full_name ?? (user?.user?.first_name + " " + user?.user?.last_name)}</strong></h5>
-                <img src={user?.user?.avatar ?? "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg"} className="rounded-circle" style={{width: "70px", height: "70px"}} alt="Avatar" />
+                <img src={imagePreview} className="rounded-circle" style={{width: "70px", height: "70px"}} alt="Avatar" />
             </div>
             <input className="dropdown d-none" type="checkbox" id="dropdown" name="dropdown"/>
             <label className="for-dropdown" for="dropdown"><i className="uil uil-angle-double-down"></i></label>

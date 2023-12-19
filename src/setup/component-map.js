@@ -1,5 +1,7 @@
 import React, { lazy } from 'react'
 
+
+
 const Home = lazy(() => import('../page/Home'))
 const API = lazy(() => import('../component/Shared/API'))
 const Profile = lazy(() => import('../page/Profile'))
@@ -31,6 +33,8 @@ const AddUser = lazy(() => import("../component/User/AddUser"))
 const ListClientTickets = lazy(() => import('../component/Ticket/ListClientTickets'))
 const ListClientSenders = lazy(() => import('../component/ClientSender/ListClientSenders'))
 const ShowFile = lazy(() => import('../component/File/ShowFile'))
+const JobManagement = lazy(() => import('../component/Queue/JobManagement'))
+const QueueManagement = lazy(() => import('../component/Queue/QueueManagement'))
 const ServiceContexts = lazy(() => import('../component/Orchi/ServiceContexts'))
 const AddWebsiteModal = lazy(() => import('../component/Client/AddWebsiteModal'))
 const ListPermissions = lazy(() => import("../component/Permission/ListPermissions"))
@@ -52,12 +56,17 @@ const EditFolder = lazy(() => import('../component/Folder/EditFolder'))
 const ListFolders = lazy(() => import('../component/Folder/ListFolders'))
 const DeleteTicket = lazy(() => import('../component/Ticket/DeleteTicket'))
 const ShowTicket = lazy(() => import('../component/Ticket/ShowTicket'))
+const ListJobs = lazy(() => import('../component/Queue/ListJobs'))
+const ListFailedJobs = lazy(() => import('../component/Queue/ListFailedJobs'))
+const ClientMessageManagement = lazy(() => import('../component/ClientMessage/ClientMessageManagement'))
 const ListTickets = lazy(() => import('../component/Ticket/ListTickets'))
+const ClientFileManagement = lazy(() => import('../component/File/ClientFileManagement'))
 const ClientSenderManagement = lazy(() => import('../component/ClientSender/ClientSenderManagement'))
 const ListClientMessageRecipients = lazy(() => import('../component/ClientMessage/ListClientMessageRecipients'))
 const ListClientMessageGroups = lazy(() => import('../component/ClientMessage/ListClientMessageGroups'))
 const DeleteUser = lazy(() => import('../component/User/DeleteUser'))
 const ShowUser = lazy(() => import('../component/User/ShowUser'))
+const ClientTicketManagement = lazy(() => import('../component/Ticket/ClientTicketManagement'))
 const AddFolder = lazy(() => import('../component/Folder/AddFolder'))
 const UploadFile = lazy(() => import('../component/File/UploadFile'))
 const AddClientMessage = lazy(() => import('../component/ClientMessage/AddClientMessage'))
@@ -85,6 +94,8 @@ const ShowPaymentMethod = lazy(() => import('../component/PaymentMethod/ShowPaym
 const DeletePaymentMethod = lazy(() => import('../component/PaymentMethod/DeletePaymentMethod'))
 const ListClientMessages = lazy(() => import('../component/ClientMessage/ListClientMessages'))
 const ListOrders = lazy(() => import('../component/Order/ListOrders'))
+const ShowJob = lazy(() => import('../component/Queue/ShowJob'))
+const ShowFailedJob = lazy(() => import('../component/Queue/ShowFailedJob'))
 const AddOrder = lazy(() => import('../component/Order/AddOrder'))
 const ShowOrder = lazy(() => import('../component/Order/ShowOrder'))
 const ListCountries = lazy(() => import('../component/Country/ListCountries'))
@@ -253,6 +264,7 @@ const componentMap = {
     "text-file-example":                    () => <TextFileExample/>,
     "word-file-example":                    () => <WordFileExample/>,
     "list-permissions":                     () => <ListPermissions/>,
+    "queue-management":                     () => <QueueManagement/>,
     "add-client-message":                   () => <AddClientMessage/>,
     "add-message-filter":                   () => <AddMessageFilter/>,
     "add-business-field":                   () => <AddBusinessField/>,
@@ -272,15 +284,18 @@ const componentMap = {
     "list-message-segments":                () => <ListMessageSegments/>,
     "list-message-languages":               () => <ListMessageLanguages/>,
     "add-sms-sending-handler":              () => <AddSMSSendingHandler/>,
+    "client-file-management":                () => <ClientFileManagement/>,
     "add-client-message-group":             () => <AddClientMessageGroup/>,
     "list-message-recipients":              () => <ListMessageRecipients/>,
     "add-mail-sending-handler":             () => <AddMailSendingHandler/>,
     "list-scheduled-messages":              () => <ListScheduledMessages/>,
+    "client-ticket-management":             () => <ClientTicketManagement/>,
     "list-unapproved-messages":             () => <ListUnapprovedMessages/>,
     "notification-management":              () => <NotificationManagement/>,
     "list-senders-connections":             () => <ListSendersConnections/>,
     "list-sms-sending-handlers":            () => <ListSMSSendingHandlers/>,
     "client-sender-management":             () => <ClientSenderManagement/>,
+    "client-message-management":            () => <ClientMessageManagement/>,
     "list-mail-sending-handlers":           () => <ListMailSendingHandlers/>,
     "list-client-message-groups":           () => <ListClientMessageGroups/>,
     "add-message-group-recipient":          () => <AddMessageGroupRecipient/>,
@@ -294,6 +309,7 @@ const componentMap = {
     "list-notification-sending-handlers":   () => <ListNotificationSendingHandlers/>,
     "list-client-message-group-recipients": () => <ListClientMessageGroupRecipients/>,
 
+    "show-job":                             (job) => <ShowJob job={job}/>,
     "edit-smsc":                            (smsc) => <EditSMSC smsc={smsc}/>,
     "show-smsc":                            (smsc) => <ShowSMSC smsc={smsc}/>,
     "edit-user":                            (user) => <EditUser user={user}/>,
@@ -301,6 +317,8 @@ const componentMap = {
     "edit-role":                            (role) => <EditRole role={role}/>,
     "show-user":                            (user) => <ShowUser user={user}/>,
     "show-file":                            (file) => <ShowFile file={file}/>,
+    "show-failed-job":                      (job) => <ShowFailedJob job={job}/>,
+    "list-jobs":                            (queue) => <ListJobs queue={queue}/>,
     "show-order":                           (order) => <ShowOrder order={order}/>,
     "edit-order":                           (order) => <EditOrder order={order}/>,
     "show-sales":                           (sales) => <ShowSales sales={sales}/>,
@@ -315,6 +333,8 @@ const componentMap = {
     "edit-client":                          (client) => <EditClient client={client}/>,
     "show-ticket":                          (ticket) => <ShowTicket ticket={ticket}/>,
     "edit-folder":                          (folder) => <EditFolder folder={folder}/>,
+    "job-management":                       (queue) => <JobManagement queue={queue}/>,
+    "list-failed-jobs":                     (queue) => <ListFailedJobs queue={queue}/>,
     "all-services":                         (services) => <Service services={services}/>,
     "get-folder-files":                     (folder) => <GetFolderFiles folder={folder}/>, 
     "show-message":                         (message) => <ShowMessage message={message}/>,

@@ -30,9 +30,10 @@ const AddClientMessage2 = ({ sender,senderConnections, order, language, groupRec
     const [validRecipients, setValidRecipients] = useState([])
     const [blacklistedWords, setBlacklistedWords] = useState([])
     const [invalidRecipients, setInvalidRecipients] = useState([])
-    const [maxNumOfSegments, setMaxNumOfSegments] = useState(null)
     const [pushButtonEnabled, setPushButtonEnabled] = useState(true)
+    const [defaultCountryCode, setDefaultCountryCode] = useState(null)
     const [wordFilterThreshold, setWordFilterThreshold] = useState(null)
+    const [maxNumberOfSegments, setMaxNumberOfSegments] = useState(null)
     const [scheduleDate, setScheduleDate] = useState("----:--:-- 00:00:00")
     const [selectedTimezone, setSelectedTimezone] = useState("Africa/Cairo")
     const [messageRecipients, setMessageRecipients] = useState(groupRecipients)
@@ -40,6 +41,8 @@ const AddClientMessage2 = ({ sender,senderConnections, order, language, groupRec
     const [parameterizedMessageSegments, setParameterizedMessageSegments] = useState([])
 
     const [prefixes, setPrefixes] = useState(makeArrayUnique(senderConnections.map(sc => ({
+        country_code: sc.smsc.country.code,
+        operator_code: sc.smsc.operator.code,
         name: sc.smsc.country.name + ", " + sc.smsc.operator.name, 
         code: sc.smsc.country.code + sc.smsc.operator.code,
         recipients: []
@@ -48,8 +51,9 @@ const AddClientMessage2 = ({ sender,senderConnections, order, language, groupRec
     const setupLock = useRef(true)
     const setup = async () => {
         getCurrentDate()
+        setDefaultCountryCode(await getSettingsValueByName(Settings.DEFAULT_COUNTRY_CODE))
         setWordFilterThreshold(await getSettingsValueByName(Settings.WORD_FILTER_THRESHOLD))
-        setMaxNumOfSegments(await getSettingsValueByName(Settings.MAXIMUM_NUMBER_OF_MESSAGES_SEGMENTS))
+        setMaxNumberOfSegments(await getSettingsValueByName(Settings.MAXIMUM_NUMBER_OF_MESSAGES_SEGMENTS))
 
         const groupNames = (await listMessageGroups(1000000000000)).data.map(group => group.name)
         setIsOldGroups(! isEmpty(groupRecipients.filter(grcp => groupNames.includes(grcp.name))))
@@ -60,43 +64,75 @@ const AddClientMessage2 = ({ sender,senderConnections, order, language, groupRec
     }, [])
 
     useEffect(() => {
-        if (maxNumOfSegments && messageSegments.length > maxNumOfSegments) {
+        if (maxNumberOfSegments && messageSegments.length > maxNumberOfSegments) {
             showAlert("Maximum number of segments exceeded")
         }
-    }, [messageSegments, maxNumOfSegments])
+    }, [messageSegments, maxNumberOfSegments])
 
     useEffect(() => {
         const valRecip = []
         const invRecip = []
-        const allowedPrefixes = prefixes.map(px => px.code)
-        message.messages = message.messages?.filter(msg => startsWithAny(msg.title, allowedPrefixes))
-        const valRecipGrp = messageRecipients.map(msgRcip => ({name: msgRcip.name, recipients: msgRcip.recipients.filter(recip => startsWithAny(recip.number, allowedPrefixes))}))
-        setMessage(message)
-        setValidGroupRecipients(valRecipGrp)
 
-        messageRecipients.forEach(gr => {
-            const recipients = gr.recipients
-
-            recipients.forEach(recipient => {
-                if (startsWithAny(recipient.number, allowedPrefixes)) {
-                    valRecip.push(recipient)
-                } else {
-                    invRecip.push(recipient)
+        message.messages = message.messages?.reduce((acc, msg) =>{
+            prefixes.forEach(prefix => {
+                let adjustedNumber = getConnectionPhoneNumbers(prefix.country_code, prefix.operator_code, [msg.title])
+                if (! isEmpty(adjustedNumber)) {
+                    msg.title = adjustedNumber[0]
+                    acc.push(msg)
                 }
             })
+            return acc
+        }, [])
 
-            prefixes.forEach(prefix => {
-                const matchingRecipients = recipients.filter(
-                    recipient => startsWithAny(recipient.number, [prefix.code])
-                )
-                prefix.recipients.push(...matchingRecipients)
-            })
-        })
+        const valRecipGrp = messageRecipients.map(msgRcip => ({
+            name: msgRcip.name, 
+            recipients: msgRcip.recipients.reduce((acc, recip) => {
+                let isInvalid = true
+                prefixes.forEach(prefix => {
+                    let adjustedNumber = getConnectionPhoneNumbers(prefix.country_code, prefix.operator_code, [recip.number])
+                    if (! isEmpty(adjustedNumber)) {
+                        isInvalid = false
+                        recip.number = adjustedNumber[0]
+                        acc.push(recip)
+                        valRecip.push(recip)
+                        prefix.recipients.push(recip)
+                    }
+                })
+                if (isInvalid) {
+                    invRecip.push(recip)
+                }
+                return acc
+            }, [])
+        }))
 
+        setMessage(message)
         setPrefixes(prefixes)
         setValidRecipients(valRecip)
         setInvalidRecipients(invRecip)
+        setValidGroupRecipients(valRecipGrp)
+
     }, [messageRecipients])
+
+    const getConnectionPhoneNumbers = (countryCode, operatorCode, phoneNumbers) => {
+        if (!countryCode || !operatorCode || !phoneNumbers || phoneNumbers.length === 0) {
+          return [];
+        }
+
+        const adjustedPhoneNumbers = phoneNumbers.map((number) => {
+          if (String(defaultCountryCode) === countryCode) {
+            if (number.startsWith(operatorCode)) {
+              return countryCode + number;
+            }
+            const lastCharacter = countryCode.slice(-1);
+            if (number.startsWith(lastCharacter + operatorCode)) {
+              return countryCode.slice(0, -1) + number;
+            }
+          }
+          return number;
+        });
+      
+        return adjustedPhoneNumbers.filter((number) => number.startsWith(countryCode + operatorCode));
+    }
 
     const onTextAreaContentChange = (message, parameterized) => {
 
@@ -229,7 +265,7 @@ const AddClientMessage2 = ({ sender,senderConnections, order, language, groupRec
         }
         
         if (! isEmpty(msg)) {
-            navigate("content", "list-client-messages")
+            navigate("content", "client-message-management")
             showAlert("Message Sent Successfully!")
         } else {
             showAlert("Valid Message Information Required")
@@ -261,20 +297,58 @@ const AddClientMessage2 = ({ sender,senderConnections, order, language, groupRec
         <Page title="Add New Message">
             <a id="censored-words-popup" className="d-none" href="#popup">popup</a>
 
-            <div className="mx-3 mt-5">
-                <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>Schedule Date</div>
-                <DateTimeButton onClick={getCurrentDate} onSelectDate={getScheduleDate}>
-                    Schedule Now <i className="fas fa-table ms-3"></i>
-                </DateTimeButton>
-                <div className="d-inline-flex align-items-center ms-5" style={{fontSize: "25px"}}>Chosen Schedule Date: { scheduleDate }</div>
+            <div style={{marginTop: "1px"}}>
+                <Hint>
+                    <div style={{color: "#fff"}}>
+                        <div className="d-flex justify-content-evenly align-items-center">
+                            <div style={{width: "50%"}}>
+                                1- Number of <span style={{color: "red"}}>Invalid </span> 
+                                recipients : <span style={{color: "red"}}>{invalidRecipients.length}</span> 
+                            </div>
+                            <div><button className="button" onClick={() => showRecipients(invalidRecipients)}>Show</button></div>
+                        </div>
+                        <div className="d-flex justify-content-evenly align-items-center">
+                            <div style={{width: "50%"}}>
+                                1- Number of <span style={{color: "red"}}>Valid </span> 
+                                recipients : <span style={{color: "red"}}>{validRecipients.length}</span> 
+                            </div>
+                            <div><button className="button" onClick={() => showRecipients(validRecipients)}>Show</button></div>
+                        </div>
+                        {prefixes.map((prefix, index) => <div className="d-flex justify-content-evenly align-items-center">
+                            <div style={{width: "50%"}}>
+                                {index + 2}- Number of <span style={{color: "red"}}>{prefix.name} </span> 
+                                recipients : <span style={{color: "red"}}>{prefix.recipients.length}</span>
+                            </div>
+                            <div><button className="button" onClick={() => showRecipients(prefix.recipients)}>Show</button></div>
+                        </div>)}
+                    </div>
+                </Hint>
             </div>
 
-            <div className="my-5 mx-3">
-                <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>Timezone:</div>
-                <div className="d-inline-flex justify-content-center" style={{width: "50%"}}>
-                    <DropList selectName="Africa/Cairo" options={getTimezones()} onSelect={onSelectTimezone}/>
-                </div>
+            <div className="d-flex justify-content-between mx-3 mt-3">
+                <div>Current Number of Characters: {messageLength}</div>
+                <div>Remaining Number of Characters: {(language.max_characters_length > messageLength? language.max_characters_length : stippize(messageLength, language.split_characters_length)) - messageLength}</div>
+                <div>Maximum number of Characters: {language.max_characters_length > messageLength? language.max_characters_length : stippize(messageLength, language.split_characters_length)}</div>
+                <div>Number of SMSs: {messageSegments.length}</div>
             </div>
+
+            <ParametrizedTextArea
+                height={"400px"} 
+                placeholder={"Enter Your Message."} 
+                onContentChange={onTextAreaContentChange} 
+                onUploadFile={onUploadFileHandler}
+                textInputFilterFunction={(e) => messageLanguageFilter(e, language.characters, language.name)}
+            />
+
+            <div className="mt-5">
+                <Card2>
+                    <div>Total Cost: <span style={{color: "red"}}>{(getNumberOfMessages() * order.pricelist.price).toFixed(2)}</span> LE</div>
+                    <div>Number of Messages: <span style={{color: "red"}}>{getNumberOfMessages()}</span></div>
+                    <div>Single Message Cost: <span style={{color: "red"}}>{order.pricelist.price}</span></div>
+                    <div>Each Recipient Will Receive <span style={{color: "red"}}>{messageSegments.length}</span> Message\s</div>
+                </Card2>
+            </div>
+
 
             <div id="add-message-group-input" className="d-none" style={{fontSize: "25px", margin: "40px 10px"}}>
             <div>The uploaded recipients data is stored to our database with group name: <span style={{color: "orange"}}>{messageRecipients[0]?.name}</span></div>
@@ -305,57 +379,21 @@ const AddClientMessage2 = ({ sender,senderConnections, order, language, groupRec
                 </div>
             </div>
 
-            <div className="d-flex justify-content-between mx-3 mt-5">
-                <div>Current Number of Characters: {messageLength}</div>
-                <div>Remaining Number of Characters: {(language.max_characters_length > messageLength? language.max_characters_length : stippize(messageLength, language.split_characters_length)) - messageLength}</div>
-                <div>Maximum number of Characters: {language.max_characters_length > messageLength? language.max_characters_length : stippize(messageLength, language.split_characters_length)}</div>
-                <div>Message Segmentation Length: {language.split_characters_length}</div>
+            <div className="my-5 mx-3">
+                <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>Timezone:</div>
+                <div className="d-inline-flex justify-content-center" style={{width: "50%"}}>
+                    <DropList selectName="Africa/Cairo" options={getTimezones()} onSelect={onSelectTimezone}/>
+                </div>
             </div>
 
-            <ParametrizedTextArea 
-                height={"400px"} 
-                placeholder={"Enter Your Message."} 
-                onContentChange={onTextAreaContentChange} 
-                onUploadFile={onUploadFileHandler}
-                textInputFilterFunction={(e) => messageLanguageFilter(e, language.characters, language.name)}
-            />
-
-            <div className="mt-5">
-                <Hint>
-                    <div style={{color: "#fff"}}>
-                        <div className="d-flex justify-content-evenly align-items-center">
-                            <div style={{width: "50%"}}>
-                                1- Number of <span style={{color: "red"}}>Invalid </span> 
-                                recipients : <span style={{color: "red"}}>{invalidRecipients.length}</span> 
-                            </div>
-                            <div><button className="button" onClick={() => showRecipients(invalidRecipients)}>Show</button></div>
-                        </div>
-                        <div className="d-flex justify-content-evenly align-items-center">
-                            <div style={{width: "50%"}}>
-                                1- Number of <span style={{color: "red"}}>Valid </span> 
-                                recipients : <span style={{color: "red"}}>{validRecipients.length}</span> 
-                            </div>
-                            <div><button className="button" onClick={() => showRecipients(validRecipients)}>Show</button></div>
-                        </div>
-                        {prefixes.map((prefix, index) => <div className="d-flex justify-content-evenly align-items-center">
-                            <div style={{width: "50%"}}>
-                                {index + 2}- Number of <span style={{color: "red"}}>{prefix.name} </span> 
-                                recipients : <span style={{color: "red"}}>{prefix.recipients.length}</span>
-                            </div>
-                            <div><button className="button" onClick={() => showRecipients(prefix.recipients)}>Show</button></div>
-                        </div>)}
-                    </div>
-                </Hint>
+            <div className="mx-3 mt-5">
+                <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>Schedule Date</div>
+                <DateTimeButton onClick={getCurrentDate} onSelectDate={getScheduleDate}>
+                    Schedule Now <i className="fas fa-table ms-3"></i>
+                </DateTimeButton>
+                <div className="d-inline-flex align-items-center ms-5" style={{fontSize: "25px"}}>Chosen Schedule Date: { scheduleDate }</div>
             </div>
 
-            <div className="mt-5">
-                <Card2>
-                    <div>Total Cost: <span style={{color: "red"}}>{(getNumberOfMessages() * order.pricelist.price).toFixed(2)}</span> LE</div>
-                    <div>Number of Messages: <span style={{color: "red"}}>{getNumberOfMessages()}</span></div>
-                    <div>Single Message Cost: <span style={{color: "red"}}>{order.pricelist.price}</span></div>
-                    <div>Each Recipient Will Receive <span style={{color: "red"}}>{messageSegments.length}</span> Message\s</div>
-                </Card2>
-            </div>
             <div className="button-container">
                 <button className="button" onClick={addNewSMSMessage}>Push</button>
             </div>

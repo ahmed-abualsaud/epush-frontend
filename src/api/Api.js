@@ -2,9 +2,9 @@ import axios from 'axios'
 import { Config } from '../config/Config'
 import { useDispatch, useSelector } from 'react-redux'
 import { isEmpty } from '../utils/helper'
-import { signin, signout } from "../container/redux/slice/authSlice"
 import { showAlert } from "../utils/validator"
 import { useNavigate } from 'react-router-dom'
+import { signin, signout, updateAuthUser } from "../container/redux/slice/authSlice"
 
 const useAxiosApi = () => 
 {
@@ -12,9 +12,19 @@ const useAxiosApi = () =>
     const dispatch = useDispatch()
     let authUser = useSelector(state => state.auth.user)
 
+    const updateAuthenticatedUser = (user) => 
+    {
+        let usr = {...getAuthenticatedUser()}
+
+        if (user?.id === usr?.user.id) {
+            usr.user = {...user}
+            localStorage.setItem('user', JSON.stringify(usr));
+            dispatch(updateAuthUser(usr.user))
+        }
+    }
+
     const getAuthenticatedUser = () => 
     {
-
         if (! isEmpty(authUser)) { return authUser }
 
         authUser = localStorage.getItem('user')
@@ -27,6 +37,7 @@ const useAxiosApi = () =>
 
     const handleErrorResponse = (error) => 
     {
+        console.log(error)
         if (isEmpty(error.response)){
             showAlert("The Backend Server is Down")
             return null
@@ -74,7 +85,9 @@ const useAxiosApi = () =>
         
         getAuthenticatedUser, 
         
-        handleErrorResponse 
+        handleErrorResponse,
+
+        updateAuthenticatedUser
     }
 }
 

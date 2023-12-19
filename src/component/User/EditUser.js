@@ -2,10 +2,8 @@ import useAuthApi from '../../api/useAuthApi'
 import { showAlert } from '../../utils/validator'
 import { useEffect, useRef, useState } from 'react'
 import { navigate, render } from '../../setup/navigator'
-import { useDispatch, useSelector } from 'react-redux'
 import { getElement, updateElement } from '../../utils/dom'
 import { isEmpty, snakeToBeautifulCase } from '../../utils/helper'
-import { updateAuthUser } from '../../container/redux/slice/authSlice'
 import Avatar from '../../layout/Shared/Avatar'
 import Page from '../../page/Page'
 
@@ -18,9 +16,6 @@ const EditUser = ({ user }) => {
       (column) => !excludedColumns.includes(column)
     )
 
-    const authUser = useSelector(state => state.auth.user)?.user
-
-    const dispatch = useDispatch()
     const [avatar, setAvatar] = useState({})
     const [userRoles, setUserRoles] = useState([])
     const [currentUser, setCurrentUser] = useState([])
@@ -152,7 +147,6 @@ const EditUser = ({ user }) => {
             if (! isEmpty(newUser)) {
                 setCurrentUser(newUser)
                 showAlert("User information updated successfully");
-                (user["id"] === authUser.id) && dispatch(updateAuthUser(newUser)) && localStorage.setItem('user', JSON.stringify(newUser))
             }
         }
     }
@@ -164,7 +158,6 @@ const EditUser = ({ user }) => {
         if (! isEmpty(newUser)) {
             setCurrentUser(newUser)
             getElement(checkboxId).checked ? showAlert("User has been enabled"): showAlert("User has been disabled");
-            (user["id"] === authUser.id) && dispatch(updateAuthUser(newUser)) && localStorage.setItem('user', JSON.stringify(newUser))
         }
     }
 
@@ -218,7 +211,6 @@ const EditUser = ({ user }) => {
             if (! isEmpty(data)) {
                 setCurrentUser(data)
                 showAlert("User avatar updated successfully");
-                (user["id"] === authUser.id) && dispatch(updateAuthUser(data)) && localStorage.setItem('user', JSON.stringify(data))
             }
         } else {
             showAlert("Please choose your avatar first")

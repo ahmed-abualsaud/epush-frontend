@@ -33,7 +33,7 @@ const FromFileAddition = ({ setGroupRecipients }) => {
     }
 
     return (
-        <div className="d-flex justify-content-between align-items-center">
+        <div className="d-flex justify-content-between">
             <pre style={{fontSize: "20px", whiteSpace: "pre-wrap"}}>
                 * Supported Files: <br/>
                 &nbsp;&nbsp;&nbsp;&nbsp;1- plaintexts: .txt <br/>

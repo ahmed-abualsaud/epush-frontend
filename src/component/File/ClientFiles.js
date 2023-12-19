@@ -10,7 +10,6 @@ import ShowAll from "../../layout/TableOperation/ShowAll"
 import { navigate } from "../../setup/navigator"
 import OperationContainer from "../../layout/TableOperation/OperationContainer"
 import ShowRowCell from "../../layout/TableOperation/ShowRowCell"
-import DeleteRowCell from "../../layout/TableOperation/DeleteRowCell"
 import DataRows from "../../layout/Table/DataRows"
 import TableBody from "../../layout/Table/TableBody"
 import HeadCells from "../../layout/Table/HeadCells"
@@ -24,8 +23,6 @@ import ComplexSearch from "../../layout/TableOperation/ComplexSearch"
 import { encodeString } from "../../utils/strUtils"
 import useSearchApi from "../../api/useSearchApi"
 import { useSelector } from "react-redux"
-import AddRowCell from "../../layout/TableOperation/AddRowCell"
-import Page from "../../page/Page"
 
 
 const ClientFiles = () =>
@@ -110,7 +107,7 @@ const ClientFiles = () =>
     return (
         ! isEmpty(files) && 
         (
-        <Page title="My Files">
+        <div>
             <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
@@ -142,7 +139,7 @@ const ClientFiles = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={files.total} perPage={files.per_page}/>
             </PaginationContainer>
-        </Page>
+        </div>
         )
     )
 }

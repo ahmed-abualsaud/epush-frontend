@@ -93,7 +93,7 @@ const ListClientTickets = () =>
     return (
         ! isEmpty(tickets) && 
         (
-        <Page title="Tickets">
+        <div>
             <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
@@ -118,7 +118,7 @@ const ListClientTickets = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={tickets.total} perPage={tickets.per_page}/>
             </PaginationContainer>
-        </Page>
+        </div>
         )
     )
 }

@@ -1,58 +1,47 @@
-import { useEffect, useRef } from "react"
+import React, { useLayoutEffect, useRef } from "react"
 import "../../assets/style/layout/navbar.css"
 import { getFirstElementParent } from "../../utils/dom"
 import { randomString } from "../../utils/strUtils"
 
 const NavBar = ({ children }) => {
-
     const navbarKey = randomString(8)
     children = children ? ([1, undefined].includes(children.length) ? [children] : children) : []
 
-    const setupLock = useRef(true)
-    const setup = async () => {
-        let tabsNewAnim = document.querySelector("#navbar-animmenu-" + navbarKey)
-        let activeItemNewAnim = tabsNewAnim.querySelector(".active")
-        let activeWidthNewAnimWidth = activeItemNewAnim.offsetWidth
-        let itemPosNewAnimLeft = activeItemNewAnim.offsetLeft
-        tabsNewAnim.querySelector(".hori-selector").style.left = itemPosNewAnimLeft + "px"
-        tabsNewAnim.querySelector(".hori-selector").style.width = activeWidthNewAnimWidth + "px"
-    }
-    useEffect(() => {
-        if (setupLock.current) { setupLock.current = false; setup() }
-    }, [])
+    const horiSelectorRef = useRef(null)
+
+    useLayoutEffect(() => {
+        const active = horiSelectorRef.current.parentElement.querySelector('.active')
+        horiSelectorRef.current.style.left = active?.offsetLeft + "px"
+        horiSelectorRef.current.style.width = active?.offsetWidth + "px"
+    }, [horiSelectorRef.current])
+
 
     const onClickHandler = (e) => {
         let navItems = document.querySelectorAll("#navbar-animmenu-" + navbarKey + " ul li")
-        navItems.forEach(function(item) {
-            item.classList.remove("active")
+        navItems.forEach(function (item) {
+        item.classList.remove("active")
         })
 
         let parent = getFirstElementParent("li", e.target)
         parent?.classList.add("active")
-
-        let activeWidthNewAnimWidth = parent?.offsetWidth
-        let itemPosNewAnimLeft = parent?.offsetLeft
-        let tabsNewAnim = document.querySelector("#navbar-animmenu-" + navbarKey)
-        tabsNewAnim.querySelector(".hori-selector").style.left = itemPosNewAnimLeft + "px"
-        tabsNewAnim.querySelector(".hori-selector").style.width = activeWidthNewAnimWidth + "px"
+        horiSelectorRef.current.style.left = parent?.offsetLeft + "px"
+        horiSelectorRef.current.style.width = parent?.offsetWidth + "px"
     }
 
     return (
         <div id={"navbar-animmenu-" + navbarKey} className="navbar-animmenu">
-            <ul>
-                <div className="hori-selector">
-                    <div className="left"></div>
-                    <div className="right"></div>
-                </div>
+        <ul>
+            <div id={"hori-selector-" + navbarKey} className="hori-selector" ref={horiSelectorRef}>
+            <div className="left"></div>
+            <div className="right"></div>
+            </div>
 
-                {children.map((child, index) => 
-                    <li className={index === 0 ? "active" : ""} onClick={onClickHandler}>
-                        <a href="javascript:void(0);">
-                            {child}
-                        </a>
-                    </li>
-                )}
-            </ul>
+            {children.map((child, index) => (
+            <li className={index === 0 ? "active" : ""} onClick={onClickHandler}>
+                <a href="javascript:void(0);">{child}</a>
+            </li>
+            ))}
+        </ul>
         </div>
     )
 }

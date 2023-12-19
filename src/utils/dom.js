@@ -1,5 +1,6 @@
 import { isEmpty } from "./helper"
 import jsxToString from 'jsx-to-string'
+import beep from '../assets/audio/beep-sound.mp3'
 
 export function createElement(tagName, options = {}) {
 
@@ -91,7 +92,7 @@ export function removeElement(elementID) {
 
 export function getElementsWithAttribute(elementID, attribute) {
 
-    return document.getElementById(elementID).querySelectorAll(`[${attribute}]`)
+    return document.getElementById(elementID)?.querySelectorAll(`[${attribute}]`)
 }
 
 export function getFormInputData(elementID) {
@@ -112,16 +113,18 @@ export function fadeElementOut(element) {
     let oldClass = element.getAttribute("class")
     let newClass = isEmpty(oldClass)? "fade-out" : `${oldClass} fade-out`
 
+    const audio = new Audio(beep);
+    audio.play();
+
     const interval1 = setInterval(() => {
         element.setAttribute("class", newClass)
-        //(new Audio("../assets/audio/beep-sound.mp3")).play()
         clearInterval(interval1)
     }, 3000)
 
     const interval2 = setInterval(() => {
         removeElement(element.getAttribute("id"))
         clearInterval(interval2)
-    }, 4000)
+    }, 300000)
 }
 
 export function getFirstElementParent(tagName, element) {

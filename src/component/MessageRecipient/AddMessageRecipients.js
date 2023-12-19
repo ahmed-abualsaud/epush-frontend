@@ -55,7 +55,15 @@ const AddMessageRecipients = ({ userID, setGroupRecipients, addMessageSegmentsRe
                 <div onClick={importedFromParametersFile}><i className="fas fa-file-import"></i>Imported From Parameters File</div>
             </NavBar>
 
-            <div style={{marginTop: "25px", padding: "0 10px"}} id="add-recipients"></div>
+            <div
+                id="add-recipients"
+                style={{
+                    padding: "10px", 
+                    maxHeight: "500px", 
+                    overflow: "auto", 
+                    borderBottom: "1px solid #000"
+                }}
+            ></div>
         </div>
     )
 }

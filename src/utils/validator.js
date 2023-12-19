@@ -48,7 +48,7 @@ function validatFormInputs(formID) {
 
     const validationElements = getElementsWithAttribute(formID, "validrules")
 
-    validationElements.forEach(element => {
+    validationElements?.forEach(element => {
         errorMessages = arrayMergeUnique(errorMessages, validateElementValue(element.value, element.getAttribute("validrules").split("|")))
     })
 
@@ -68,15 +68,10 @@ function addToasts(contents) {
                 value: "toast"
             },
             {
-                name: "class",
-                value: "position-fixed bottom-0 end-0"
-            },
-            {
                 name: "style",
-                value: {
-                    display: "block"
-                }
-            }
+                value: "position:fixed;top:5px;left:50%;transform:translateX(-50%);z-index:1000000;"
+            },
+            
         ]
     })
 
@@ -86,7 +81,7 @@ function addToasts(contents) {
     
         toastElement = createElement("div")
         toastElement.setAttribute("id", toastID)
-        toastElement.setAttribute("style", "border-bottom-left-radius:55px;border-top-left-radius:0;z-index:1000000;background-image: url(\"https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg\"), linear-gradient(43deg, #070020 0%, #063F30 50%, #BFE85F 200%);")
+        toastElement.setAttribute("style", "z-index:1000000;background-image: url(\"https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg\"), linear-gradient(43deg, #070020 -100%, #063F30 30%, #BFE85F 150%);border:1px solid #fff")
         toastElement.setAttribute("class", "alert d-flex text-white justify-content-between")
         
         toastElement.appendChild(createElement("p", {

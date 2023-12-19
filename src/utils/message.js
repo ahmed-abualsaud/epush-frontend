@@ -39,9 +39,10 @@ export const generateMessages = (keys, values, template) => {
     return messages
 }
 
-export const generateMessagesFromFileData = (template, data) => {
+export const generateMessagesFromFileData = (template, data, setAttributes = null) => {
     let keys = data[0].split(/,\s*/).map(key => key.toLowerCase())
     let msgKeys = getMessageTemplateKeys(template)
+    setAttributes(keys)
     
     if (! [...msgKeys, "phone"].every(element => keys.includes(element))) {
         showAlert("Message parameter names and uploaded parameter names are not equal")
@@ -89,16 +90,16 @@ export const generateMessagesFromRecipients = (template, recipients) => {
     return result
 }
 
-export const generateMessagesUsingExcelFileParameters = (template, excelContent) => {
-    return generateMessagesFromFileData(template, parseExcelFile(excelContent))
+export const generateMessagesUsingExcelFileParameters = (template, excelContent, setAttributes = null) => {
+    return generateMessagesFromFileData(template, parseExcelFile(excelContent), setAttributes)
 }
 
-export const generateMessagesUsingWordFileParameters = (template, wordContent) => {
-    return generateMessagesFromFileData(template, parseWordFile(wordContent))
+export const generateMessagesUsingWordFileParameters = (template, wordContent, setAttributes = null) => {
+    return generateMessagesFromFileData(template, parseWordFile(wordContent), setAttributes)
 }
 
-export const generateMessagesUsingTextFileParameters = (template, textContent) => {
-    return generateMessagesFromFileData(template, parseTextFile(textContent))
+export const generateMessagesUsingTextFileParameters = (template, textContent, setAttributes = null) => {
+    return generateMessagesFromFileData(template, parseTextFile(textContent), setAttributes)
 }
 
 export const messageLanguageFilter = (e, characters, languageName) => {

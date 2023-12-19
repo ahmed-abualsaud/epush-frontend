@@ -1,8 +1,10 @@
 export const Settings = {
 
-    WORD_FILTER_THRESHOLD: "Word Filter Threshold",
+    DEFAULT_COUNTRY_CODE : 'Default Country Code',
 
-    MESSAGE_APPROVEMENT_LIMIT: 'Message Approvement Limit',
+    WORD_FILTER_THRESHOLD : "Word Filter Threshold",
 
-    MAXIMUM_NUMBER_OF_MESSAGES_SEGMENTS: 'Maximum Number of Messages Segments',
+    MESSAGE_APPROVEMENT_LIMIT : 'Message Approvement Limit',
+
+    MAXIMUM_NUMBER_OF_MESSAGES_SEGMENTS : 'Maximum Number of Messages Segments',
 }

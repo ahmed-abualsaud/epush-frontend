@@ -54,10 +54,10 @@ const AddClientMessage = () => {
 
     const onSelectSender = async (option) => {
         let sender = senders.find(s => s.name === option)
+        setSelectedSender(sender)
         const sc = await getSenderConnections(sender.id)
         setSenderConnections(sc.filter(c => c.approved === true))
         setUnapprovedSenderConnections(sc.filter(c => c.approved === false))
-        setSelectedSender(sender)
         getElement("client-sender-approved-connections")?.classList.remove("d-none")
         getElement("client-sender-unapproved-connections")?.classList.remove("d-none")
     }
@@ -95,11 +95,11 @@ const AddClientMessage = () => {
             }
         }))
 
-        if (! isEmpty(invalidRecipients)) {
-            render("modal-content", "invalid-recipients-modal", invalidRecipients, renderAddMessageSegments)
-            getElement("continue-with-invalid-recipients").click()
-            return
-        }
+        // if (! isEmpty(invalidRecipients)) {
+        //     render("modal-content", "invalid-recipients-modal", invalidRecipients, renderAddMessageSegments)
+        //     getElement("continue-with-invalid-recipients").click()
+        //     return
+        // }
 
         renderAddMessageSegments()
     }
@@ -113,8 +113,12 @@ const AddClientMessage = () => {
                 <div className="d-inline-flex justify-content-center" style={{width: "30%"}}>
                     <DropList selectName="Select Language" options={languages.map(item => item.name)} onSelect={onSelectLanguage}/>
                 </div>
-                <div className="d-inline-flex align-items-center justify-content-center" style={{width: "25%", fontSize: "22px"}}>Maximum Characters = {selectedLanguage?.max_characters_length || 0}</div>
-                <div className="d-inline-flex align-items-center justify-content-center" style={{width: "25%", fontSize: "22px"}}>Split Length = {selectedLanguage?.split_characters_length || 0}</div>
+                {/* <div className="d-inline-flex align-items-center justify-content-center" style={{width: "25%", fontSize: "22px"}}>
+                    Maximum Characters = {selectedLanguage?.max_characters_length || 0}
+                </div>
+                <div className="d-inline-flex align-items-center justify-content-center" style={{width: "25%", fontSize: "22px"}}>
+                    Split Length = {selectedLanguage?.split_characters_length || 0}
+                </div> */}
             </div>
 
             {selectedClient.balance <= 0 ? <div className="no-data">Your wallet is empty</div> :
@@ -145,7 +149,7 @@ const AddClientMessage = () => {
                     )}
                 </Section>
 
-                <Section id="client-sender-unapproved-connections" title="You Can Not Send To" className="d-none">
+                {/* <Section id="client-sender-unapproved-connections" title="You Can Not Send To" className="d-none">
                     {isEmpty(unapprovedSenderConnections)? <div style={{fontSize: "40px", textAlign: "center", margin: "30px 0"}}>
                         The selected sender does'nt have any unapproved sms connections!
                     </div>:
@@ -157,7 +161,7 @@ const AddClientMessage = () => {
                             )}</div>
                         </div>
                     )}
-                </Section>
+                </Section> */}
 
                 {! isEmpty(senderConnections) && <div>
                     <AddMessageRecipients userID={selectedClient.user_id} setGroupRecipients={setGroupRecipients} addMessageSegmentsRenderFunction={renderAddMessageSegments}/>

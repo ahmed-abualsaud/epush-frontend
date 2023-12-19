@@ -3,7 +3,7 @@ import DataCells from "./DataCells";
 import TableRow from "./TableRow";
 import { isEmpty } from "../../utils/helper";
 
-const DataRows = ({ columns, rows, except, children }) => {
+const DataRows = ({ height, columns, rows, except, children }) => {
 
     const [deletedRows, setDeletedRows] = useState([])
 
@@ -17,14 +17,14 @@ const DataRows = ({ columns, rows, except, children }) => {
 
     return (
         <>
-            {rows?.map((row, index) => (
+            {isEmpty(rows)?<tr><td colSpan={2} className="no-data">No Data</td></tr> : rows?.map((row, index) => (
 
                 ! deletedRows.includes(row?.id) &&
 
-                <TableRow key={"row" + index}>
+                <TableRow height={height} key={"row" + index}>
 
                     <td key={ "#" + index + 1 }>{ index + 1 }</td>
-                    <DataCells columns={columns} row={row} />
+                    <DataCells height={height} columns={columns} row={row} />
 
                     {(isEmpty(except) || isEmpty(except.find(exc => Object.values(exc)[0] === row[Object.keys(exc)[0]]))) && children.map(child => {
                         let component = child(row)

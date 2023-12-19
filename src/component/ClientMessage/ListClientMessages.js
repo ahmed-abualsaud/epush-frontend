@@ -25,7 +25,6 @@ import { encodeString } from "../../utils/strUtils"
 import useSearchApi from "../../api/useSearchApi"
 import { useSelector } from "react-redux"
 import AddRowCell from "../../layout/TableOperation/AddRowCell"
-import Page from "../../page/Page"
 
 
 const ListClientMessages = () =>
@@ -110,7 +109,7 @@ const ListClientMessages = () =>
     return (
         ! isEmpty(messages) && 
         (
-        <Page title="Messages">
+        <div>
             <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
@@ -144,7 +143,7 @@ const ListClientMessages = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={messages.total} perPage={messages.per_page}/>
             </PaginationContainer>
-        </Page>
+        </div>
         )
     )
 }

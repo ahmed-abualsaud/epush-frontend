@@ -92,7 +92,7 @@ const ListClientMessageRecipients = () =>
     return (
         ! isEmpty(messageRecipients) && 
         (
-        <Page title="Message Recipients">
+        <div>
             <ComplexSearch columns={columns} onSearch={onSearch}/>
             <OperationContainer>
                 <ShowAll onCheck={onCheckShowAll}/>
@@ -122,7 +122,7 @@ const ListClientMessageRecipients = () =>
                 <PerPageDropList perPageHandler={ setup }/>
                 <PaginationInfo total={messageRecipients.total} perPage={messageRecipients.per_page}/>
             </PaginationContainer>
-        </Page>
+        </div>
         )
     )
 }

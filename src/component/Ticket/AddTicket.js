@@ -63,7 +63,7 @@ const AddTicket = () => {
     }
 
     return (
-        <Page title="Contact Us">
+        <div>
             <div className="d-flex justify-content-around">
                 <Input id="first-name" type="text" icon="fas fa-signature" placeholder={"First Name: " + client.first_name} validrules="required" className="w-50"/>
                 <Input id="last-name" type="text" icon="fas fa-signature" placeholder={"Last Name: " + client.last_name} validrules="required" className="w-50"/>
@@ -85,7 +85,7 @@ const AddTicket = () => {
             <div className="button-container">
                 <button className="button" onClick={sendTicket}>Send it</button>
             </div>
-        </Page>
+        </div>
     )
 }
 

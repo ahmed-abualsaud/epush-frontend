@@ -5,7 +5,7 @@ import { normalizeUsers } from "../utils/helper"
 const useCoreApi = () => 
 {
 
-    const { api, handleErrorResponse } = useAxiosApi()
+    const { api, handleErrorResponse, updateAuthenticatedUser } = useAxiosApi()
 
     const getAdmin = async (userID) =>
     {
@@ -53,6 +53,7 @@ const useCoreApi = () =>
                 },
             })).data.data
 
+            updateAuthenticatedUser(adm?.user)
             adm = normalizeUsers([adm])
             return adm[0]
 
@@ -156,6 +157,8 @@ const useCoreApi = () =>
                   'Content-Type': 'multipart/form-data',
                 },
             })).data.data
+
+            updateAuthenticatedUser(clt?.user)
             clt = normalizeUsers([clt])
             return clt[0]
 

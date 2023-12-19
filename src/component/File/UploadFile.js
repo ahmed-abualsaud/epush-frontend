@@ -60,7 +60,7 @@ const UploadFile = () => {
     }
 
     return (
-        <Page title="Upload Document">
+        <Page title={user?.roles[0].name === "client" ? null : "Upload Document"} style={user?.roles[0].name === "client" ? {border: "none"} : {}}>
             <Document onSelectDocument={onSelectDocument}/>
             {/* <div className="d-flex justify-content-center">
                 <div className="d-inline-flex justify-content-center" style={{width: "51vw"}}>

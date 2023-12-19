@@ -33,8 +33,9 @@ const AddMessageSegments = ({ sender,senderConnections, order, language, groupRe
     const [messageSegments, setMessageSegments] = useState([])
     const [blacklistedWords, setBlacklistedWords] = useState([])
     const [invalidRecipients, setInvalidRecipients] = useState([])
-    const [maxNumOfSegments, setMaxNumOfSegments] = useState(null)
     const [pushButtonEnabled, setPushButtonEnabled] = useState(true)
+    const [defaultCountryCode, setDefaultCountryCode] = useState(null)
+    const [maxNumberOfSegments, setMaxNumberOfSegments] = useState(null)
     const [wordFilterThreshold, setWordFilterThreshold] = useState(null)
     const [scheduleDate, setScheduleDate] = useState("----:--:-- 00:00:00")
     const [selectedTimezone, setSelectedTimezone] = useState("Africa/Cairo")
@@ -44,6 +45,8 @@ const AddMessageSegments = ({ sender,senderConnections, order, language, groupRe
     const [parameterizedMessageSegments, setParameterizedMessageSegments] = useState([])
 
     const [prefixes, setPrefixes] = useState(makeArrayUnique(senderConnections.map(sc => ({
+        country_code: sc.smsc.country.code,
+        operator_code: sc.smsc.operator.code,
         name: sc.smsc.country.name + ", " + sc.smsc.operator.name, 
         code: sc.smsc.country.code + sc.smsc.operator.code,
         recipients: []
@@ -53,8 +56,9 @@ const AddMessageSegments = ({ sender,senderConnections, order, language, groupRe
     const setupLock = useRef(true)
     const setup = async () => {
         getCurrentDate()
+        setDefaultCountryCode(await getSettingsValueByName(Settings.DEFAULT_COUNTRY_CODE))
         setWordFilterThreshold(await getSettingsValueByName(Settings.WORD_FILTER_THRESHOLD))
-        setMaxNumOfSegments(await getSettingsValueByName(Settings.MAXIMUM_NUMBER_OF_MESSAGES_SEGMENTS))
+        setMaxNumberOfSegments(await getSettingsValueByName(Settings.MAXIMUM_NUMBER_OF_MESSAGES_SEGMENTS))
         setMessageApprovementLimit(await getSettingsValueByName(Settings.MESSAGE_APPROVEMENT_LIMIT))
 
         const groupNames = (await listMessageGroups(1000000000000)).data.map(group => group.name)
@@ -67,43 +71,75 @@ const AddMessageSegments = ({ sender,senderConnections, order, language, groupRe
     }, [])
 
     useEffect(() => {
-        if (maxNumOfSegments && messageSegments.length > maxNumOfSegments) {
+        if (maxNumberOfSegments && messageSegments.length > maxNumberOfSegments) {
             showAlert("Maximum number of segments exceeded")
         }
-    }, [messageSegments, maxNumOfSegments])
+    }, [messageSegments, maxNumberOfSegments])
 
     useEffect(() => {
         const valRecip = []
         const invRecip = []
-        const allowedPrefixes = prefixes.map(px => px.code)
-        message.messages = message.messages?.filter(msg => startsWithAny(msg.title, allowedPrefixes))
-        const valRecipGrp = messageRecipients.map(msgRcip => ({name: msgRcip.name, recipients: msgRcip.recipients.filter(recip => startsWithAny(recip.number, allowedPrefixes))}))
-        setMessage(message)
-        setValidGroupRecipients(valRecipGrp)
 
-        messageRecipients.forEach(gr => {
-            const recipients = gr.recipients
-
-            recipients.forEach(recipient => {
-                if (startsWithAny(recipient.number, allowedPrefixes)) {
-                    valRecip.push(recipient)
-                } else {
-                    invRecip.push(recipient)
+        message.messages = message.messages?.reduce((acc, msg) =>{
+            prefixes.forEach(prefix => {
+                let adjustedNumber = getConnectionPhoneNumbers(prefix.country_code, prefix.operator_code, [msg.title])
+                if (! isEmpty(adjustedNumber)) {
+                    msg.title = adjustedNumber[0]
+                    acc.push(msg)
                 }
             })
+            return acc
+        }, [])
 
-            prefixes.forEach(prefix => {
-                const matchingRecipients = recipients.filter(
-                    recipient => startsWithAny(recipient.number, [prefix.code])
-                )
-                prefix.recipients.push(...matchingRecipients)
-            })
-        })
+        const valRecipGrp = messageRecipients.map(msgRcip => ({
+            name: msgRcip.name, 
+            recipients: msgRcip.recipients.reduce((acc, recip) => {
+                let isInvalid = true
+                prefixes.forEach(prefix => {
+                    let adjustedNumber = getConnectionPhoneNumbers(prefix.country_code, prefix.operator_code, [recip.number])
+                    if (! isEmpty(adjustedNumber)) {
+                        isInvalid = false
+                        recip.number = adjustedNumber[0]
+                        acc.push(recip)
+                        valRecip.push(recip)
+                        prefix.recipients.push(recip)
+                    }
+                })
+                if (isInvalid) {
+                    invRecip.push(recip)
+                }
+                return acc
+            }, [])
+        }))
 
+        setMessage(message)
         setPrefixes(prefixes)
         setValidRecipients(valRecip)
         setInvalidRecipients(invRecip)
+        setValidGroupRecipients(valRecipGrp)
+
     }, [messageRecipients])
+
+    const getConnectionPhoneNumbers = (countryCode, operatorCode, phoneNumbers) => {
+        if (!countryCode || !operatorCode || !phoneNumbers || phoneNumbers.length === 0) {
+          return [];
+        }
+
+        const adjustedPhoneNumbers = phoneNumbers.map((number) => {
+          if (String(defaultCountryCode) === countryCode) {
+            if (number.startsWith(operatorCode)) {
+              return countryCode + number;
+            }
+            const lastCharacter = countryCode.slice(-1);
+            if (number.startsWith(lastCharacter + operatorCode)) {
+              return countryCode.slice(0, -1) + number;
+            }
+          }
+          return number;
+        });
+      
+        return adjustedPhoneNumbers.filter((number) => number.startsWith(countryCode + operatorCode));
+    }
 
     const getNumberOfRecipients = () => {
         let numberOfRecipients = 0
@@ -274,53 +310,9 @@ const AddMessageSegments = ({ sender,senderConnections, order, language, groupRe
 
             <div style={{borderTop: "1px solid #fff"}}>
                 <Hint>
-                    <div>1- The maximum number of a message segments is : {maxNumOfSegments}</div>
+                    <div>1- The maximum number of a message segments is : {maxNumberOfSegments}</div>
                     <div>2- The maximum number of message recipients who can receive messages without admin approval is : {messageApprovementLimit}</div>
                 </Hint>
-            </div>
-
-            <div className="mx-3 mt-5">
-                <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>Schedule Date</div>
-                <DateTimeButton onClick={getCurrentDate} onSelectDate={getScheduleDate}>
-                    Schedule Now <i className="fas fa-table ms-3"></i>
-                </DateTimeButton>
-                <div className="d-inline-flex align-items-center ms-5" style={{fontSize: "25px"}}>Chosen Schedule Date: { scheduleDate }</div>
-            </div>
-
-            <div className="my-5 mx-3">
-                <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>Timezone:</div>
-                <div className="d-inline-flex justify-content-center" style={{width: "50%"}}>
-                    <DropList selectName="Africa/Cairo" options={getTimezones()} onSelect={onSelectTimezone}/>
-                </div>
-            </div>
-
-            <div id="add-message-group-input" className="d-none" style={{fontSize: "25px", margin: "40px 10px"}}>
-            <div>The uploaded recipients data is stored to our database with group name: <span style={{color: "orange"}}>{messageRecipients[0]?.name}</span></div>
-                <div>
-                    <span>Do you want to change the name of the group ?</span> 
-                    <input 
-                        id="change-message-group-name"
-                        style={{
-                            padding: "10px", 
-                            margin: "20px", 
-                            border: "2px solid #063F30", 
-                            borderRadius: "10px"
-                        }}
-                        type="text"
-                        placeholder="Type the new group name"
-                    />
-                    <button 
-                        style={{
-                            marginLeft: "-100px", 
-                            padding: "10px", 
-                            borderTopRightRadius: "10px", 
-                            borderBottomRightRadius: "10px", 
-                            color: "#fff", 
-                            backgroundColor: "#063F30"
-                        }}
-                        onClick={() => setMessageRecipients([{name: getElement("change-message-group-name").value, recipients: messageRecipients[0].recipients}])}
-                        >Change</button>
-                </div>
             </div>
 
             <div className="d-flex justify-content-between mx-3 mt-5">
@@ -373,6 +365,51 @@ const AddMessageSegments = ({ sender,senderConnections, order, language, groupRe
 
             <h1 className="content-header my-5">Message Segments</h1>
             <ItemsList items={messageSegments}/>
+
+            <div id="add-message-group-input" className="d-none" style={{fontSize: "25px", margin: "40px 10px"}}>
+            <div>The uploaded recipients data is stored to our database with group name: <span style={{color: "orange"}}>{messageRecipients[0]?.name}</span></div>
+                <div>
+                    <span>Do you want to change the name of the group ?</span> 
+                    <input 
+                        id="change-message-group-name"
+                        style={{
+                            padding: "10px", 
+                            margin: "20px", 
+                            border: "2px solid #063F30", 
+                            borderRadius: "10px"
+                        }}
+                        type="text"
+                        placeholder="Type the new group name"
+                    />
+                    <button 
+                        style={{
+                            marginLeft: "-100px", 
+                            padding: "10px", 
+                            borderTopRightRadius: "10px", 
+                            borderBottomRightRadius: "10px", 
+                            color: "#fff", 
+                            backgroundColor: "#063F30"
+                        }}
+                        onClick={() => setMessageRecipients([{name: getElement("change-message-group-name").value, recipients: messageRecipients[0].recipients}])}
+                        >Change</button>
+                </div>
+            </div>
+
+            <div className="my-5 mx-3">
+                <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>Timezone:</div>
+                <div className="d-inline-flex justify-content-center" style={{width: "50%"}}>
+                    <DropList selectName="Africa/Cairo" options={getTimezones()} onSelect={onSelectTimezone}/>
+                </div>
+            </div>
+
+            <div className="mx-3 mt-5">
+                <div className="d-inline-flex align-items-center" style={{width: "20%", fontSize: "25px"}}>Schedule Date</div>
+                <DateTimeButton onClick={getCurrentDate} onSelectDate={getScheduleDate}>
+                    Schedule Now <i className="fas fa-table ms-3"></i>
+                </DateTimeButton>
+                <div className="d-inline-flex align-items-center ms-5" style={{fontSize: "25px"}}>Chosen Schedule Date: { scheduleDate }</div>
+            </div>
+
             <div className="button-container">
                 <button className="button" onClick={addNewSMSMessage}>Push</button>
             </div>

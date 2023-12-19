@@ -1,7 +1,7 @@
-const TableRow = ({ key, children }) => {
+const TableRow = ({height, key, children }) => {
 
     return (
-        <tr key={key}>
+        <tr style={{height: height}} key={key}>
             { children }
         </tr>
     )

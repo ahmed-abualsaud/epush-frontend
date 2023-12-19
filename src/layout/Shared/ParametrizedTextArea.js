@@ -8,10 +8,16 @@ import { render } from "../../setup/navigator"
 import { randomString } from "../../utils/strUtils"
 
 
-const ParametrizedTextArea = ({ height, placeholder, onContentChange , textInputFilterFunction, onUploadFile, disabled, readonly }) => {
+const ParametrizedTextArea = ({ height, style, placeholder, onContentChange, textInputFilterFunction, onUploadFile, disabled, readonly }) => {
 
     const componentKey = randomString(8)
-    const parameters = [
+
+    const [content, setContent] = useState("")
+    const [message, setMessage] = useState([])
+    const [attributes, setAttributes] = useState([])
+    const [parameterized, setParameterized] = useState(false)
+
+    const parameters = ! isEmpty(attributes) ? attributes : [
     
         "name",
         "username",
@@ -28,10 +34,6 @@ const ParametrizedTextArea = ({ height, placeholder, onContentChange , textInput
         "price",
     
     ]
-
-    const [content, setContent] = useState("")
-    const [message, setMessage] = useState([])
-    const [parameterized, setParameterized] = useState(false)
 
     const onTextAreaContentChange = (cnt) => {
         setContent(cnt)
@@ -83,18 +85,20 @@ const ParametrizedTextArea = ({ height, placeholder, onContentChange , textInput
     const onSelectFile = (file) => {
         let messages = []
         let fileContent = file.result
+        let attributes = {}
 
         switch (file.attributes.type) {
             case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                messages = generateMessagesUsingWordFileParameters(content, fileContent)
+                messages = generateMessagesUsingWordFileParameters(content, fileContent, setAttributes)
                 break
 
             case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-                messages = generateMessagesUsingExcelFileParameters(content, fileContent)
+                messages = generateMessagesUsingExcelFileParameters(content, fileContent, setAttributes)
+                console.log(attributes)
                 break
 
             default:
-                messages = generateMessagesUsingTextFileParameters(content, fileContent)
+                messages = generateMessagesUsingTextFileParameters(content, fileContent, setAttributes)
                 break
         }
 
@@ -119,7 +123,7 @@ const ParametrizedTextArea = ({ height, placeholder, onContentChange , textInput
 
 
     return (
-        <div className="parametrized-textarea-container">
+        <div style={style} className="parametrized-textarea-container">
             <a id="parametrize-messages-popup" className="d-none" href="#popup">popup</a>
             <div className="textarea-toolbox">
                 <div id={"parametrized-textarea-selected-parameters-file-" + componentKey} className="parametrized-textarea-selected-parameters-file"></div>

@@ -3,7 +3,7 @@ import { getElement } from "../../utils/dom"
 import { isEmpty } from "../../utils/helper"
 import { randomString } from "../../utils/strUtils"
 
-const DataCells = ({ columns, row }) => {
+const DataCells = ({ height, columns, row }) => {
 
     const showExpandIcon = (key) => {
         getElement("expand-icon-" + key)?.classList.remove("d-none")
@@ -15,13 +15,13 @@ const DataCells = ({ columns, row }) => {
 
 
     return (
-        columns.map(column => <DataCell column={column} value={row[column]} onHoverExpandIcon={showExpandIcon} onLeaveExpandIcon={hideExpandIcon}/>)
+        columns.map(column => <DataCell height={height} column={column} value={row[column]} onHoverExpandIcon={showExpandIcon} onLeaveExpandIcon={hideExpandIcon}/>)
     )
 }
 
 export default DataCells
 
-const DataCell = ({ column, value, onHoverExpandIcon, onLeaveExpandIcon }) => {
+const DataCell = ({ height, column, value, onHoverExpandIcon, onLeaveExpandIcon }) => {
 
     const tdKey = randomString(5)
 
@@ -38,7 +38,7 @@ const DataCell = ({ column, value, onHoverExpandIcon, onLeaveExpandIcon }) => {
         >
             <div
             style={{
-                maxHeight: "40px",
+                maxHeight: height ?? "40px",
                 overflowY: "auto",
             }}
             >
