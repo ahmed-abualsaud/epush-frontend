@@ -15,28 +15,48 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import AdminDashboard from './page/dashboard/AdminDashboard'
 import ErrorBoundary from './setup/ErrorBoundary'
 import ClientDashboard from './page/dashboard/ClientDashboard'
+import Control from './page/Control'
+import { useEffect, useRef, useState } from 'react'
+import useControlApi from './api/useControlApi'
 
 function App() {
 
-  let currentTimestamp = new Date().getTime();
-  let targetTimestamp = new Date("2024-03-01 20:00:00").getTime();
-  if (currentTimestamp > targetTimestamp) {
-    return (<div></div>)
+  const { get } = useControlApi()
+  const [controlTimestamp, setControlTimestamp] = useState({})
+
+  const setupLock = useRef(true)
+  const setup = async () => {
+    setControlTimestamp(await get())
+  }
+  useEffect(() => {
+    if (setupLock.current) { setupLock.current = false; setup() }
+  }, [])
+
+  if (new Date().getTime() > controlTimestamp) {
+    return (
+      <ErrorBoundary fallback={<p>Something went wrong</p>}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/control" element={<Control/>} />
+          </Routes>
+        </BrowserRouter>
+      </ErrorBoundary>
+    )
   }
 
   return (
     <>
-      {/* <ErrorBoundary fallback={<p>Something went wrong</p>}> */}
+      <ErrorBoundary fallback={<p>Something went wrong</p>}>
         <Provider store={store}>
           <BrowserRouter>
           <Modal/>
 
-          <Routes>
-
+            <Routes>
               {/* Public Routes */}
               <Route path="/" element={<Home />} />
               <Route path="/signin" element={<Signin />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/control" element={<Control/>} />
 
 
               {/* Protected Routes */}
@@ -49,7 +69,7 @@ function App() {
             </Routes>
           </BrowserRouter>
         </Provider> 
-      {/* </ErrorBoundary> */}
+      </ErrorBoundary>
     </>   
   )
 }

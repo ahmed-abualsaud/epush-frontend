@@ -53,7 +53,7 @@ const ListScheduledMessages = () =>
         }
          
         setMessages(msg)
-        setColumns(["company_name", "sender_name", "content", "notes", "approved", "single_message_cost", "total_cost", "number_of_segments", "number_of_recipients", "language", "scheduled_at", "created_at"])
+        setColumns(["company_name", "sender_name", "content", "notes", "approved", "single_message_cost", "total_cost", "number_of_segments", "number_of_recipients", "language", "sent_at", "sender_ip", "scheduled_at", "created_at"])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup(10) }

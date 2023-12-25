@@ -88,7 +88,7 @@ const ListClients = () =>
         } else {
             clt = await search(searchParams.enti, searchParams.crit, perPage)
         }
-         
+        console.log(clt)
         setClients(clt)
         setColumns(clt?.data[0] ? Object.keys(clt?.data[0]).filter(
             (column) => !excludedColumns.includes(column)

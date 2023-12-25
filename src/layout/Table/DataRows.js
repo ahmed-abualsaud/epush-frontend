@@ -17,7 +17,10 @@ const DataRows = ({ height, columns, rows, except, children }) => {
 
     return (
         <>
-            {isEmpty(rows)?<tr><td colSpan={2} className="no-data">No Data</td></tr> : rows?.map((row, index) => (
+            {isEmpty(rows)?<tr><td colSpan={2} className="no-data">
+                <div style={{position: "absolute", width: "200px", left: "50%", fontSize: "40px"}}>No Data</div>
+            </td></tr> : 
+            rows?.map((row, index) => (
 
                 ! deletedRows.includes(row?.id) &&
 
