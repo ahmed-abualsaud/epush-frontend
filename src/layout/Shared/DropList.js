@@ -43,7 +43,7 @@ const DropList = ({ selectName, options, onSelect }) => {
                     <div className="droplist-search-options">
                         <input style={{padding: "10px"}} className="form-style" onInput={searchDroplistOptions} type="text" placeholder="Type Option Name"/>
                     </div>
-                    {currentOptions.map((option, index) => (
+                    {isEmpty(currentOptions) ? <div className="no-data">No Data</div> : currentOptions.map((option, index) => (
                         <div className="option-container__option" onClick={selectOptionOnClickHandler} key={index}>
                             <input type="radio" className="option__radio" name="category" />
                             <label className="option__label" data-value={option}>
