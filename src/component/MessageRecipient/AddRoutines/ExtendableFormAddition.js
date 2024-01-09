@@ -11,7 +11,6 @@ const ExtendableFormAddition = ({ setGroupRecipients }) => {
     const handleChange = (numbers) => {
         setNumbers(numbers)
         setGroupRecipients([{name: messageGroupName, recipients: numbers.map(num => {return {number: num}})}])
-        console.log([{name: messageGroupName, recipients: numbers.map(num => {return {number: num}})}])
     }
 
     return (

@@ -22,6 +22,7 @@ const PerPageDropList = ({ perPageHandler }) => {
                     <li onClick={() => perPageHandler(25)}>25</li>
                     <li onClick={() => perPageHandler(50)}>50</li>
                     <li onClick={() => perPageHandler(100)}>100</li>
+                    <li onClick={() => perPageHandler(500)}>500</li>
                 </ul>
             </div>
 

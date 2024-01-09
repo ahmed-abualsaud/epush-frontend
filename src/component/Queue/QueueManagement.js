@@ -13,10 +13,10 @@ import withOperationCellParameters from "../../HOC/withOperationCellParameters"
 import useQueueApi from "../../api/useQueueApi"
 import Switch from "../../layout/Shared/Switch"
 import { showAlert } from "../../utils/validator"
+import Search from "../../layout/TableOperation/Search"
+import ShowAll from "../../layout/TableOperation/ShowAll"
 
 const QueueManagement = () => {
-
-    // const queues = ['message', 'mail', 'sms', 'notification']
 
     const { listSenders } = useCoreApi()
     const [queueName, setQueueName] = useState([])
@@ -25,11 +25,13 @@ const QueueManagement = () => {
     const setupLock = useRef(true)
     const setup = async() => {
         const senders = await listSenders(1000000000000)
-        const queuesEnabled = await checkQueuesEnabled(['mail', 'sms', 'notification', ...senders.data.map(sender => sender?.name.replace(/ /g, "_"))])
+        const queuesEnabled = await checkQueuesEnabled(['mail', 'sms', 'notification', 'database', ...senders.data.map(sender => sender?.name.replace(/ /g, "_"))])
         if (senders.data) setQueueName([
             {queue: 'mail', enabled: queuesEnabled.mail}, 
             {queue: 'sms', enabled: queuesEnabled.sms}, 
-            {queue: 'notification', enabled: queuesEnabled.notification}, 
+            {queue: 'database', enabled: queuesEnabled.database},
+            {queue: 'notification', enabled: queuesEnabled.notification},
+
             ...senders.data.map(sender => ({queue: sender?.name.replace(/ /g, "_"), enabled: queuesEnabled[sender?.name.replace(/ /g, "_")]}))
         ])
     }
@@ -62,9 +64,19 @@ const QueueManagement = () => {
         />
     }
 
+    const searchQueueColumn = (column, value) => {
+        value = ["yes", "true"].includes(value) ? true : value
+        value = ["no", "false"].includes(value) ? false : value
+        setQueueName(queueName.filter(queue => queue[column] === value))
+    }
+
 
     return (
         <Page>
+            <div style={{display: "flex", justifyContent: "center"}}>
+                <Search columns={['queue', 'enabled']} searchColumn={searchQueueColumn}/>
+                <ShowAll onCheck={setup}/>
+            </div>
             <Switch
                 id={"queue-switch-all"} 
                 labelLeft="Disable All Queues" 

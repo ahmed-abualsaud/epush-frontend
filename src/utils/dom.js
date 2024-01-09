@@ -124,7 +124,7 @@ export function fadeElementOut(element) {
     const interval2 = setInterval(() => {
         removeElement(element.getAttribute("id"))
         clearInterval(interval2)
-    }, 300000)
+    }, 30000)
 }
 
 export function getFirstElementParent(tagName, element) {

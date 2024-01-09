@@ -1,7 +1,36 @@
+import { useEffect, useRef, useState } from "react"
+import useCoreApi from "../../api/useCoreApi"
 import Page from "../../page/Page"
 import { isEmpty, snakeToBeautifulCase } from "../../utils/helper"
+import Export from "../../layout/TableOperation/Export"
+import Table from "../../layout/Table/Table"
+import TableHead from "../../layout/Table/TableHead"
+import HeadRow from "../../layout/Table/HeadRow"
+import HeadCells from "../../layout/Table/HeadCells"
+import TableBody from "../../layout/Table/TableBody"
+import DataRows from "../../layout/Table/DataRows"
+import PaginationContainer from "../../layout/Pagination/PaginationContainer"
+import PageInput from "../../layout/Pagination/PageInput"
+import Paginator from "../../layout/Pagination/Paginator"
+import PerPageDropList from "../../layout/Pagination/PerPageDropList"
+import PaginationInfo from "../../layout/Pagination/PaginationInfo"
+import useAxiosApi from "../../api/Api"
 
 const ShowMessage = ({ message }) => {
+
+    const { sendGetRequest } = useAxiosApi()
+    const { getMessageRecipients } = useCoreApi()
+
+    const [messageRecipients, setMessageRecipients] = useState([])
+
+    const setupLock = useRef(true)
+    const setup = async (perPage) => {
+        const msgrcp = await getMessageRecipients(message.id, perPage)
+        if (msgrcp) setMessageRecipients(msgrcp)
+    }
+    useEffect(() => {
+        if (setupLock.current) { setupLock.current = false; setup(10) }
+    }, [])
 
     const excludedColumns = [
 
@@ -24,14 +53,14 @@ const ShowMessage = ({ message }) => {
         (column) => ! excludedColumns.includes(column)
     ) : []
 
-    const recipientsColumns = ["number", "attributes", ...Object.keys(message['recipients'].length > 0 ? message['recipients'][0] : []).filter(
-        (column) => ! excludedColumns.includes(column)
-    )]
-
     const segmentsColumns = Object.keys(message['segments'].length > 0 ? message['segments'][0] : []).filter(
         (column) => ! excludedColumns.includes(column)
     )
 
+    const handleGetPage = async (pageUrl) => {
+        let rcp = await sendGetRequest(pageUrl)
+        if (! isEmpty(rcp)) setMessageRecipients(rcp)
+    }
 
     return (
         <Page title="General Information">
@@ -54,40 +83,6 @@ const ShowMessage = ({ message }) => {
                     </tr>
                 </tbody>
             </table>
-
-            <h1 className="content-header">Recipients Information</h1>
-            {isEmpty(message['recipients'])? <div className="no-data">Message has no recipients</div>:
-                <div>
-                    <div className="d-flex justify-content-center m-3" style={{fontSize: "20px"}}>Total Number of Recipients = {message['recipients'].length}</div>
-                    <table className="fl-table">
-                        <thead>
-                            <tr>
-                                {recipientsColumns.map(recipientColumn =>
-                                    <th>{snakeToBeautifulCase(recipientColumn)}</th>
-                                )}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {message['recipients'].map(recipient =>
-                                <tr>
-                                    {recipientsColumns?.map((col) => {
-                                        if (col === "number") {
-                                            return <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{recipient?.message_group_recipient?.number ?? "NULL"}</td>
-                                        } else if (col === "attributes") {
-                                            return <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{recipient?.message_group_recipient?.attributes ?? "NULL"}</td>
-                                        } else {
-                                            return <td style={{fontSize: "22px"}} key={ col + "-show-user-info" }>{ typeof recipient[col] === "boolean"? recipient[col] ? "Yes" : "No" : recipient[col] ?? "NULL"}</td>
-                                        }
-                                    })}
-                                </tr>
-                            )}
-                            <tr key="last-row">
-                                <td className="last-row" colSpan={recipientsColumns.length}></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            }
 
             <h1 className="content-header">Segments Information</h1>
             {isEmpty(message['segments'])? <div className="no-data">Message has no segments</div>:
@@ -114,6 +109,34 @@ const ShowMessage = ({ message }) => {
                             </tr>
                         </tbody>
                     </table>
+                </div>
+            }
+
+            <h1 className="content-header">Recipients Information</h1>
+            {isEmpty(messageRecipients.data)? <div className="no-data">Message has no recipients</div>:
+                <div>
+                    <div className="d-flex justify-content-center m-3" style={{fontSize: "20px"}}>Total Number of Recipients = {messageRecipients.total}</div>
+                    <div className="d-flex justify-content-center">
+                        <Export columns={['status', 'number', 'attributes']} rows={messageRecipients.data}/>
+                    </div>
+
+                    <Table>
+                        <TableHead>
+                            <HeadRow>
+                                <HeadCells columns={['status', 'number', 'attributes']}/>
+                            </HeadRow>
+                        </TableHead>
+                        <TableBody>
+                            <DataRows columns={['status', 'number', 'attributes']} rows={messageRecipients.data}/>
+                        </TableBody>
+                    </Table>
+
+                    <PaginationContainer>
+                        <PageInput url={messageRecipients.links[1].url.split("?")[0] + "?take=" + messageRecipients.per_page} numberOfPages={Math.ceil(parseFloat(messageRecipients.total/messageRecipients.per_page))} setPageHandler={handleGetPage} />
+                        <Paginator links={messageRecipients.links} perPage={messageRecipients.per_page} total={messageRecipients.total} getPageHandler={ handleGetPage }/>
+                        <PerPageDropList perPageHandler={ setup }/>
+                        <PaginationInfo total={messageRecipients.total} perPage={messageRecipients.per_page}/>
+                    </PaginationContainer>
                 </div>
             }
         </Page>

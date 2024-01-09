@@ -94,7 +94,6 @@ const ParametrizedTextArea = ({ height, style, placeholder, onContentChange, tex
 
             case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
                 messages = generateMessagesUsingExcelFileParameters(content, fileContent, setAttributes)
-                console.log(attributes)
                 break
 
             default:

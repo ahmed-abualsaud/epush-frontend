@@ -40,8 +40,8 @@
 
 .dropdown-page__items li {
     color: var(--primary-color);
-    padding: 3px;
-    margin-right: 19px;
+    padding: 2px;
+    margin-right: 14px;
     margin-left: -10px;
     border-radius: 50%;
     background-color: var(--boundry-color);

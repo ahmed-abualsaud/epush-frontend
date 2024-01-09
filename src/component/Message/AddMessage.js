@@ -121,13 +121,17 @@ const AddMessage = () => {
             }
         }))
 
-        if (! isEmpty(invalidRecipients)) {
-            render("modal-content", "invalid-recipients-modal", invalidRecipients, renderAddMessageSegments)
-            getElement("continue-with-invalid-recipients").click()
-            return
-        }
+        // if (! isEmpty(invalidRecipients)) {
+        //     render("modal-content", "invalid-recipients-modal", invalidRecipients, renderAddMessageSegments)
+        //     getElement("continue-with-invalid-recipients").click()
+        //     return
+        // }
 
         renderAddMessageSegments()
+    }
+
+    const setGroupRecipientsData = (data) => {
+        setGroupRecipients(data)
     }
 
     return (
@@ -191,7 +195,7 @@ const AddMessage = () => {
                 </div>
 
                 <div id="upload-recipients-element" className="d-none">
-                    <AddMessageRecipients userID={selectedClient.user_id} setGroupRecipients={setGroupRecipients} addMessageSegmentsRenderFunction={renderAddMessageSegments}/>
+                    <AddMessageRecipients userID={selectedClient.user_id} setGroupRecipients={setGroupRecipientsData} addMessageSegmentsRenderFunction={renderAddMessageSegments}/>
 
                     <div id="add-message-group-input" className="d-none" style={{fontSize: "25px", margin: "40px 10px"}}>
                         <div>The uploaded recipients data is stored to our database with group name: <span style={{color: "orange"}}>{groupRecipients[0]?.name}</span></div>

@@ -26,6 +26,7 @@ const AddMessageSegments = ({ sender,senderConnections, order, language, groupRe
     const { getSettingsValueByName } = useSettingsApi()
 
     const [message, setMessage] = useState([])
+    const [doublicated, setDoublicated] = useState([])
     const [isOldGroups, setIsOldGroups] = useState([])
     const [messageLength, setMessageLength] = useState(0)
     const [parameterized, setParameterized] = useState(false)
@@ -77,19 +78,33 @@ const AddMessageSegments = ({ sender,senderConnections, order, language, groupRe
     }, [messageSegments, maxNumberOfSegments])
 
     useEffect(() => {
+        adjustRecipients()
+
+    }, [messageRecipients, defaultCountryCode])
+
+    const adjustRecipients = () => {
+        if (isEmpty(defaultCountryCode)) { return }
+
         const valRecip = []
         const invRecip = []
+        const dupl = []
 
-        message.messages = message.messages?.reduce((acc, msg) =>{
-            prefixes.forEach(prefix => {
-                let adjustedNumber = getConnectionPhoneNumbers(prefix.country_code, prefix.operator_code, [msg.title])
-                if (! isEmpty(adjustedNumber)) {
-                    msg.title = adjustedNumber[0]
-                    acc.push(msg)
-                }
-            })
-            return acc
-        }, [])
+        if (typeof message !== "string") {
+            message.messages = message?.messages?.reduce((acc, msg) =>{
+                prefixes.forEach(prefix => {
+                    let adjustedNumber = getConnectionPhoneNumbers(prefix.country_code, prefix.operator_code, [msg.title])
+                    if (! isEmpty(adjustedNumber)) {
+                        msg.title = adjustedNumber[0]
+                        acc.push(msg)
+                    }
+                })
+                return acc
+            }, [])
+        }
+
+        messageRecipients.forEach(recip => {
+            dupl.push(...recip.recipients.map(r => r.number))
+        })
 
         const valRecipGrp = messageRecipients.map(msgRcip => ({
             name: msgRcip.name, 
@@ -97,6 +112,7 @@ const AddMessageSegments = ({ sender,senderConnections, order, language, groupRe
                 let isInvalid = true
                 prefixes.forEach(prefix => {
                     let adjustedNumber = getConnectionPhoneNumbers(prefix.country_code, prefix.operator_code, [recip.number])
+
                     if (! isEmpty(adjustedNumber)) {
                         isInvalid = false
                         recip.number = adjustedNumber[0]
@@ -113,12 +129,12 @@ const AddMessageSegments = ({ sender,senderConnections, order, language, groupRe
         }))
 
         setMessage(message)
+        setDoublicated(dupl)
         setPrefixes(prefixes)
-        setValidRecipients(valRecip)
+        setValidRecipients(makeArrayUnique(valRecip, "number"))
         setInvalidRecipients(invRecip)
         setValidGroupRecipients(valRecipGrp)
-
-    }, [messageRecipients])
+    }
 
     const getConnectionPhoneNumbers = (countryCode, operatorCode, phoneNumbers) => {
         if (!countryCode || !operatorCode || !phoneNumbers || phoneNumbers.length === 0) {
@@ -299,6 +315,11 @@ const AddMessageSegments = ({ sender,senderConnections, order, language, groupRe
         getElement("censored-words-popup").click()
     }
 
+    const showDoublicated = (recipients) => {
+        render("modal-content", "items-list", recipients)
+        getElement("censored-words-popup").click()
+    }
+
     const onSelectTimezone = (timezone) => {
         setSelectedTimezone(timezone)
     }
@@ -347,14 +368,21 @@ const AddMessageSegments = ({ sender,senderConnections, order, language, groupRe
                         </div>
                         <div className="d-flex justify-content-evenly align-items-center">
                             <div style={{width: "50%"}}>
-                                1- Number of <span style={{color: "red"}}>Valid </span> 
+                                2- Number of <span style={{color: "red"}}>Valid </span> 
                                 recipients : <span style={{color: "red"}}>{validRecipients.length}</span> 
                             </div>
                             <div><button className="button" onClick={() => showRecipients(validRecipients)}>Show</button></div>
                         </div>
+                        {/* <div className="d-flex justify-content-evenly align-items-center">
+                            <div style={{width: "50%"}}>
+                                3- Number of <span style={{color: "red"}}>Doublicated </span> 
+                                recipients : <span style={{color: "red"}}>{doublicated.length}</span> 
+                            </div>
+                            <div><button className="button" onClick={() => showDoublicated(doublicated)}>Show</button></div>
+                        </div> */}
                         {prefixes.map((prefix, index) => <div className="d-flex justify-content-evenly align-items-center">
                             <div style={{width: "50%"}}>
-                                {index + 2}- Number of <span style={{color: "red"}}>{prefix.name} </span> 
+                                {index + 3}- Number of <span style={{color: "red"}}>{prefix.name} </span> 
                                 recipients : <span style={{color: "red"}}>{prefix.recipients.length}</span>
                             </div>
                             <div><button className="button" onClick={() => showRecipients(prefix.recipients)}>Show</button></div>

@@ -859,6 +859,26 @@ const useCoreApi = () =>
         }
     }
 
+    const getMessageRecipients = async (messageID, take) =>
+    {
+        try {
+            return (await api.get("/message/" + messageID + "/recipients?" + qs.stringify({take: take}))).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const getMessageGroupRecipients = async (messageGroupID, take) =>
+    {
+        try {
+            return (await api.get("/message-group/" + messageGroupID + "/recipients?" + qs.stringify({take: take}))).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
     const getMessageGroup = async (messageGroupID) =>
     {
         try {
@@ -1255,6 +1275,10 @@ const useCoreApi = () =>
         deleteMessageFilter,
 
         searchMessageFilter,
+
+        getMessageRecipients,
+
+        getMessageGroupRecipients
 
     }
 }
