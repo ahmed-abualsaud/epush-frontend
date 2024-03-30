@@ -1069,6 +1069,81 @@ const useCoreApi = () =>
         }
     }
 
+    const getClientIPWhitelist = async (userID) => {
+        try {
+            return (await api.get("/client/" + userID + "/ipwhitelist")).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const addIPWhitelist = async (data) => {
+        try {
+            return (await api.post("/ipwhitelist", data)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const updateIPWhitelist = async (ipID, data) => {
+        try {
+            return (await api.put("/ipwhitelist/" + ipID, data)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const listBanners = async () =>
+    {
+        try {
+            return (await api.get("/banner")).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const addBanner = async (data) =>
+    {
+        try {
+            return (await api.post("/banner", data, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+            })).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const updateBanner = async (bannerID, data) =>
+    {
+        try {
+            data?.append("_method", "PUT")
+            return (await api.post("/banner/" + bannerID, data, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+            })).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const deleteBanner = async (bannerID) =>
+    {
+        try {
+            return (await api.delete("/banner/" + bannerID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
 
 
 
@@ -1278,7 +1353,21 @@ const useCoreApi = () =>
 
         getMessageRecipients,
 
-        getMessageGroupRecipients
+        getMessageGroupRecipients,
+
+        getClientIPWhitelist,
+
+        addIPWhitelist,
+
+        updateIPWhitelist,
+
+        addBanner,
+
+        listBanners,
+
+        updateBanner,
+
+        deleteBanner,
 
     }
 }

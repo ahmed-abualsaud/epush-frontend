@@ -22,8 +22,11 @@ const HandleGroup = lazy(() => import('../component/Orchi/HandleGroup'))
 const ListAdmins = lazy(() => import('../component/Admin/ListAdmins'))
 const ListClients = lazy(() => import('../component/Client/ListClients'))
 const ClientProfile = lazy(() => import('../component/Client/ClientProfile'))
-const AddPricelist = lazy(() => import('../component/Pricelist/AddPricelist'))
+const AddPricelist = lazy(() => import('../component/Banner/AddBanner'))
+const AddBanner = lazy(() => import('../component/Banner/AddBanner'))
 const AddAdmin = lazy(() => import('../component/Admin/AddAdmin'))
+const ListBanners = lazy(() => import('../component/Banner/ListBanners'))
+const EditBanner = lazy(() => import('../component/Banner/EditBanner'))
 const EditPricelist = lazy(() => import('../component/Pricelist/EditPricelist'))
 const AddClient = lazy(() => import("../component/Client/AddClient"))
 const ListPricelist = lazy(() => import('../component/Pricelist/ListPricelist'))
@@ -82,7 +85,9 @@ const ClientFiles = lazy(() => import('../component/File/ClientFiles'))
 const ShowPermission = lazy(() => import('../component/Permission/ShowPermission'))
 const DeletePermission = lazy(() => import('../component/Permission/DeletePermission'))
 const ListScheduledMessages = lazy(() => import('../component/Message/ListScheduledMessages'))
+const ShowBanner = lazy(() => import('../component/Banner/ShowBanner'))
 const ShowPricelist = lazy(() => import('../component/Pricelist/ShowPricelist'))
+const DeleteBanner = lazy(() => import('../component/Banner/DeleteBanner'))
 const DeletePricelist = lazy(() => import('../component/Pricelist/DeletePricelist'))
 const AddClientMessageGroup = lazy(() => import('../component/ClientMessage/AddClientMessageGroup'))
 const ShowSales = lazy(() => import('../component/Sales/ShowSales'))
@@ -233,6 +238,7 @@ const componentMap = {
     "add-ticket":                           () => <AddTicket/>,
     "list-smscs":                           () => <ListSMSCs/>,
     "list-roles":                           () => <ListRoles/>,
+    "add-banner":                           () => <AddBanner/>,
     "list-sales":                           () => <ListSales/>,
     "add-sender":                           () => <AddSender/>,
     "add-folder":                           () => <AddFolder/>,
@@ -249,6 +255,7 @@ const componentMap = {
     "add-operator":                         () => <AddOperator/>,
     "list-tickets":                         () => <ListTickets/>,
     "add-settings":                         () => <AddSettings/>,
+    "list-banners":                         () => <ListBanners/>,
     "list-settings":                        () => <ListSettings/>,
     "list-messages":                        () => <ListMessages/>,
     "add-pricelist":                        () => <AddPricelist/>,
@@ -327,6 +334,8 @@ const componentMap = {
     "show-admin":                           (admin) => <ShowAdmin admin={admin}/>,
     "items-list":                           (items) => <ItemsList items={items}/>,
     "role-list":                            (userID) => <RoleList userID={userID}/>,
+    "show-banner":                          (banner) => <ShowBanner banner={banner}/>,
+    "edit-banner":                          (banner) => <EditBanner banner={banner}/>,
     "edit-sender":                          (sender) => <EditSender sender={sender}/>,
     "show-sender":                          (sender) => <ShowSender sender={sender}/>,
     "show-client":                          (client) => <ShowClient client={client}/>,
@@ -412,6 +421,7 @@ const componentMap = {
     "delete-sender":                        (sender, onDelete) => <DeleteSender sender={sender} onDelete={onDelete}/>,
     "delete-folder":                        (folder, onDelete) => <DeleteFolder folder={folder} onDelete={onDelete}/>,
     "delete-ticket":                        (ticket, onDelete) => <DeleteTicket ticket={ticket} onDelete={onDelete}/>,
+    "delete-banner":                        (banner, onDelete) => <DeleteBanner banner={banner} onDelete={onDelete}/>,
     "delete-country":                       (country, onDelete) => <DeleteCountry country={country} onDelete={onDelete}/>,
     "delete-message":                       (message, onDelete) => <DeleteMessage message={message} onDelete={onDelete}/>,
     "delete-operator":                      (operator, onDelete) => <DeleteOperator operator={operator} onDelete={onDelete}/>,

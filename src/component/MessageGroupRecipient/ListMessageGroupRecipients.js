@@ -42,7 +42,7 @@ const ListMessageGroupRecipients = ({messageGroup}) =>
     const setup = async (perPage) => {
 
         if (!isEmpty(messageGroup)) {
-            messageGroup.recipients = messageGroup.recipients.map(rcp => {rcp.message_group = messageGroup; return rcp})
+            messageGroup.recipients = messageGroup?.recipients?.map(rcp => {rcp.message_group = messageGroup; return rcp})
         }
 
         let msgrp = []

@@ -105,6 +105,7 @@ const SuperAdminDashboard = () => {
                         <NavItem text="Notification" icon="fas fa-bell" onClick={ () => navigate("content", "notification-management") }/>
                         <NavItem text="Queue" icon="fas fa-layer-group" onClick={ () => navigate("content", "queue-management") }/>
                         <NavItem text="Documents" icon="fas fa-folder-tree" onClick={ () => navigate("content", "list-folders") }/>
+                        <NavItem text="Announcements" icon="fas fa-bullhorn" onClick={ () => navigate("content", "list-banners") }/>
                     </NavItems>
                 </NavItem>
 
