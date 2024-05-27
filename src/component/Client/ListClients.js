@@ -160,6 +160,7 @@ const ListClients = () =>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
                 <Export columns={columns.filter(item => item !== "websites")} rows={clients.data}/>
+                <AddRowCell addingFunction={addClientHandler}/>
             </OperationContainer>
 
             <Table>

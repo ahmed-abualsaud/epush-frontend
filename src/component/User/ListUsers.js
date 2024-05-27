@@ -162,6 +162,7 @@ const ListUsers = () =>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
                 <Export columns={columns.filter(item => item !== "websites")} rows={users.data}/>
+                <AddRowCell addingFunction={addUserHandler}/>
             </OperationContainer>
 
             <Table>

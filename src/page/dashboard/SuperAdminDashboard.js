@@ -129,7 +129,7 @@ const SuperAdminDashboard = () => {
                     onMouseLeave={handleLeave}
                 >
                     <NavItems className="nav-flyout">
-                        <NavItem text="Messages" icon="fas fa-envelope-open-text" onClick={ () => navigate("content", "list-messages") }/>
+                        <NavItem text="Sent Messages" icon="fas fa-envelope-open-text" onClick={ () => navigate("content", "list-messages") }/>
                         <NavItem text="Scheduled Messages" icon="fas fa-calendar-days" onClick={ () => navigate("content", "list-scheduled-messages") }/>
                         <NavItem text="Unapproved Messages" icon="fas fa-comment-slash" onClick={ () => navigate("content", "list-unapproved-messages") }/>
                         <NavItem text="Message Groups" icon="fas fa-users-rectangle" onClick={ () => navigate("content", "list-message-groups") }/>

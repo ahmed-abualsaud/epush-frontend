@@ -161,6 +161,7 @@ const ListAdmins = () =>
                 <ShowAll onCheck={onCheckShowAll}/>
                 <Search columns={columns} searchColumn={searchEntityColumn}/>
                 <Export columns={columns} rows={admins.data}/>
+                <AddRowCell addingFunction={addAdminHandler}/>
             </OperationContainer>
 
             <Table>

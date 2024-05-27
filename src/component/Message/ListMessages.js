@@ -3,7 +3,7 @@ import Paginator from "../../layout/Pagination/Paginator"
 import useAxiosApi from "../../api/Api"
 import Search from '../../layout/TableOperation/Search'
 import Export from '../../layout/TableOperation/Export'
-import { isEmpty } from "../../utils/helper"
+import { getDatetimeString, isEmpty } from "../../utils/helper"
 import useCoreApi from "../../api/useCoreApi"
 import PerPageDropList from "../../layout/Pagination/PerPageDropList"
 import { useEffect, useRef, useState } from "react"
@@ -42,7 +42,9 @@ const ListMessages = () =>
     const setup = async (perPage) => {
         let msg = []
         if (isEmpty(searchParams)) {
-            msg = await listMessages(perPage)
+            let criteria = "scheduled_at <= '" + getDatetimeString() + "'"
+            setSearchParams({entity: encodeString("message"), criteria: encodeString(criteria), enti: "message", crit: criteria})
+            msg = await search("message", criteria, perPage)
         }
         else if (searchParams.hasOwnProperty('criteria')) {
             msg = await search(searchParams.enti, searchParams.crit, perPage)
@@ -51,7 +53,7 @@ const ListMessages = () =>
             msg = await searchMessage(perPage, searchParams.column, searchParams.value)
         }
         setMessages(msg)
-        setColumns(["company_name", "sender_name", "content", "notes", "approved", "single_message_cost", "total_cost", "number_of_segments", "number_of_recipients", "language", "sender_ip", "message_type", "scheduled_at", "created_at"])
+        setColumns(["company_name", "sender_name", "content", "notes", "approved", "single_message_cost", "total_cost", "number_of_segments", "number_of_recipients", "language", "sender_ip", "message_type", "updated_at"])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup(10) }
@@ -78,6 +80,8 @@ const ListMessages = () =>
     }
 
     const onSearch = async (criteria) => {
+        criteria = isEmpty(criteria) ? "scheduled_at <= '" + getDatetimeString() + "'" : criteria + " AND scheduled_at <= '" + getDatetimeString() + "'"
+
         const msg = await search("message", criteria, 10)
         if (msg) setMessages(msg)
         setSearchParams({entity: encodeString("message"), criteria: encodeString(criteria), enti: "message", crit: criteria})
@@ -121,7 +125,7 @@ const ListMessages = () =>
             <Table>
                 <TableHead>
                     <HeadRow>
-                        <HeadCells columns={columns}/>
+                        <HeadCells columns={["company_name", "sender_name", "content", "notes", "approved", "single_message_cost", "total_cost", "number_of_segments", "number_of_recipients", "language", "sender_ip", "message_type", "sent_date"]}/>
                         <AddRowCell className="w-110px" addingFunction={addMessageHandler}/>
                     </HeadRow>
                 </TableHead>
