@@ -3,7 +3,7 @@ import Paginator from "../../layout/Pagination/Paginator"
 import useAxiosApi from "../../api/Api"
 import Search from '../../layout/TableOperation/Search'
 import Export from '../../layout/TableOperation/Export'
-import { getDatetimeString, isEmpty } from "../../utils/helper"
+import { getDatetimeString, isEmpty, roleExists } from "../../utils/helper"
 import PerPageDropList from "../../layout/Pagination/PerPageDropList"
 import { useEffect, useRef, useState } from "react"
 import ShowAll from "../../layout/TableOperation/ShowAll"
@@ -33,15 +33,18 @@ const ListOrders = () =>
 {
     const [orders, setOrders] = useState([])
     const [columns, setColumns] = useState([])
+    const [authUser, setAuthUser] = useState({})
     const [currentOrder, setCurrentOrder] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
     const { search } = useSearchApi()
-    const { sendGetRequest, sendPostRequest } = useAxiosApi()
+    const { sendGetRequest, sendPostRequest, getAuthenticatedUser } = useAxiosApi()
     const { listOrders, updateOrder, searchOrder } = useExpenseApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
+        setAuthUser(getAuthenticatedUser())
+
         let ord = []
         if (isEmpty(searchParams)) {
             ord = await listOrders(perPage)
@@ -68,8 +71,13 @@ const ListOrders = () =>
                 let url  = pageUrl.split("?")
                 pageUrl = url[0]+"/search?"+url[1]
             }
-            ord = await sendPostRequest(pageUrl, searchParams)
+            let params = {...searchParams}
+            if (roleExists(authUser.roles, "partner")) {
+                params.partner_id = authUser.user.id
+            }
+            ord = await sendPostRequest(pageUrl, params)
         }
+
         if (! isEmpty(ord)) setOrders(ord)
     }
 
@@ -80,6 +88,9 @@ const ListOrders = () =>
     }
 
     const onSearch = async (criteria) => {
+        if (roleExists(authUser.roles, "partner")) {
+            criteria += " AND partner_id = " + authUser.user.id
+        }
         const ord = await search("order", criteria, 10)
         if (ord) setOrders(ord)
         setSearchParams({entity: encodeString("order"), criteria: encodeString(criteria), enti: "order", crit: criteria})
@@ -153,7 +164,7 @@ const ListOrders = () =>
                     </HeadRow>
                 </TableHead>
                 <TableBody>
-                    <DataRows columns={columns} rows={orders.data.map(order => {
+                    <DataRows columns={columns} rows={orders?.data?.map(order => {
                         order.company_name = order.company_name ?? order.client?.company_name ?? "NULL"
                         order.sales_name = order.sales_name ?? order.client?.sales?.name ?? "NULL"
                         order.pricelist = order.pricelist_name ?? order.pricelist?.name ?? "NULL"

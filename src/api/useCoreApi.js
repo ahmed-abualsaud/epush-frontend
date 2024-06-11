@@ -1,11 +1,13 @@
 import qs from "qs"
 import useAxiosApi from "./Api"
-import { normalizeUsers } from "../utils/helper"
+import { normalizeUsers, roleExists } from "../utils/helper"
 
 const useCoreApi = () => 
 {
 
-    const { api, handleErrorResponse, updateAuthenticatedUser } = useAxiosApi()
+    const { api, handleErrorResponse, updateAuthenticatedUser, getAuthenticatedUser } = useAxiosApi()
+
+    const authUser = getAuthenticatedUser()
 
     const getAdmin = async (userID) =>
     {
@@ -71,11 +73,86 @@ const useCoreApi = () =>
             return handleErrorResponse(error)
         }
     }
-    
+
     const searchAdmin = async (take, column, value) =>
     {
         try {
             return (await api.post("/admin/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const getPartner = async (userID) =>
+    {
+        try {
+            return (await api.get("/admin/" + userID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const addPartner = async (partner) =>
+    {
+        try {
+            return (await api.post("/partner", partner, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const listPartners = async (perPage) =>
+    {
+        try {
+            let adm = (await api.get("/partner?" + qs.stringify({take: perPage}))).data.data
+            adm.data = normalizeUsers(adm.data)
+            return adm
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const updatePartner = async (userID, data) =>
+    {
+        try {
+            data?.append("_method", "PUT")
+            let adm = (await api.post("/partner/" + userID , data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })).data.data
+
+            updateAuthenticatedUser(adm?.user)
+            adm = normalizeUsers([adm])
+            return adm[0]
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const deletePartner = async (userID) =>
+    {
+        try {
+            return (await api.delete("/partner/" + userID)).data.data
+
+        } catch (error) {
+            return handleErrorResponse(error)
+        }
+    }
+
+    const searchPartner = async (take, column, value) =>
+    {
+        try {
+            return (await api.post("/partner/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -108,8 +185,13 @@ const useCoreApi = () =>
 
     const listClients = async (perPage) =>
     {
+        let params = {take: perPage}
+        if (roleExists(authUser.roles, "partner")) {
+            params.partner_id = authUser.user.id
+        }
+
         try {
-            let clt = (await api.get("/client?" + qs.stringify({take: perPage}))).data.data
+            let clt = (await api.get("/client?" + qs.stringify(params))).data.data
             clt.data = normalizeUsers(clt.data)
             return clt
 
@@ -179,8 +261,13 @@ const useCoreApi = () =>
     
     const searchClient = async (take, column, value) =>
     {
+        let params = {column: column, value: value}
+        if (roleExists(authUser.roles, "partner")) {
+            params.partner_id = authUser.user.id
+        }
+
         try {
-            let clt = (await api.post("/client/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+            let clt = (await api.post("/client/search?" + qs.stringify({take: take}), params)).data.data
             clt.data = normalizeUsers(clt.data)
             return clt
 
@@ -721,8 +808,13 @@ const useCoreApi = () =>
 
     const listMessages = async (perPage) =>
     {
+        let params = {take: perPage}
+        if (roleExists(authUser.roles, "partner")) {
+            params.partner_id = authUser.user.id
+        }
+
         try {
-            return (await api.get("/message?" + qs.stringify({take: perPage}))).data.data
+            return (await api.get("/message?" + qs.stringify(params))).data.data
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -751,8 +843,12 @@ const useCoreApi = () =>
     
     const searchMessage = async (take, column, value) =>
     {
+        let params = {column: column, value: value}
+        if (roleExists(authUser.roles, "partner")) {
+            params.partner_id = authUser.user.id
+        }
         try {
-            return (await api.post("/message/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+            return (await api.post("/message/search?" + qs.stringify({take: take}), params)).data.data
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -821,8 +917,13 @@ const useCoreApi = () =>
 
     const listMessageSegments = async (perPage) =>
     {
+        let params = {take: perPage}
+        if (roleExists(authUser.roles, "partner")) {
+            params.partner_id = authUser.user.id
+        }
+
         try {
-            return (await api.get("/message-segment?" + qs.stringify({take: perPage}))).data.data
+            return (await api.get("/message-segment?" + qs.stringify(params))).data.data
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -831,8 +932,13 @@ const useCoreApi = () =>
 
     const searchMessageSegment = async (take, column, value) =>
     {
+        let params = {column: column, value: value}
+        if (roleExists(authUser.roles, "partner")) {
+            params.partner_id = authUser.user.id
+        }
+
         try {
-            return (await api.post("/message-segment/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+            return (await api.post("/message-segment/search?" + qs.stringify({take: take}), params)).data.data
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -841,8 +947,13 @@ const useCoreApi = () =>
 
     const listMessageRecipients = async (perPage) =>
     {
+        let params = {take: perPage}
+        if (roleExists(authUser.roles, "partner")) {
+            params.partner_id = authUser.user.id
+        }
+
         try {
-            return (await api.get("/message-recipient?" + qs.stringify({take: perPage}))).data.data
+            return (await api.get("/message-recipient?" + qs.stringify(params))).data.data
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -851,8 +962,13 @@ const useCoreApi = () =>
 
     const searchMessageRecipient = async (take, column, value) =>
     {
+        let params = {column: column, value: value}
+        if (roleExists(authUser.roles, "partner")) {
+            params.partner_id = authUser.user.id
+        }
+
         try {
-            return (await api.post("/message-recipient/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+            return (await api.post("/message-recipient/search?" + qs.stringify({take: take}), params)).data.data
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -911,8 +1027,13 @@ const useCoreApi = () =>
 
     const listMessageGroups = async (perPage) =>
     {
+        let params = {take: perPage}
+        if (roleExists(authUser.roles, "partner")) {
+            params.partner_id = authUser.user.id
+        }
+
         try {
-            return (await api.get("/message-group?" + qs.stringify({take: perPage}))).data.data
+            return (await api.get("/message-group?" + qs.stringify(params))).data.data
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -941,8 +1062,13 @@ const useCoreApi = () =>
     
     const searchMessageGroup = async (take, column, value) =>
     {
+        let params = {column: column, value: value}
+        if (roleExists(authUser.roles, "partner")) {
+            params.partner_id = authUser.user.id
+        }
+
         try {
-            return (await api.post("/message-group/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+            return (await api.post("/message-group/search?" + qs.stringify({take: take}), params)).data.data
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -971,8 +1097,13 @@ const useCoreApi = () =>
 
     const listMessageGroupRecipients = async (perPage) =>
     {
+        let params = {take: perPage}
+        if (roleExists(authUser.roles, "partner")) {
+            params.partner_id = authUser.user.id
+        }
+
         try {
-            return (await api.get("/message-group-recipient?" + qs.stringify({take: perPage}))).data.data
+            return (await api.get("/message-group-recipient?" + qs.stringify(params))).data.data
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -1001,8 +1132,13 @@ const useCoreApi = () =>
     
     const searchMessageGroupRecipient = async (take, column, value) =>
     {
+        let params = {column: column, value: value}
+        if (roleExists(authUser.roles, "partner")) {
+            params.partner_id = authUser.user.id
+        }
+
         try {
-            return (await api.post("/message-group-recipient/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+            return (await api.post("/message-group-recipient/search?" + qs.stringify({take: take}), params)).data.data
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -1160,6 +1296,18 @@ const useCoreApi = () =>
         deleteAdmin,
 
         searchAdmin,
+
+        getPartner,
+
+        addPartner,
+
+        listPartners,
+
+        updatePartner,
+
+        deletePartner,
+
+        searchPartner,
 
         addSales,
 

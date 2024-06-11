@@ -3,7 +3,7 @@ import Paginator from "../../layout/Pagination/Paginator"
 import useAxiosApi from "../../api/Api"
 import Search from '../../layout/TableOperation/Search'
 import Export from '../../layout/TableOperation/Export'
-import { isEmpty } from "../../utils/helper"
+import { isEmpty, roleExists } from "../../utils/helper"
 import useCoreApi from "../../api/useCoreApi"
 import PerPageDropList from "../../layout/Pagination/PerPageDropList"
 import { useEffect, useRef, useState } from "react"
@@ -26,15 +26,18 @@ import Page from "../../page/Page"
 const ListMessageRecipients = () =>
 {
     const [columns, setColumns] = useState([])
+    const [authUser, setAuthUser] = useState({})
     const [messageRecipients, setMessageRecipients] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
     const { search } = useSearchApi()
     const { listMessageRecipients, searchMessageRecipient } = useCoreApi()
-    const { sendGetRequest, sendPostRequest } = useAxiosApi()
+    const { sendGetRequest, sendPostRequest, getAuthenticatedUser } = useAxiosApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
+        setAuthUser(getAuthenticatedUser())
+
         let msgrcip = []
         if (isEmpty(searchParams)) {
             msgrcip = await listMessageRecipients(perPage)
@@ -61,7 +64,11 @@ const ListMessageRecipients = () =>
                 let url  = pageUrl.split("?")
                 pageUrl = url[0]+"/search?"+url[1]
             }
-            msgrcip = await sendPostRequest(pageUrl, searchParams)
+            let params = {...searchParams}
+            if (roleExists(authUser.roles, "partner")) {
+                params.partner_id = authUser.user.id
+            }
+            msgrcip = await sendPostRequest(pageUrl, params)
         }
         if (! isEmpty(msgrcip)) setMessageRecipients(msgrcip)
     }
@@ -73,6 +80,9 @@ const ListMessageRecipients = () =>
     }
 
     const onSearch = async (criteria) => {
+        if (roleExists(authUser.roles, "partner")) {
+            criteria += " AND partner_id = " + authUser.user.id
+        }
         const msgrcip = await search("message_recipient", criteria, 10)
         if (msgrcip) setMessageRecipients(msgrcip)
         setSearchParams({entity: encodeString("message_recipient"), criteria: encodeString(criteria), enti: "message_recipient", crit: criteria})

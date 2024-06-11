@@ -225,6 +225,14 @@ export const normalizeUsers = (objs) => {
   return result
 }
 
+export const roleExists = (roles, roleName) =>
+  {
+    const filterdeRoles = roles?.filter(
+      (role) => role.name === roleName
+    )
+    return ! isEmpty(filterdeRoles)
+  }
+
 
 export const getTimezones = () => {
   return [

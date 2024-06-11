@@ -3,7 +3,7 @@ import Paginator from "../../layout/Pagination/Paginator"
 import useAxiosApi from "../../api/Api"
 import Search from '../../layout/TableOperation/Search'
 import Export from '../../layout/TableOperation/Export'
-import { isEmpty, getDatetimeString } from "../../utils/helper"
+import { isEmpty, getDatetimeString, roleExists } from "../../utils/helper"
 import useCoreApi from "../../api/useCoreApi"
 import PerPageDropList from "../../layout/Pagination/PerPageDropList"
 import { useEffect, useRef, useState } from "react"
@@ -34,18 +34,25 @@ const ListScheduledMessages = () =>
 {
     const [columns, setColumns] = useState([])
     const [messages, setMessages] = useState([])
+    const [authUser, setAuthUser] = useState({})
     const [searchParams, setSearchParams] = useState({})
     const [UnscheduledMessages, setUnscheduledMessages] = useState([])
 
     const { search } = useSearchApi()
     const { updateMessage } = useCoreApi()
-    const { sendGetRequest, sendPostRequest } = useAxiosApi()
+    const { sendGetRequest, sendPostRequest, getAuthenticatedUser } = useAxiosApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
+        let user = getAuthenticatedUser()
+        setAuthUser(user)
+
         let msg = []
         if (isEmpty(searchParams)) {
             let criteria = "scheduled_at >= '" + getDatetimeString() + "'"
+            if (roleExists(user.roles, "partner")) {
+                criteria += " AND partner_id = " + user.user.id
+            }
             setSearchParams({entity: encodeString("message"), criteria: encodeString(criteria), enti: "message", crit: criteria})
             msg = await search("message", criteria, perPage)
         } else {
@@ -75,6 +82,9 @@ const ListScheduledMessages = () =>
 
     const searchEntityColumn = async (column, value) => {
         let criteria = "scheduled_at >= '" + getDatetimeString() + "' And " + column +  ((column === "approved") ? (" = " + (["true", "yes", "1"].includes(value) ? "true" : "false")) : (" LIKE '%" + value + "%'"))
+        if (roleExists(authUser.roles, "partner")) {
+            criteria += " AND partner_id = " + authUser.user.id
+        }
         const msg = await search("message", criteria, 10)
         if (msg) setMessages(msg)
         setSearchParams({entity: encodeString("message"), criteria: encodeString(criteria), enti: "message", crit: criteria})
@@ -82,6 +92,9 @@ const ListScheduledMessages = () =>
 
     const onSearch = async (criteria) => {
         criteria = "scheduled_at >= '" + getDatetimeString() + "' And " + criteria
+        if (roleExists(authUser.roles, "partner")) {
+            criteria += " AND partner_id = " + authUser.user.id
+        }
         const msg = await search("message", criteria, 10)
         if (msg) setMessages(msg)
         setSearchParams({entity: encodeString("message"), criteria: encodeString(criteria), enti: "message", crit: criteria})

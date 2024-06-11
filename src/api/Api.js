@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Config } from '../config/Config'
 import { useDispatch, useSelector } from 'react-redux'
-import { isEmpty } from '../utils/helper'
+import { isEmpty, roleExists } from '../utils/helper'
 import { showAlert } from "../utils/validator"
 import { useNavigate } from 'react-router-dom'
 import { signin, signout, updateAuthUser } from "../container/redux/slice/authSlice"
@@ -56,6 +56,10 @@ const useAxiosApi = () =>
 
     const sendGetRequest = async (url) => {
         try {
+            if (roleExists(authUser.roles, "partner")) {
+                url += url.includes("?") ? "&" : "?"
+                url += "partner_id=" + authUser.user.id
+            }
             return (await api.get(url)).data.data
 
         } catch (error) {

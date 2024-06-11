@@ -1,10 +1,13 @@
 import qs from "qs"
 import useAxiosApi from "./Api"
+import { roleExists } from "../utils/helper"
 
 const useExpenseApi = () => 
 {
 
-    const { api, handleErrorResponse } = useAxiosApi()
+    const { api, handleErrorResponse, getAuthenticatedUser } = useAxiosApi()
+
+    const authUser = getAuthenticatedUser()
 
     const listPaymentMethods = async () =>
     {
@@ -58,8 +61,12 @@ const useExpenseApi = () =>
 
     const listOrders = async (perPage) =>
     {
+        let params = {take: perPage}
+        if (roleExists(authUser.roles, "partner")) {
+            params.partner_id = authUser.user.id
+        }
         try {
-            return (await api.get("/expense/order?" + qs.stringify({take: perPage}))).data.data
+            return (await api.get("/expense/order?" + qs.stringify(params))).data.data
 
         } catch (error) {
             return handleErrorResponse(error)
@@ -88,8 +95,13 @@ const useExpenseApi = () =>
 
     const searchOrder = async (take, column, value) =>
     {
+        let params = {column: column, value: value}
+        if (roleExists(authUser.roles, "partner")) {
+            params.partner_id = authUser.user.id
+        }
+
         try {
-            return (await api.post("/expense/order/search?" + qs.stringify({take: take}), {column: column, value: value})).data.data
+            return (await api.post("/expense/order/search?" + qs.stringify({take: take}), params)).data.data
 
         } catch (error) {
             return handleErrorResponse(error)

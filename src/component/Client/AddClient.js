@@ -13,17 +13,22 @@ import ExtendedInput from '../../layout/Shared/ExtendedInput'
 
 const AddClient = () => {
 
-    const { addClient, listSales, listBusinessFields } = useCoreApi()
+    const { addClient, listPartners, listSales, listBusinessFields } = useCoreApi()
 
     const [sales, setSales] = useState([])
     const [avatar, setAvatar] = useState({})
+    const [partners, setPartners] = useState([])
     const [businessField, setBusinessField] = useState([])
     const [selectedSalesID, setSelectedSalesID] = useState([])
+    const [selectedPartnerID, setSelectedPartnerID] = useState([])
     const [selectedBusinessFieldID, setSelectedBusinessFieldID] = useState([])
     const [websiteInputs, setWebsiteInputs] = useState([]);
 
     const setupLock = useRef(true)
     const setup = async () => {
+        const prtnrs = await listPartners(1000000000000)
+        if (prtnrs.data) setPartners(prtnrs.data)
+
         const prclst = await listSales()
         if (prclst) setSales(prclst)
 
@@ -48,6 +53,9 @@ const AddClient = () => {
             client.append("sales_id",  selectedSalesID)
             client.append("business_field_id",  selectedBusinessFieldID)
 
+            if (! isEmpty(selectedPartnerID)) {
+                client.append("partner_id",  selectedPartnerID)
+            }
             client = await addClient(client);
             if (! isEmpty(client)) {
                 navigate("content", "top-nav")
@@ -60,6 +68,10 @@ const AddClient = () => {
 
     const onSelectAvatar = (avatar) => {
         setAvatar(avatar)
+    }
+
+    const onSelectPartner = (option) => {
+        setSelectedPartnerID(partners.filter(p => p.full_name === option)[0].user_id)
     }
 
     const onSelectSales = (option) => {
@@ -91,6 +103,10 @@ const AddClient = () => {
                 <h6><span>Disabled</span><span>Enabled</span></h6>
                 <input id="add-client-enabled" className="checkbox d-none" type="checkbox" defaultChecked={true}/>
                 <label for="add-client-enabled"></label>
+            </div>
+
+            <div className="d-flex justify-content-center mt-5">
+                <DropList selectName="Select Partner" options={partners.map(item => item.full_name)} onSelect={onSelectPartner}/>
             </div>
             <div className="d-flex justify-content-center mt-5">
                 <DropList selectName="Select Sales" options={sales.map(item => item.name)} onSelect={onSelectSales}/>

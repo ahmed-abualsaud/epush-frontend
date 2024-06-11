@@ -126,7 +126,7 @@
     display: flex;
     justify-content: space-between;
     position: fixed;
-    bottom: 10px;
+    bottom: -15px;
     width: 150px;
     margin-left: 22%;
     padding: 0;

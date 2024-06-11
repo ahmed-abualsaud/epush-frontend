@@ -1,6 +1,6 @@
 import useAuthApi from "../../api/useAuthApi"
 import Button from "../../layout/Shared/Button"
-import { isEmpty } from "../../utils/helper"
+import { isEmpty, roleExists } from "../../utils/helper"
 import { useNavigate } from "react-router-dom"
 import { showAlert } from "../../utils/validator"
 
@@ -25,6 +25,10 @@ const SubmitSignin = () => {
       navigate("/client")
     }
 
+    if (! isEmpty(data) && roleExists(data.roles, "partner")) {
+      navigate("/partner")
+    }
+
     if (isEmpty(data) || isEmpty(data.roles)) {
       navigate("/")
       showAlert("Your Role is Unknown!")
@@ -37,12 +41,3 @@ const SubmitSignin = () => {
 }
   
 export default SubmitSignin
-
-
-const roleExists = (roles, roleName) =>
-{
-  const filterdeRoles = roles?.filter(
-    (role) => role.name === roleName
-  )
-  return ! isEmpty(filterdeRoles)
-}

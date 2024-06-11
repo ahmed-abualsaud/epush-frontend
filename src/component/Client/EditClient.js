@@ -11,6 +11,7 @@ import MutedInput from "../../layout/Shared/MutedInput"
 import { generateApiKey, isIPAddress } from "../../utils/strUtils"
 import Switch from "../../layout/Shared/Switch"
 import ExtendedInput from "../../layout/Shared/ExtendedInput"
+import DropList from "../../layout/Shared/DropList"
 
 const EditClient = ({ client }) => {
 
@@ -18,6 +19,7 @@ const EditClient = ({ client }) => {
         "id", 
         "full_name",
         "sales_id",
+        "partner_id",
         "pricelist_id",
         "balance",
         "avatar", 
@@ -31,21 +33,28 @@ const EditClient = ({ client }) => {
         "governmentId",
         "areaId",
         "adminId",
-        "FDelete"
+        "FDelete",
+        "partner"
     ]
 
     const filteredColumns = Object.keys(client).filter(
       (column) => !excludedColumns.includes(column)
     )
 
-    const { updateClient } = useCoreApi()
     const [apiKey, setApiKey] = useState("")
     const [avatar, setAvatar] = useState({})
+    const [partners, setPartners] = useState([])
     const [ipAddresses, setIPAddresses] = useState([])
     const [currentClient, setCurrentClient] = useState([])
+    const [selectedPartnerID, setSelectedPartnerID] = useState([])
+
+    const { updateClient, listPartners } = useCoreApi()
 
     const setupLock = useRef(true)
     const setup = async () => {
+        const prtnrs = await listPartners(1000000000000)
+        if (prtnrs.data) setPartners(prtnrs.data)
+        setSelectedPartnerID(client.partner_id)
         setCurrentClient(client)
     }
     useEffect(() => {
@@ -102,6 +111,9 @@ const EditClient = ({ client }) => {
         userInfoInput.forEach(usrInp => {
             if(! isEmpty(usrInp.value)) {data.append(usrInp.id.split("-")[0], usrInp.value)}
         })
+        if (!isEmpty(selectedPartnerID)) {
+            data.append('partner_id', selectedPartnerID)
+        }
         isEmpty(data) && showAlert("You need to insert new client information")
         if (! isEmpty(data)) {
             let newClient = await updateClient(client["user_id"], data)
@@ -214,6 +226,10 @@ const EditClient = ({ client }) => {
         }
     }
 
+    const onSelectPartner = (option) => {
+        setSelectedPartnerID(partners.filter(p => p.full_name === option)[0].user_id)
+    }
+
 
     return (
         <Page title="Client Information">
@@ -284,6 +300,10 @@ const EditClient = ({ client }) => {
                         </div>
                     </Section>}
                 </Section>
+
+                <div className="d-flex justify-content-center mt-5">
+                    <DropList selectName="Select Partner" options={partners.map(item => item.full_name)} onSelect={onSelectPartner}/>
+                </div>
 
                 <table style={{marginTop: "100px"}} className="fl-table">
                     <thead>

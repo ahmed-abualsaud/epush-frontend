@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 import '../../assets/style/component/profile-nav.css'
 import useAuthApi from '../../api/useAuthApi'
 import { navigate } from '../../setup/navigator'
-import { isEmpty } from '../../utils/helper'
+import { isEmpty, roleExists } from '../../utils/helper'
 import { useEffect, useState } from 'react'
 
 const ProfileNav = () => {
@@ -50,7 +50,8 @@ const ProfileNav = () => {
             <label className="for-dropdown" for="dropdown"><i className="uil uil-angle-double-down"></i></label>
             <div className="section-dropdown"> 
                 <a href="#" onClick={() => navigate("content", "profile", user?.user, user?.roles[0]?.name)}>Profile <i className="uil uil-user-md"></i></a>
-                <a href="#" onClick={goToSettings}>Settings <i className="uil uil-setting"></i></a>
+                { roleExists(user?.roles, "super-admin") && <a href="#" onClick={goToSettings}>Settings <i className="uil uil-setting"></i></a>
+                }
                 <a href="#" onClick={ logout }>Logout <i className="uil uil-sign-out-alt"></i></a>
             </div>
         </div>

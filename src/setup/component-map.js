@@ -1,7 +1,6 @@
 import React, { lazy } from 'react'
 
 
-
 const Home = lazy(() => import('../page/Home'))
 const API = lazy(() => import('../component/Shared/API'))
 const Profile = lazy(() => import('../page/Profile'))
@@ -25,6 +24,8 @@ const ClientProfile = lazy(() => import('../component/Client/ClientProfile'))
 const AddPricelist = lazy(() => import('../component/Pricelist/AddPricelist'))
 const AddBanner = lazy(() => import('../component/Banner/AddBanner'))
 const AddAdmin = lazy(() => import('../component/Admin/AddAdmin'))
+const DeletePartner = lazy(() => import('../component/Partner/DeletePartner'))
+const ListPartners = lazy(() => import('../component/Partner/ListPartners'))
 const ListBanners = lazy(() => import('../component/Banner/ListBanners'))
 const EditBanner = lazy(() => import('../component/Banner/EditBanner'))
 const EditPricelist = lazy(() => import('../component/Pricelist/EditPricelist'))
@@ -59,6 +60,7 @@ const EditFolder = lazy(() => import('../component/Folder/EditFolder'))
 const ListFolders = lazy(() => import('../component/Folder/ListFolders'))
 const DeleteTicket = lazy(() => import('../component/Ticket/DeleteTicket'))
 const ShowTicket = lazy(() => import('../component/Ticket/ShowTicket'))
+const AddPartner = lazy(() => import('../component/Partner/AddPartner'))
 const ListJobs = lazy(() => import('../component/Queue/ListJobs'))
 const ListFailedJobs = lazy(() => import('../component/Queue/ListFailedJobs'))
 const ClientMessageManagement = lazy(() => import('../component/ClientMessage/ClientMessageManagement'))
@@ -102,6 +104,8 @@ const ListOrders = lazy(() => import('../component/Order/ListOrders'))
 const ShowJob = lazy(() => import('../component/Queue/ShowJob'))
 const ShowFailedJob = lazy(() => import('../component/Queue/ShowFailedJob'))
 const AddOrder = lazy(() => import('../component/Order/AddOrder'))
+const EditPartner = lazy(() => import('../component/Partner/EditPartner'))
+const ShowPartner = lazy(() => import('../component/Partner/ShowPartner'))
 const ShowOrder = lazy(() => import('../component/Order/ShowOrder'))
 const ListCountries = lazy(() => import('../component/Country/ListCountries'))
 const ShowCountry = lazy(() => import('../component/Country/ShowCountry'))
@@ -248,6 +252,7 @@ const componentMap = {
     "add-country":                          () => <AddCountry/>,
     "add-message":                          () => <AddMessage/>,
     "upload-file":                          () => <UploadFile/>,
+    "add-partner":                          () => <AddPartner/>,
     "client-files":                         () => <ClientFiles/>,
     "list-folders":                         () => <ListFolders/>,
     "list-clients":                         () => <ListClients/>,
@@ -256,6 +261,7 @@ const componentMap = {
     "list-tickets":                         () => <ListTickets/>,
     "add-settings":                         () => <AddSettings/>,
     "list-banners":                         () => <ListBanners/>,
+    "list-partners":                        () => <ListPartners/>,
     "list-settings":                        () => <ListSettings/>,
     "list-messages":                        () => <ListMessages/>,
     "add-pricelist":                        () => <AddPricelist/>,
@@ -349,6 +355,8 @@ const componentMap = {
     "show-message":                         (message) => <ShowMessage message={message}/>,
     "show-country":                         (country) => <ShowCountry country={country}/>,
     "edit-country":                         (country) => <EditCountry country={country}/>,
+    "edit-partner":                         (partner) => <EditPartner partner={partner}/>,
+    "show-partner":                         (partner) => <ShowPartner partner={partner}/>,
     "message-list":                         (messages) => <MessagesList messages={messages}/>,
     "edit-settings":                        (settings) => <EditSettings settings={settings}/>,
     "show-settings":                        (settings) => <ShowSettings settings={settings}/>,
@@ -424,6 +432,7 @@ const componentMap = {
     "delete-banner":                        (banner, onDelete) => <DeleteBanner banner={banner} onDelete={onDelete}/>,
     "delete-country":                       (country, onDelete) => <DeleteCountry country={country} onDelete={onDelete}/>,
     "delete-message":                       (message, onDelete) => <DeleteMessage message={message} onDelete={onDelete}/>,
+    "delete-partner":                        (partner, onDelete) => <DeletePartner partner={partner} onDelete={onDelete}/>,
     "delete-operator":                      (operator, onDelete) => <DeleteOperator operator={operator} onDelete={onDelete}/>,
     "delete-settings":                      (settings, onDelete) => <DeleteSettings settings={settings} onDelete={onDelete}/>,
     "delete-sms-template":                  (template, onDelete) => <DeleteSMSTemplate template={template} onDelete={onDelete}/>,

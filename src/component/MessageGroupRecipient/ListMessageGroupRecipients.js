@@ -3,7 +3,7 @@ import Paginator from "../../layout/Pagination/Paginator"
 import useAxiosApi from "../../api/Api"
 import Search from '../../layout/TableOperation/Search'
 import Export from '../../layout/TableOperation/Export'
-import { isEmpty } from "../../utils/helper"
+import { isEmpty, roleExists } from "../../utils/helper"
 import useCoreApi from "../../api/useCoreApi"
 import PerPageDropList from "../../layout/Pagination/PerPageDropList"
 import { useEffect, useRef, useState } from "react"
@@ -31,15 +31,17 @@ import Page from "../../page/Page"
 const ListMessageGroupRecipients = ({messageGroup}) =>
 {
     const [columns, setColumns] = useState([])
+    const [authUser, setAuthUser] = useState({})
     const [messageGroupRecipients, setMessageGroupRecipients] = useState([])
     const [searchParams, setSearchParams] = useState({})
 
     const { search } = useSearchApi()
     const { listMessageGroupRecipients, searchMessageGroupRecipient } = useCoreApi()
-    const { sendGetRequest, sendPostRequest } = useAxiosApi()
+    const { sendGetRequest, sendPostRequest, getAuthenticatedUser } = useAxiosApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
+        setAuthUser(getAuthenticatedUser())
 
         if (!isEmpty(messageGroup)) {
             messageGroup.recipients = messageGroup?.recipients?.map(rcp => {rcp.message_group = messageGroup; return rcp})
@@ -72,8 +74,13 @@ const ListMessageGroupRecipients = ({messageGroup}) =>
                 let url  = pageUrl.split("?")
                 pageUrl = url[0]+"/search?"+url[1]
             }
-            msgrp = await sendPostRequest(pageUrl, searchParams)
+            let params = {...searchParams}
+            if (roleExists(authUser.roles, "partner")) {
+                params.partner_id = authUser.user.id
+            }
+            msgrp = await sendPostRequest(pageUrl, params)
         }
+
         if (! isEmpty(msgrp)) setMessageGroupRecipients(msgrp)
     }
 
@@ -84,6 +91,9 @@ const ListMessageGroupRecipients = ({messageGroup}) =>
     }
 
     const onSearch = async (criteria) => {
+        if (roleExists(authUser.roles, "partner")) {
+            criteria += " AND partner_id = " + authUser.user.id
+        }
         const msgrp = await search("message_group_recipient", criteria, 10)
         if (msgrp) setMessageGroupRecipients(msgrp)
         setSearchParams({entity: encodeString("message_group_recipient"), criteria: encodeString(criteria), enti: "message_group_recipient", crit: criteria})

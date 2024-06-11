@@ -3,7 +3,7 @@ import Paginator from "../../layout/Pagination/Paginator"
 import useAxiosApi from "../../api/Api"
 import Search from '../../layout/TableOperation/Search'
 import Export from '../../layout/TableOperation/Export'
-import { isEmpty } from "../../utils/helper"
+import { isEmpty, roleExists } from "../../utils/helper"
 import useCoreApi from "../../api/useCoreApi"
 import PerPageDropList from "../../layout/Pagination/PerPageDropList"
 import { useEffect, useRef, useState } from "react"
@@ -33,14 +33,17 @@ const ListMessageGroups = () =>
 {
     const [columns, setColumns] = useState([])
     const [messageGroups, setMessageGroups] = useState([])
+    const [authUser, setAuthUser] = useState({})
     const [searchParams, setSearchParams] = useState({})
 
     const { search } = useSearchApi()
     const { listMessageGroups, searchMessageGroup } = useCoreApi()
-    const { sendGetRequest, sendPostRequest } = useAxiosApi()
+    const { sendGetRequest, sendPostRequest, getAuthenticatedUser } = useAxiosApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
+        setAuthUser(getAuthenticatedUser())
+
         let msgrp = []
         if (isEmpty(searchParams)) {
             msgrp = await listMessageGroups(perPage)
@@ -80,6 +83,9 @@ const ListMessageGroups = () =>
     }
 
     const onSearch = async (criteria) => {
+        if (roleExists(authUser.roles, "partner")) {
+            criteria += " AND partner_id = " + authUser.user.id
+        }
         const msg = await search("message_group", criteria, 10)
         if (msg) setMessageGroups(msg)
         setSearchParams({entity: encodeString("message_group"), criteria: encodeString(criteria), enti: "message_group", crit: criteria})

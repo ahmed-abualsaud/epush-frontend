@@ -4,7 +4,7 @@ import Paginator from "../../layout/Pagination/Paginator"
 import useAxiosApi from "../../api/Api"
 import Search from '../../layout/TableOperation/Search'
 import Export from '../../layout/TableOperation/Export'
-import { isEmpty, normalizeUsers } from "../../utils/helper"
+import { isEmpty, normalizeUsers, roleExists } from "../../utils/helper"
 import useCoreApi from "../../api/useCoreApi"
 import PerPageDropList from "../../layout/Pagination/PerPageDropList"
 import { useEffect, useRef, useState } from "react"
@@ -70,18 +70,21 @@ const ListClients = () =>
         "sales_id",
         "business_field_id",
         "websites",
+        "partner_id",
     ]
 
     const [clients, setClients] = useState([])
     const [columns, setColumns] = useState([])
+    const [authUser, setAuthUser] = useState({})
     const [searchParams, setSearchParams] = useState({})
 
     const { search } = useSearchApi()
     const { listClients } = useCoreApi()
-    const { sendGetRequest, sendPostRequest } = useAxiosApi()
+    const { sendGetRequest, sendPostRequest, getAuthenticatedUser } = useAxiosApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
+        setAuthUser(getAuthenticatedUser())
         let clt = []
         if (isEmpty(searchParams)) {
             clt = await listClients(perPage)
@@ -98,6 +101,7 @@ const ListClients = () =>
     }, [])
 
     const handleGetPage = async (pageUrl) => {
+        
         let clt = {}
         if (isEmpty(searchParams)) {
             clt = await sendGetRequest(pageUrl)
@@ -107,19 +111,29 @@ const ListClients = () =>
                 let url  = pageUrl.split("?")
                 pageUrl = url[0]+"/search?"+url[1]
             }
-            clt = await sendPostRequest(pageUrl, searchParams)
+            let params = {...searchParams}
+            if (roleExists(authUser.roles, "partner")) {
+                params.partner_id = authUser.user.id
+            }
+            clt = await sendPostRequest(pageUrl, params)
         }
         if (! isEmpty(clt)) setClients(clt)
     }
 
     const searchEntityColumn = async (column, value) => {
         let criteria = column + " LIKE '%" + value + "%'"
+        if (roleExists(authUser.roles, "partner")) {
+            criteria += " AND partner_id = " + authUser.user.id
+        }
         const clt = await search("client", criteria, 10)
         if (clt) setClients(clt)
         setSearchParams({entity: encodeString("client"), criteria: encodeString(criteria), enti: "client", crit: criteria})
     }
 
     const onSearch = async (criteria) => {
+        if (roleExists(authUser.roles, "partner")) {
+            criteria += " AND partner_id = " + authUser.user.id
+        }
         const clt = await search("client", criteria, 10)
         if (clt) setClients(clt)
         setSearchParams({entity: encodeString("client"), criteria: encodeString(criteria), enti: "client", crit: criteria})
@@ -173,6 +187,7 @@ const ListClients = () =>
                 <TableBody>
                     <DataRows columns={columns} rows={clients.data.map(client => {
                         client.sales = client.sales?.name ?? "NULL"
+                        client.partner = typeof client?.partner == "string" ? client.partner : client?.partner?.full_name
                         client.business_field = client.business_field?.name ?? "NULL"
                         client.full_name = client.full_name ?? client.first_name + " " + client.last_name
                         return client

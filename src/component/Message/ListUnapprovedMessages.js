@@ -3,7 +3,7 @@ import Paginator from "../../layout/Pagination/Paginator"
 import useAxiosApi from "../../api/Api"
 import Search from '../../layout/TableOperation/Search'
 import Export from '../../layout/TableOperation/Export'
-import { isEmpty } from "../../utils/helper"
+import { isEmpty, roleExists } from "../../utils/helper"
 import useCoreApi from "../../api/useCoreApi"
 import PerPageDropList from "../../layout/Pagination/PerPageDropList"
 import { useEffect, useRef, useState } from "react"
@@ -33,18 +33,24 @@ const ListUnapprovedMessages = () =>
 {
     const [columns, setColumns] = useState([])
     const [messages, setMessages] = useState([])
+    const [authUser, setAuthUser] = useState({})
     const [searchParams, setSearchParams] = useState({})
     const [approvedMessages, setApprovedMessages] = useState([])
 
     const { search } = useSearchApi()
     const { updateMessage } = useCoreApi()
-    const { sendGetRequest, sendPostRequest } = useAxiosApi()
+    const { sendGetRequest, sendPostRequest, getAuthenticatedUser } = useAxiosApi()
 
     const setupLock = useRef(true)
     const setup = async (perPage) => {
+        let user = getAuthenticatedUser()
+        setAuthUser(user)
         let msg = []
         if (isEmpty(searchParams)) {
             let criteria = "approved = false"
+            if (roleExists(user.roles, "partner")) {
+                criteria += " AND partner_id = " + user.user.id
+            }
             setSearchParams({entity: encodeString("message"), criteria: encodeString(criteria), enti: "message", crit: criteria})
             msg = await search("message", criteria, perPage)
         } else {
@@ -74,6 +80,9 @@ const ListUnapprovedMessages = () =>
 
     const searchEntityColumn = async (column, value) => {
         let criteria = "approved = false And " + column + " LIKE '%" + value + "%'"
+        if (roleExists(authUser.roles, "partner")) {
+            criteria += " AND partner_id = " + authUser.user.id
+        }
         const msg = await search("message", criteria, 10)
         if (msg) setMessages(msg)
         setSearchParams({entity: encodeString("message"), criteria: encodeString(criteria), enti: "message", crit: criteria})
@@ -81,6 +90,9 @@ const ListUnapprovedMessages = () =>
 
     const onSearch = async (criteria) => {
         criteria = "approved = false And " + criteria
+        if (roleExists(authUser.roles, "partner")) {
+            criteria += " AND partner_id = " + authUser.user.id
+        }
         const msg = await search("message", criteria, 10)
         if (msg) setMessages(msg)
         setSearchParams({entity: encodeString("message"), criteria: encodeString(criteria), enti: "message", crit: criteria})

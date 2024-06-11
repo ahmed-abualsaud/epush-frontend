@@ -177,6 +177,7 @@ const SuperAdminDashboard = () => {
                 </NavItem>
 
                 <NavItem text="Sales" icon="fas fa-hand-holding-dollar" onClick={ () => navigate("content", "list-sales") }/>
+                <NavItem text="Partners" icon="fas fa-handshake" onClick={ () => navigate("content", "list-partners") }/>
                 <NavItem text="Price List" icon="fas fa-receipt" onClick={ () => navigate("content", "list-pricelist") }/>
                 <NavItem text="Business Fields" icon="fas fa-chart-column" onClick={ () => navigate("content", "list-business-fields") }/>
                 <NavItem text="Countries" icon="fas fa-earth-americas" onClick={ () => navigate("content", "list-countries") }/>
