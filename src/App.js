@@ -62,7 +62,7 @@ function App() {
 
               {/* Protected Routes */}
               <Route path="/" element={<ProtectedRoute />}>
-                <Route path="/client" element={<ClientDashboard/>} />
+                {/* <Route path="/client" element={<ClientDashboard/>} /> */}
                 <Route path="/admin" element={<AdminDashboard/>} />
                 <Route path="/partner" element={<PartnerDashboard/>} />
                 <Route path="/super-admin" element={<SuperAdminDashboard/>} />

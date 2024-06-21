@@ -21,9 +21,9 @@ const SubmitSignin = () => {
       navigate("/admin")
     }
 
-    if (! isEmpty(data) && roleExists(data.roles, "client")) {
-      navigate("/client")
-    }
+    // if (! isEmpty(data) && roleExists(data.roles, "client")) {
+    //   navigate("/client")
+    // }
 
     if (! isEmpty(data) && roleExists(data.roles, "partner")) {
       navigate("/partner")
