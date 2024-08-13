@@ -6,6 +6,7 @@ import DropList from "../../layout/Shared/DropList"
 import { useEffect, useRef, useState } from "react"
 import { getElement } from "../../utils/dom"
 import Page from "../../page/Page"
+import Input from "../../layout/Shared/Input"
 
 
 const EditSMSCBinding = ({ smscBinding }) => {
@@ -40,7 +41,8 @@ const EditSMSCBinding = ({ smscBinding }) => {
             smsc_id: selectedSMSCID + "",
             country_id: selectedCountryID + "",
             operator_id: selectedOperatorID + "",
-            default: getElement("edit-smsc-binding-default")?.checked
+            default: getElement("edit-smsc-binding-default")?.checked,
+            length: getElement("add-smsc-length")?.value ?? 8
         }
 
         const result = await updateSMSCBinding(smscBinding.id, binding);
@@ -93,6 +95,10 @@ const EditSMSCBinding = ({ smscBinding }) => {
                 <div className="d-inline-flex align-items-center p-5" style={{width: "25%", fontSize: "25px"}}>
                     Value = {isEmpty(selectedSMSCID) ? smscs.filter(s => s.id === smscBinding.smsc.id)[0]?.value : smscs.filter(s => s.id === selectedSMSCID)[0]?.value}
                 </div>
+            </div>
+
+            <div className="mx-4">
+                <Input id="add-smsc-length" type="number" icon="fas fa-plug" placeholder="Number Length" validrules="required"/>
             </div>
 
             <div className="d-flex flex-column align-items-center pt-5">

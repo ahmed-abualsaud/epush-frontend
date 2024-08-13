@@ -53,7 +53,7 @@ const ListSMSCBindings = () =>
         }
          
         setSMSCBindings(smcbdg)
-        setColumns(["country_name", "country_code", "operator_name", "operator_code", "smsc_name", "smsc_value", "default", "created_at"])
+        setColumns(["country_name", "country_code", "operator_name", "operator_code", "smsc_name", "smsc_value", "default","length", "created_at"])
     }
     useEffect(() => {
         if (setupLock.current) { setupLock.current = false; setup(10) }
