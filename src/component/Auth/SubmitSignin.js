@@ -29,6 +29,10 @@ const SubmitSignin = () => {
       navigate("/partner")
     }
 
+    if (! isEmpty(data) && roleExists(data.roles, "accountant")) {
+      navigate("/accountant")
+    }
+
     if (isEmpty(data) || isEmpty(data.roles)) {
       navigate("/")
       showAlert("Your Role is Unknown!")

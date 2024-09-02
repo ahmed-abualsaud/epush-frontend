@@ -60,7 +60,7 @@ const SigninForm = ({ className }) => {
             <h4 className="mb-4 pb-3 text-white form-title">Sign In</h4>
             <Input id="username" type="name" icon="uil uil-user-check" placeholder="Username" validrules="required" onKeyDown={onKeyDownHandler}/>
             <Input id="password" type="password" icon="uil uil-lock-alt" placeholder="Password" validrules="required" onKeyDown={onKeyDownHandler}/>
-            <Input id="recaptcha_token" validrules="required" style={{display: "none"}} value={token}/>
+            <Input id="recaptcha_token" validrules="" style={{display: "none"}} value={token}/>
             <div style={{ transform: "scaleX(1.35) translateX(64px)"}}><ReCAPTCHA sitekey={sitekey} onChange={onChange}/></div>
             <SubmitSignin />
             <p className="mb-0 mt-4 text-center">

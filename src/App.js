@@ -19,6 +19,7 @@ import Control from './page/Control'
 import { useEffect, useRef, useState } from 'react'
 import useControlApi from './api/useControlApi'
 import PartnerDashboard from './page/dashboard/PartnerDashboard'
+import AccountantDashboard from './page/dashboard/AccountantDashboard'
 
 function App() {
 
@@ -65,6 +66,7 @@ function App() {
                 {/* <Route path="/client" element={<ClientDashboard/>} /> */}
                 <Route path="/admin" element={<AdminDashboard/>} />
                 <Route path="/partner" element={<PartnerDashboard/>} />
+                <Route path="/accountant" element={<AccountantDashboard/>} />
                 <Route path="/super-admin" element={<SuperAdminDashboard/>} />
               </Route>
 

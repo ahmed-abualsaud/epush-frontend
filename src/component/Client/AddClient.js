@@ -49,6 +49,7 @@ const AddClient = () => {
 
             if (! isEmpty(avatar)) { client.append("avatar", avatar) }
             client.append("enabled", getElement("add-client-enabled").checked)
+            client.append("blind", !getElement("add-client-sighted").checked)
             client.append("websites", JSON.stringify(websiteInputs.map(website => ({url: website}))))
             client.append("sales_id",  selectedSalesID)
             client.append("business_field_id",  selectedBusinessFieldID)
@@ -99,10 +100,18 @@ const AddClient = () => {
             <Input id="add-client-notes" icon="uil uil-notes" type="text" placeholder="Notes" validrules=""/>
             <ExtendedInput type="text" icon="fas fa-globe" placeholder="Website URL" setUpdatedValues={(websites) => setWebsiteInputs(websites)}/>
 
-            <div className="d-flex flex-column align-items-center pt-5">
-                <h6><span>Disabled</span><span>Enabled</span></h6>
-                <input id="add-client-enabled" className="checkbox d-none" type="checkbox" defaultChecked={true}/>
-                <label for="add-client-enabled"></label>
+            <div className="d-flex justify-content-center" style={{gap: '80px'}}>
+                <div className="d-flex flex-column align-items-center pt-5">
+                    <h6><span>Disabled</span><span>Enabled</span></h6>
+                    <input id="add-client-enabled" className="checkbox d-none" type="checkbox" defaultChecked={true}/>
+                    <label for="add-client-enabled"></label>
+                </div>
+
+                <div className="d-flex flex-column align-items-center pt-5">
+                    <h6><span>Blind</span><span>Sighted</span></h6>
+                    <input id="add-client-sighted" className="checkbox d-none" type="checkbox" defaultChecked={true}/>
+                    <label for="add-client-sighted"></label>
+                </div>
             </div>
 
             <div className="d-flex justify-content-center mt-5">
@@ -111,6 +120,7 @@ const AddClient = () => {
             <div className="d-flex justify-content-center mt-5">
                 <DropList selectName="Select Sales" options={sales.map(item => item.name)} onSelect={onSelectSales}/>
             </div>
+
             <div className="d-flex justify-content-center mt-5">
                 <DropList selectName="Select Business Field" options={businessField.map(item => item.name)} onSelect={onSelectBusinessField}/>
             </div>
